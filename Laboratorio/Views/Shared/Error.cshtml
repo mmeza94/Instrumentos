@@ -1,0 +1,23 @@
+﻿@using MyResource = Laboratorio.Messages;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+</head>
+<body>
+        @switch (ViewBag.ErrorCode as int?)
+        {
+            case -1: <h2>@MyResource.ErrorInsToolType</h2> break;
+            case -2: <h2>@MyResource.ErrorDelToolType</h2> break;
+            case -3: <h2>@MyResource.ErrorInsTool</h2> break;
+            case -4: <h2>@MyResource.ErrorDelTool</h2> break;
+            case -5: <h2>@MyResource.ErrorInsMachineTool</h2> break;
+            case -6: <h2>@MyResource.ErrorDelMachineTool</h2> break;
+            default: break;
+        }
+</body>
+</html>

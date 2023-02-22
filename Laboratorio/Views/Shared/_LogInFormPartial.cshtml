@@ -1,0 +1,27 @@
+﻿@using (Html.BeginForm("LogIn", "Account", FormMethod.Post)) {
+    <div>
+        <fieldset>
+            <legend>Crendenciales</legend>
+            
+            <div class="editor-label">
+                @Html.Label("Usuario")
+            </div>
+            <div class="textBox textBoxEnable">
+                @Html.TextBox("usuario")
+            </div>
+            <div class="editor-label">
+                @Html.Label("Contraseña")
+            </div>
+            <div class="textBox textBoxEnable">
+                @Html.Password("contrasena")
+            </div>
+            @if (ViewBag.ValidationMessage != null)
+            {
+                <label class="validationError">@ViewBag.ValidationMessage</label>
+            }
+            <p>
+                <input type="submit" value="Ingresar" />
+            </p>
+        </fieldset>
+    </div>
+}

@@ -1,0 +1,111 @@
+﻿@using MyResource = Laboratorio.Messages;
+@{
+    ViewBag.Title = "Index";
+    bool odd = true;
+}
+@if (Request.IsAuthenticated)
+{
+
+    //Este es el modulo de instrumentos dados de baja
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').datepicker({ dateFormat: "dd/mm/yy" });
+    });
+    </script>
+    <fieldset>
+        <legend>Instrumentos deshabilitados</legend>
+        <table class="center">
+            <tr class="TableHeader">
+                <th>
+                    C&oacute;digo
+                </th>
+
+
+                <th>
+                    Tipo
+                </th>
+
+
+                <th>
+                    Fecha de calibraci&oacute;n
+                </th>
+
+
+                <th>
+                    Fecha de expiraci&oacute;n
+                </th>
+
+                <th>
+                    
+                </th>
+
+            </tr>
+            @if (ViewBag.NoRecords)
+            {
+                <tr class="noRecords">
+                    <td colspan="8" class="gridRowOdd">@MyResource.NoRecords
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var tm in Model)
+                {
+                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                    <td>@tm.Code
+                    </td>
+
+
+                    <td>@tm.Type
+                    </td>
+
+
+                    <td class="centeredTD">@tm.CalibrationDate.ToString("dd/MM/yy")
+                    </td>
+
+
+                    <td class="centeredTD">@tm.ExpirationDate.ToString("dd/MM/yy")
+                    </td>
+
+
+                   
+
+                    <td>
+                     
+                            <a href="@Url.Action("ActivateTool", "DischargedTools", new { code = tm.Code })">
+                            <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/insert.png")" /></a>
+                        
+                    </td>
+
+                </tr>
+        
+                         odd = odd ? false : true;
+                }
+            }
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>@MyResource.NewTool</legend>
+        @using (Html.BeginForm("InsertTool", "Tool", FormMethod.Post))
+        {
+            <label for="Code">@MyResource.Code</label>
+            @Html.TextBox("Code", "", new { @class = "textBox textBoxEnable" })
+            <label for="TypeName">@MyResource.ToolType</label>
+            @Html.DropDownList("TypeName", ViewBag.Types as List<SelectListItem>, MyResource.SelectOne, new { @class = "textBox textBoxEnable select" })
+            <label for="CalibrationDate">@MyResource.CalibrationDate</label>
+            @Html.TextBox("CalibrationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
+            <label for="ExpirationDate">@MyResource.ExpirationDate</label>
+            @Html.TextBox("ExpirationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
+            if (ViewBag.ValidationMessage != null)
+            {
+            <label class="validationError">@ViewBag.ValidationMessage</label>
+            }
+            <input type="submit" value="@MyResource.Add" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
+        }
+    </fieldset>
+}
+else
+{
+   // @Html.Partial("_LogInFormPartial")
+   <h2>No se puede loguear</h2>
+}

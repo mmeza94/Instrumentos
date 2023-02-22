@@ -1,0 +1,27 @@
+﻿@using MyResource = Laboratorio.Messages;
+@{
+    ViewBag.Title = MyResource.ToolIndexPageTitle;
+    bool odd = true;
+}
+<table class="center">
+    <tr class="TableHeader">
+        <th>
+            Herramientas
+        </th>
+        <th>
+        </th>
+    </tr>
+    @foreach (var tm in Model)
+    {
+        <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+            <td >@tm.Code
+            </td>
+            <td >
+                <a href="@Url.Action("DeleteToolType", "ToolTypes", new { id = tm.ID })">
+                    <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/delete.png")" /></a>
+            </td>
+        </tr>
+        
+        odd = odd ? false : true;
+    }
+</table>

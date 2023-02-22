@@ -1,0 +1,65 @@
+﻿@using MyResource = Laboratorio.Messages;
+@{
+    ViewBag.Title = MyResource.ToolTypeIndexPageTitle;
+    bool odd = true;
+}
+@if (Request.IsAuthenticated)
+{
+<fieldset>
+    <legend>@MyResource.ToolTypeCatalog</legend>
+    <table class="center">
+        <tr class="TableHeader">
+            <th>
+                Tipo de herramienta
+            </th>
+            <th>
+            </th>
+        </tr>
+        @if (ViewBag.NoRecords)
+        {
+            <tr class="noRecords">
+                <td colspan="2" class="gridRowOdd">@MyResource.NoRecords
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var ttm in Model)
+            {
+            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                <td>@ttm.Name
+                </td>
+                <td>
+                    <a href="@Url.Action("DeleteToolType", "ToolTypes", new { id = ttm.ID, tipo=ttm.Name })">
+                        <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/delete.png")" /></a>
+                </td>
+            </tr>
+        
+                odd = odd ? false : true;
+            }
+        }
+    </table>
+    @if (ViewBag.TableError != null)
+    {
+        <label class="validationError">@ViewBag.TableError</label>
+    }
+</fieldset>
+<fieldset>
+    <legend>@MyResource.NewToolType</legend>
+    @using (Html.BeginForm("InsertToolType", "ToolTypes", FormMethod.Post))
+    {
+        <label for="ToolTypeName">@MyResource.Name</label>
+        @Html.TextBox("ToolTypeName", "", new { @class = "textBox textBoxEnable" })
+        if (ViewBag.ValidationMessage != null)
+        {
+        <label class="validationError">@ViewBag.ValidationMessage</label>
+        }
+        <input type="submit" value="@MyResource.Add" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
+    
+    }
+</fieldset>
+}
+else
+{
+    @Html.Partial("_LogInFormPartial")
+}

@@ -1,0 +1,272 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Tenaris.Library.DbClient;
+using System.Data;
+using System.Configuration;
+
+namespace Laboratorio.Models.DataAccess
+{
+    public class DataAccess
+    {
+        private static DbClient dbClientGrana;
+
+        private static string storeProcedureQryToolTypes = ConfigurationManager.AppSettings["SP_qryToolTypes"].ToString();
+        private static string storeProcedureInsToolType = ConfigurationManager.AppSettings["SP_insToolType"].ToString();
+        private static string storeProcedureDelToolType = ConfigurationManager.AppSettings["SP_delToolType"].ToString();
+        private static string storeProcedureQryTools = ConfigurationManager.AppSettings["SP_qryTools"].ToString();
+        private static string storeProcedureInsTool = ConfigurationManager.AppSettings["SP_insTool"].ToString();
+        private static string storeProcedureDelTool = ConfigurationManager.AppSettings["SP_delTool"].ToString();
+        private static string storeProcedureUpdTool = ConfigurationManager.AppSettings["SP_updTool"].ToString();
+        private static string storeProcedureQryToolsByMachineCode = ConfigurationManager.AppSettings["SP_qryToolsByMachineCode"].ToString();
+        private static string storeProcedureQryAvailableTools = ConfigurationManager.AppSettings["SP_qryAvailableTools"].ToString();
+        private static string storeProcedureInsMachineTool = ConfigurationManager.AppSettings["SP_insMachineTool"].ToString();
+        private static string storeProcedureDelMachineTool = ConfigurationManager.AppSettings["SP_delMachineTool"].ToString();
+        private static string storeProcedureQryUserPrivileges = ConfigurationManager.AppSettings["SP_qryUserPrivileges"].ToString();
+        private static string storeProcedureInsLog = ConfigurationManager.AppSettings["SP_insLog"].ToString();
+        private static string storeProcedureShareMachineTool = ConfigurationManager.AppSettings["SP_shaMachineTool"].ToString();
+
+        static DataAccess()
+        {
+            dbClientGrana = new DbClient("GEC_DB");
+
+            dbClientGrana.AddCommand(storeProcedureQryToolTypes);
+            dbClientGrana.AddCommand(storeProcedureInsToolType);
+            dbClientGrana.AddCommand(storeProcedureDelToolType);
+            dbClientGrana.AddCommand(storeProcedureQryTools);
+            dbClientGrana.AddCommand(storeProcedureInsTool);
+            dbClientGrana.AddCommand(storeProcedureDelTool);
+            dbClientGrana.AddCommand(storeProcedureUpdTool);
+            dbClientGrana.AddCommand(storeProcedureQryToolsByMachineCode);
+            dbClientGrana.AddCommand(storeProcedureQryAvailableTools);
+            dbClientGrana.AddCommand(storeProcedureInsMachineTool);
+            dbClientGrana.AddCommand(storeProcedureDelMachineTool);
+            dbClientGrana.AddCommand(storeProcedureQryUserPrivileges);
+            dbClientGrana.AddCommand(storeProcedureInsLog);
+            dbClientGrana.AddCommand(storeProcedureShareMachineTool);
+
+            dbClientGrana.Activate();
+        }
+
+        public static List<ToolTypeModel> GetToolTypes()
+        {
+            List<ToolTypeModel> l = new List<ToolTypeModel>();
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureQryToolTypes).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolTypeModel ttm = new ToolTypeModel();
+
+                    ttm.ID = Int32.Parse(reader["idType"].ToString());
+                    ttm.Name = reader["Name"].ToString();
+                    ttm.Active = Boolean.Parse(reader["Active"].ToString());
+
+                    l.Add(ttm);
+                }
+            }
+
+            return l;
+        }
+
+        public static int InsertToolType(string name)
+        {
+            dbClientGrana.GetCommand(storeProcedureInsToolType).Parameters["@Name"].Value = name;
+
+            dbClientGrana.GetCommand(storeProcedureInsToolType).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureInsToolType).Parameters["@Success"].Value.ToString());
+        }
+
+        public static int DeleteToolType(int id)
+        {
+            dbClientGrana.GetCommand(storeProcedureDelToolType).Parameters["@Id"].Value = id.ToString();
+
+            dbClientGrana.GetCommand(storeProcedureDelToolType).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureDelToolType).Parameters["@Success"].Value.ToString());
+        }
+
+        public static List<ToolModel> GetTools()
+        {
+            List<ToolModel> l = new List<ToolModel>();
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureQryTools).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["TypeName"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.Machine = reader["MachineName"].ToString();
+
+                    bool active = Boolean.Parse(reader["Active"].ToString());
+                    if (tm.Machine.Equals(String.Empty))
+                    {
+                        if (active)
+                        {
+                            tm.Available = 1; //disponible
+                        }
+                        else
+                        {
+                            tm.Available = 3; //de baja
+                        }
+                    }
+                    else
+                    {
+                        tm.Available = 2; //no disponible porque esta asignado
+                    }
+
+                    l.Add(tm);
+                }
+            }
+
+            return l;
+        }
+
+        public static int InsertTool(string code, string typeName, DateTime expirationDate, DateTime calibrationDate)
+        {
+            dbClientGrana.GetCommand(storeProcedureInsTool).Parameters["@Code"].Value = code;
+            dbClientGrana.GetCommand(storeProcedureInsTool).Parameters["@TypeName"].Value = typeName;
+            dbClientGrana.GetCommand(storeProcedureInsTool).Parameters["@ExpirationDate"].Value = expirationDate;
+            dbClientGrana.GetCommand(storeProcedureInsTool).Parameters["@CalibrationDate"].Value = calibrationDate;
+
+            dbClientGrana.GetCommand(storeProcedureInsTool).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureInsTool).Parameters["@Success"].Value.ToString());
+        }
+
+        public static int DeleteTool(string code)
+        {
+            dbClientGrana.GetCommand(storeProcedureDelTool).Parameters["@Code"].Value = code;
+
+            dbClientGrana.GetCommand(storeProcedureDelTool).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureDelTool).Parameters["@Success"].Value.ToString());
+        }
+
+        public static List<ToolModel> GetToolsByMachineCode(string code)
+        {
+            List<ToolModel> l = new List<ToolModel>();
+
+            dbClientGrana.GetCommand(storeProcedureQryToolsByMachineCode).Parameters["@MachineCode"].Value = code;
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureQryToolsByMachineCode).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["Name"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.Measure = Boolean.Parse(reader["Measure"].ToString());
+                    tm.Shared = reader["Shared"].ToString();
+                    l.Add(tm);
+                }
+
+            }
+
+            return l;
+        }
+
+        public static List<ToolModel> GetAvailableTools()
+        {
+            List<ToolModel> l = new List<ToolModel>();
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureQryAvailableTools).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["TypeName"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+
+                    l.Add(tm);
+                }
+
+            }
+
+            return l;
+        }
+
+        public static int InsertMachineTool(string toolCode, string machineCode, int measure)
+        {
+            dbClientGrana.GetCommand(storeProcedureInsMachineTool).Parameters["@ToolCode"].Value = toolCode;
+            dbClientGrana.GetCommand(storeProcedureInsMachineTool).Parameters["@MachineCode"].Value = machineCode;
+            dbClientGrana.GetCommand(storeProcedureInsMachineTool).Parameters["@Measure"].Value = measure;
+
+            dbClientGrana.GetCommand(storeProcedureInsMachineTool).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureInsMachineTool).Parameters["@Success"].Value.ToString());
+        }
+
+        public static int DeleteMachineTool(string toolCode, string machineCode)
+        {
+            dbClientGrana.GetCommand(storeProcedureDelMachineTool).Parameters["@ToolCode"].Value = toolCode;
+            dbClientGrana.GetCommand(storeProcedureDelMachineTool).Parameters["@MachineCode"].Value = machineCode;
+
+            dbClientGrana.GetCommand(storeProcedureDelMachineTool).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureDelMachineTool).Parameters["@Success"].Value.ToString());
+        }
+
+        public static int UpdateTool(string code, DateTime calibrationDate, DateTime expirationDate)
+        {
+            dbClientGrana.GetCommand(storeProcedureUpdTool).Parameters["@Code"].Value = code;
+            dbClientGrana.GetCommand(storeProcedureUpdTool).Parameters["@CalibrationDate"].Value = calibrationDate;
+            dbClientGrana.GetCommand(storeProcedureUpdTool).Parameters["@ExpirationDate"].Value = expirationDate;
+
+            dbClientGrana.GetCommand(storeProcedureUpdTool).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureUpdTool).Parameters["@Success"].Value.ToString());
+        }
+
+        public static List<string> GetUserPrivileges(string user, string pass)
+        {
+            List<string> l = new List<string>();
+
+            dbClientGrana.GetCommand(storeProcedureQryUserPrivileges).Parameters["@User"].Value = user;
+            dbClientGrana.GetCommand(storeProcedureQryUserPrivileges).Parameters["@Pass"].Value = pass;
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureQryUserPrivileges).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string s = reader["Name"].ToString();
+                    l.Add(s);
+                }
+            }
+            return l;
+        }
+
+        public static void InsertLogEntry(string user, string movement)
+        {
+            dbClientGrana.GetCommand(storeProcedureInsLog).Parameters["@User"].Value = user;
+            dbClientGrana.GetCommand(storeProcedureInsLog).Parameters["@Movement"].Value = movement;
+
+            dbClientGrana.GetCommand(storeProcedureInsLog).ExecuteNonQuery();
+        }
+
+
+
+        public static int ShareMachineTool(string toolCode, string machineCode,bool meassure)
+        {
+            dbClientGrana.GetCommand(storeProcedureShareMachineTool).Parameters["@ToolCode"].Value = toolCode;
+            dbClientGrana.GetCommand(storeProcedureShareMachineTool).Parameters["@MachineCode"].Value = machineCode;
+            dbClientGrana.GetCommand(storeProcedureShareMachineTool).Parameters["@Measure"].Value = meassure;
+
+            dbClientGrana.GetCommand(storeProcedureShareMachineTool).ExecuteNonQuery();
+
+            return Int32.Parse(dbClientGrana.GetCommand(storeProcedureShareMachineTool).Parameters["@Success"].Value.ToString());
+        }
+    }
+}
