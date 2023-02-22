@@ -14,41 +14,25 @@ namespace Laboratorio.Controllers
     {
         // GET: /Assignment/
 
-        public ActionResult Index(string MachineCode, string validation)
+        public ActionResult Index(string ToolKitCode, string validation)
         {
+
+            
+            List<SelectListItem> toolkits = GetToolkitCodes();
+            ViewBag.toolkitCodes = toolkits;
             ViewBag.ValidationMessage = validation;
 
-            if (MachineCode == null)
-            {
-                MachineCode = ConfigurationManager.AppSettings["GranalladoraCode"].ToString();
-            }
 
+            ToolKitCode = (ToolKitCode == null) ? toolkits[0].Value : ToolKitCode;
 
-            ViewBag.MachineCode = MachineCode;
+            List<ToolModel> tools = GetToolsFromToolKit(ToolKitCode);
+            ViewBag.ToolKit = tools;
 
-
-            //Se llena el primer comboBox
-            List<SelectListItem> sli = LoadMachines();
-            ViewBag.Sli = sli;
-
-
-            //Se llena el segundo combobox
-            List<SelectListItem> toolkits = GetToolkitCodes();
-            ViewBag.toolkits = toolkits;
+            ViewBag.NoRecords = false;
 
 
 
-            List<ToolModel> tm;
-            tm = DataAccess.GetToolsByMachineCode(MachineCode);
-            ViewBag.MachineTools = tm;
-            if (tm.Count == 0)
-            {
-                ViewBag.NoRecords = true;
-            }
-            else
-            {
-                ViewBag.NoRecords = false;
-            }
+
 
             List<ToolModel> available;
             available = DataAccess.GetAvailableTools();
@@ -64,6 +48,16 @@ namespace Laboratorio.Controllers
 
             return View();
         }
+
+
+
+        public List<ToolModel> GetToolsFromToolKit(string ToolKitCode)
+        {
+            List<ToolModel> Tools = DataAccess.GetToolsFromToolKit(ToolKitCode);
+
+            return Tools;
+        }
+
 
 
 
@@ -83,27 +77,7 @@ namespace Laboratorio.Controllers
         {
             int result = DataAccess.InsertMachineTool(toolCode, machineCode, use);
 
-            if (result < 0)
-            {
-                ResourceManager rs = new ResourceManager(typeof(Laboratorio.Messages));
-                if (result == -5) //Mismo tipo ya asociado
-                {
-                    ViewBag.ValidationMessage = rs.GetString("ValidationSameTypeAssignation");
-                    return RedirectToAction("Index", "Assignment", new { machineCode = machineCode, validation = ViewBag.ValidationMessage });
-                }
-                else
-                {
-                    ViewBag.ErrorCode = result;
-                    return View("Error");
-                }
-            }
-            else
-            {
-                DataAccess.InsertLogEntry(User.Identity.Name,
-                   String.Format("Instrumento asociado: \"{0}\"  a la máquina \"{1}\"", toolCode, machineCode));
-                ViewBag.MachineCode = machineCode;
-                return RedirectToAction("Index", "Assignment", new { machineCode = machineCode });
-            }
+            
         }
 
         public ActionResult RemoveTool(string toolCode, string machineCode)

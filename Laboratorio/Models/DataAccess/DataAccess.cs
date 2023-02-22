@@ -62,6 +62,40 @@ namespace Laboratorio.Models.DataAccess
 
 
 
+
+        public static List<ToolModel> GetToolsFromToolKit(string toolKitCode)
+        {
+            List<ToolModel> ToolsFromToolKit = new List<ToolModel>();
+
+            dbClientGrana.GetCommand(storeProcedureGetToolKit).Parameters["@ToolKitCode"].Value = toolKitCode;
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureGetToolKit).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["Name"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.Measure = Boolean.Parse(reader["Measure"].ToString());
+                    tm.Shared = reader["Shared"].ToString();
+                    ToolsFromToolKit.Add(tm);
+                }
+
+            }
+
+            return ToolsFromToolKit;
+
+
+
+
+        }
+
+
+
+
         public static List<SelectListItem> GetToolKitCodes()
         {
             var list = new List<SelectListItem>();
@@ -135,6 +169,20 @@ namespace Laboratorio.Models.DataAccess
             return DeactivatedTools;
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,20 +6,18 @@
 @if (Request.IsAuthenticated)
 {
     <fieldset>
-        <legend>@MyResource.ToolAssignation</legend>
-        @using (Html.BeginForm("Index", "Assignment", FormMethod.Post))
+        <legend>Creación de plantillas</legend>
+        @using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
         {
             <fieldset>
-                <legend>Herramientas asignadas</legend>
-                <label for="MachineCode">
-                    Máquina:</label>
-                @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                <legend>Plantilla-Herramientas</legend>
+               
             <div class="ui-corner-left">
                 <br />
-                <label for="ToolKit">
-                    ToolKit:
+                <label for="ToolKitCode">
+                    ToolKitCode:
                 </label>
-                @Html.DropDownList("ToolKit", ViewBag.toolkits as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
             </div>
                 <table class="center">
                     <tr class="TableHeader">
@@ -40,8 +38,7 @@
                         </th>
                         <th>
                         </th>
-                        <th>
-                        </th>
+                        
                         @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
                         {
                             if (ViewBag.MachineCode == "EMBAL1")
@@ -54,6 +51,8 @@
                             }
                         }
                     </tr>
+
+                    @*Aqui comienza contenido de primera tabla*@
                     @if (ViewBag.NoRecords)
                     {
                         <tr class="noRecords">
@@ -63,7 +62,7 @@
                     }
                     else
                     {
-                        foreach (var tm in ViewBag.MachineTools)
+                        foreach (var tm in ViewBag.ToolKit)
                         {
                 <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
                     <td>
@@ -92,38 +91,12 @@
 
                 }
                 <td>
-                    <a href="@Url.Action("RemoveTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
+                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
                         <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
                     </a>
                 </td>
-                @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
-                {
-                    if (string.IsNullOrEmpty(tm.Shared))
-                    {
-                        <td class="centeredTD">
-                            No Compartido
-                            <a href="@Url.Action("ShareTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, meassure = tm.Measure })">
-                                <img alt="@MyResource.RightArrow" src="@Url.Content("~/Content/images/rightarrow2.png")" />
-                            </a>
-                        </td>
-                    }
-                    else
-                    {
-                        <td class="centeredTD">
-                            Compartido
-                            <a href="@Url.Action("ShareTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, meassure = tm.Measure })">
-                                <img alt="@MyResource.RightArrow" src="@Url.Content("~/Content/images/rightarrow2.png")" />
-                            </a>
-                        </td>
-                    }
-                }
-                <td>
-                   
-                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                    </a>
-                    
-                </td>
+            
+                
 
                 </tr>
         
@@ -182,11 +155,11 @@
                         <td class="centeredTD">@tm.ExpirationDate.ToString("dd/MM/yy")
                         </td>
                         <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
                                 <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" /></a>
                         </td>
                         <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
                                 <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" /></a>
                         </td>
                     </tr>

@@ -34,7 +34,7 @@ namespace Laboratorio.Controllers
         }
 
         //
-        // POST: /InsertToolType/ HOLA MUNDO
+        // POST: /InsertToolType/ 
         public ActionResult InsertToolType(string toolTypeName)
         {
             ResourceManager rs = new ResourceManager(typeof(Laboratorio.Messages));
