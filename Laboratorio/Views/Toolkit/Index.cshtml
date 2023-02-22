@@ -12,13 +12,14 @@
             <fieldset>
                 <legend>Plantilla-Herramientas</legend>
                
-            <div class="ui-corner-left">
-                <br />
-                <label for="ToolKitCode">
-                    ToolKitCode:
-                </label>
-                @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
-            </div>
+                <div class="ui-corner-left">
+                    <input type="submit" value="@MyResource.Down" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
+                    <br />
+                    <label for="ToolKitCode">
+                        ToolKitCode:
+                    </label>
+                    @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                </div>
                 <table class="center">
                     <tr class="TableHeader">
                         <th>
@@ -91,7 +92,7 @@
 
                 }
                 <td>
-                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
+                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code })">
                         <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
                     </a>
                 </td>
@@ -155,11 +156,11 @@
                         <td class="centeredTD">@tm.ExpirationDate.ToString("dd/MM/yy")
                         </td>
                         <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, use = 0  })">
                                 <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" /></a>
                         </td>
                         <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code,  use = 1 })">
                                 <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" /></a>
                         </td>
                     </tr>

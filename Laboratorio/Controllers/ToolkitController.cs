@@ -14,30 +14,87 @@ namespace Laboratorio.Controllers
     {
         // GET: /Assignment/
 
+        public List<SelectListItem> toolkits { get; set; }
+        public List<ToolModel> toolsFromToolKits { get; set; }
+        public List<ToolModel> AvailableTools { get; set; }
+
+        public ToolkitController()
+        {
+            FillToolKitViewBag();
+            FillAvailableToolsViewBag();
+            FillToolkitsViewBag();
+            
+        }
+
+
+
+
+
         public ActionResult Index(string ToolKitCode, string validation)
         {
 
-            
-            List<SelectListItem> toolkits = GetToolkitCodes();
-            ViewBag.toolkitCodes = toolkits;
+                
             ViewBag.ValidationMessage = validation;
 
 
-            ToolKitCode = (ToolKitCode == null) ? toolkits[0].Value : ToolKitCode;
-
-            List<ToolModel> tools = GetToolsFromToolKit(ToolKitCode);
-            ViewBag.ToolKit = tools;
-
-            ViewBag.NoRecords = false;
+            if(ToolKitCodeExists(ToolKitCode))
+                FillToolkitsViewBag();
 
 
+            //Validamos que las dos tablas tenga informacion
+            NoRecordsViewBag();
+            NoRecords2ViewBag();
+            return View();
+        }
 
 
 
-            List<ToolModel> available;
-            available = DataAccess.GetAvailableTools();
-            ViewBag.AvailableTools = available;
-            if (available.Count == 0)
+        public ActionResult AddTool(string toolCode, int use)
+        {
+
+            ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
+
+            toolsFromToolKits.Add(SelectedTool);
+            ViewBag.ToolKit = toolsFromToolKits;
+            NoRecordsViewBag();
+            NoRecords2ViewBag();
+            return View("Index");
+        }
+
+
+
+        public ActionResult RemoveTool(string toolCode)
+        {
+            ToolModel SelectedTool = toolsFromToolKits.FirstOrDefault(tool => tool.Code == toolCode);
+            toolsFromToolKits.Remove(SelectedTool);
+            ViewBag.ToolKit = toolsFromToolKits;
+            NoRecordsViewBag();
+            NoRecords2ViewBag();
+            return View("Index");
+
+
+        }
+
+
+
+
+
+
+        private void NoRecordsViewBag()
+        {
+            if (toolkits.Count == 0)
+            {
+                ViewBag.NoRecords = true;
+            }
+            else
+            {
+                ViewBag.NoRecords = false;
+            }
+        }
+
+        private void NoRecords2ViewBag()
+        {
+            if (AvailableTools.Count == 0)
             {
                 ViewBag.NoRecords2 = true;
             }
@@ -45,11 +102,32 @@ namespace Laboratorio.Controllers
             {
                 ViewBag.NoRecords2 = false;
             }
-
-            return View();
         }
 
+        private void FillToolKitViewBag()
+        {
+            toolkits = GetToolkitCodes();
+            ViewBag.toolkitCodes = toolkits;
+        }
 
+        private void FillAvailableToolsViewBag()
+        {
+            AvailableTools = DataAccess.GetAvailableTools();
+            ViewBag.AvailableTools = AvailableTools;
+        }
+
+        private void FillToolkitsViewBag(string ToolKitCode = "Abc") //Valor por default para prueba, esto se va a poner en BD
+        {
+            toolsFromToolKits = GetToolsFromToolKit(ToolKitCode);
+            ViewBag.ToolKit = toolsFromToolKits;
+        }
+
+        private bool ToolKitCodeExists(string ToolKitCode)
+        {
+            if (ToolKitCode is null)
+                return false;
+            return true;
+        }
 
         public List<ToolModel> GetToolsFromToolKit(string ToolKitCode)
         {
@@ -57,9 +135,6 @@ namespace Laboratorio.Controllers
 
             return Tools;
         }
-
-
-
 
         public List<SelectListItem> GetToolkitCodes()
         {
@@ -69,33 +144,13 @@ namespace Laboratorio.Controllers
             return lista;
         }
 
-
-
-
-
-        public ActionResult AddTool(string toolCode, string machineCode, int use)
+        private ToolModel GetSelectedToolFromAvailableTools(string toolCode, int use)
         {
-            int result = DataAccess.InsertMachineTool(toolCode, machineCode, use);
+            ToolModel SelectedTool = AvailableTools.FirstOrDefault(tool => tool.Code == toolCode);
+            var valorMeasure = (use == 1) ? true : false;
+            SelectedTool.Measure = valorMeasure;
 
-            
-        }
-
-        public ActionResult RemoveTool(string toolCode, string machineCode)
-        {
-            int result = DataAccess.DeleteMachineTool(toolCode, machineCode);
-
-            if (result < 0)
-            {
-                ViewBag.ErrorCode = result;
-                return View("Error");
-            }
-            else
-            {
-                DataAccess.InsertLogEntry(User.Identity.Name,
-                   String.Format("Instrumento deasociado: \"{0}\"  a la máquina \"{1}\"", toolCode, machineCode));
-                ViewBag.MachineCode = machineCode;
-                return RedirectToAction("Index", "Assignment", new { machineCode = machineCode });
-            }
+            return SelectedTool;
         }
 
         public ActionResult UpdateToolPage(string code, string validation)
@@ -193,7 +248,6 @@ namespace Laboratorio.Controllers
 
             return sli;
         }
-
 
         public ActionResult ShareTool(string toolCode, string machineCode, bool meassure)
         {
