@@ -99,6 +99,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AssignmentController.cs" />
     <Compile Include="Controllers\DischargedToolsController.cs" />
+    <Compile Include="Controllers\Helper\DataSet.cs" />
     <Compile Include="Controllers\ToolController.cs" />
     <Compile Include="Controllers\ToolkitController.cs" />
     <Compile Include="Controllers\ToolTypesController.cs" />

@@ -14,18 +14,21 @@ namespace Laboratorio.Controllers
     {
         // GET: /Assignment/
 
-        public List<SelectListItem> toolkits { get; set; }
-        public List<ToolModel> toolsFromToolKits { get; set; }
-        public List<ToolModel> AvailableTools { get; set; }
 
-        public ToolkitController()
+
+
+
+        private bool ValidateInformation()
         {
-            FillToolKitViewBag();
-            FillAvailableToolsViewBag();
-            FillToolkitsViewBag();
-            
-        }
+            //if (toolkits == null)
+            //    return true;
+            //if (toolsFromToolKits == null)
+            //    return true;
+            //if (AvailableTools == null)
+            //    return true;
 
+            return false;
+        }
 
 
 
@@ -36,10 +39,15 @@ namespace Laboratorio.Controllers
                 
             ViewBag.ValidationMessage = validation;
 
+            FillToolKitViewBag();
+            FillAvailableToolsViewBag();
+            
 
-            if(ToolKitCodeExists(ToolKitCode))
+
+            if (ToolKitCodeExists(ToolKitCode))
+                FillToolkitsViewBag(ToolKitCode);
+            else
                 FillToolkitsViewBag();
-
 
             //Validamos que las dos tablas tenga informacion
             NoRecordsViewBag();
@@ -48,23 +56,75 @@ namespace Laboratorio.Controllers
         }
 
 
+        
+
+
 
         public ActionResult AddTool(string toolCode, int use)
         {
 
             ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
+            List<ToolModel> toolsFromToolKits;
 
+            var a = this.Session["toolsFromToolKits"];
+            toolsFromToolKits = (List<ToolModel>)a;
             toolsFromToolKits.Add(SelectedTool);
-            ViewBag.ToolKit = toolsFromToolKits;
+            this.Session["toolsFromToolKits"] = toolsFromToolKits;
+            ViewBag.ToolKit = this.Session["toolsFromToolKits"];
+
             NoRecordsViewBag();
             NoRecords2ViewBag();
+
+            this.Session["toolkitCodes"] = GetToolkitCodes();
+            ViewBag.toolkitCodes = this.Session["toolkitCodes"];
+            ViewBag.AvailableTools = this.Session["AvailableTools"];
+
+
             return View("Index");
         }
 
 
 
+
+        public ActionResult InsertNewToolKitCatalog(string KitCode)
+        {
+
+            var result = DataAccess.InsToolKitCatalog(KitCode);
+
+            if (result)
+            {
+                InsToolKit(KitCode);
+                NoRecordsViewBag();
+                NoRecords2ViewBag();
+                return View("Index");// "OperacionExitosa";
+            }
+
+            NoRecordsViewBag();
+            NoRecords2ViewBag();
+
+            return View("Index"); // Operacion no exitosa
+        }
+
+
+        public void InsToolKit(string kitCode)
+        {
+            var toolsFromToolKits = (List<ToolModel>)this.Session["toolsFromToolKits"];
+            foreach (var item in toolsFromToolKits)
+            {
+                DataAccess.InsToolKit(kitCode, item.Code);
+            }
+
+            
+               
+        }
+
+
+
+
+
         public ActionResult RemoveTool(string toolCode)
         {
+            List<ToolModel> toolsFromToolKits = (List<ToolModel>)this.Session["toolsFromToolKits"];
             ToolModel SelectedTool = toolsFromToolKits.FirstOrDefault(tool => tool.Code == toolCode);
             toolsFromToolKits.Remove(SelectedTool);
             ViewBag.ToolKit = toolsFromToolKits;
@@ -82,44 +142,50 @@ namespace Laboratorio.Controllers
 
         private void NoRecordsViewBag()
         {
-            if (toolkits.Count == 0)
-            {
-                ViewBag.NoRecords = true;
-            }
-            else
-            {
-                ViewBag.NoRecords = false;
-            }
+            //if (toolkits.Count == 0)
+            //{
+            //    ViewBag.NoRecords = true;
+            //}
+            //else
+            //{
+            //    ViewBag.NoRecords = false;
+            //}
+            ViewBag.NoRecords = false;
+
         }
 
         private void NoRecords2ViewBag()
         {
-            if (AvailableTools.Count == 0)
-            {
-                ViewBag.NoRecords2 = true;
-            }
-            else
-            {
-                ViewBag.NoRecords2 = false;
-            }
+            //if (AvailableTools.Count == 0)
+            //{
+            //    ViewBag.NoRecords2 = true;
+            //}
+            //else
+            //{
+            //    ViewBag.NoRecords2 = false;
+            //}
+            ViewBag.NoRecords2 = false;
         }
 
         private void FillToolKitViewBag()
         {
-            toolkits = GetToolkitCodes();
+            var toolkits = GetToolkitCodes();
             ViewBag.toolkitCodes = toolkits;
         }
 
         private void FillAvailableToolsViewBag()
         {
-            AvailableTools = DataAccess.GetAvailableTools();
-            ViewBag.AvailableTools = AvailableTools;
+            var AvailableTools = DataAccess.GetAvailableTools();
+            this.Session["AvailableTools"] = AvailableTools;
+            ViewBag.AvailableTools = this.Session["AvailableTools"];
         }
 
         private void FillToolkitsViewBag(string ToolKitCode = "Abc") //Valor por default para prueba, esto se va a poner en BD
         {
-            toolsFromToolKits = GetToolsFromToolKit(ToolKitCode);
-            ViewBag.ToolKit = toolsFromToolKits;
+            var toolsFromToolKits = GetToolsFromToolKit(ToolKitCode);
+            this.Session["toolsFromToolKits"] = toolsFromToolKits;
+            ViewBag.ToolKit = this.Session["toolsFromToolKits"];
+            
         }
 
         private bool ToolKitCodeExists(string ToolKitCode)
@@ -146,7 +212,8 @@ namespace Laboratorio.Controllers
 
         private ToolModel GetSelectedToolFromAvailableTools(string toolCode, int use)
         {
-            ToolModel SelectedTool = AvailableTools.FirstOrDefault(tool => tool.Code == toolCode);
+            var availableTools = this.Session["AvailableTools"];
+            ToolModel SelectedTool = ((List<ToolModel>)availableTools).FirstOrDefault(tool => tool.Code == toolCode);
             var valorMeasure = (use == 1) ? true : false;
             SelectedTool.Measure = valorMeasure;
 

@@ -32,6 +32,8 @@ namespace Laboratorio.Models.DataAccess
         private static string storeProcedureActivateTool = ConfigurationManager.AppSettings["SP_ActivateTool"].ToString();
         private static string storeProcedureGetToolKit = ConfigurationManager.AppSettings["SP_GetToolKit"].ToString();
         private static string storeProcedureGetToolKitCodes = ConfigurationManager.AppSettings["SP_GetToolKitCodes"].ToString();
+        private static string storeProcedureInsToolKitCode = ConfigurationManager.AppSettings["SP_InsToolKitCode"].ToString();
+        private static string storeProcedureInsToolKit = ConfigurationManager.AppSettings["SP_InsToolKit"].ToString();
 
         static DataAccess()
         {
@@ -56,11 +58,38 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.AddCommand(storeProcedureActivateTool);
             dbClientGrana.AddCommand(storeProcedureGetToolKit);
             dbClientGrana.AddCommand(storeProcedureGetToolKitCodes);
+            dbClientGrana.AddCommand(storeProcedureInsToolKitCode);
+            dbClientGrana.AddCommand(storeProcedureInsToolKit);
 
             dbClientGrana.Activate();
         }
 
 
+
+
+        public static void InsToolKit(string ToolKitCode, string ToolCode)
+        {
+            dbClientGrana.GetCommand(storeProcedureInsToolKit).Parameters["@ToolKitCode"].Value = ToolKitCode;
+            dbClientGrana.GetCommand(storeProcedureInsToolKit).Parameters["@ToolCode"].Value = ToolCode;
+
+            dbClientGrana.GetCommand(storeProcedureInsToolKit).ExecuteNonQuery();
+
+           
+        }
+
+
+
+
+        public static bool InsToolKitCatalog(string ToolKitCode)
+        {
+            dbClientGrana.GetCommand(storeProcedureInsToolKitCode).Parameters["@ToolKitCode"].Value = ToolKitCode;
+
+            var result = dbClientGrana.GetCommand(storeProcedureInsToolKitCode).ExecuteScalar();
+
+            return (result.ToString() == "1") ? true : false;
+
+
+        }
 
 
         public static List<ToolModel> GetToolsFromToolKit(string toolKitCode)
