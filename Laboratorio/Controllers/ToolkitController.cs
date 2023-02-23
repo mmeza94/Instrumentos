@@ -41,13 +41,8 @@ namespace Laboratorio.Controllers
 
             FillToolKitViewBag();
             FillAvailableToolsViewBag();
-            
+            FillToolkitsViewBag(ToolKitCode);
 
-
-            if (ToolKitCodeExists(ToolKitCode))
-                FillToolkitsViewBag(ToolKitCode);
-            else
-                FillToolkitsViewBag();
 
             //Validamos que las dos tablas tenga informacion
             NoRecordsViewBag();
@@ -56,32 +51,40 @@ namespace Laboratorio.Controllers
         }
 
 
-        
+        private void UpdateToolsFromToolkitData(ToolModel SelectedTool)
+        {
+            var UpdatedToolsFromToolskit = this.Session["ToolsFromToolKit"];
+            List<ToolModel>  toolsFromToolKits = (List<ToolModel>)UpdatedToolsFromToolskit;
+            toolsFromToolKits.Add(SelectedTool);
+            this.Session["ToolsFromToolKit"] = toolsFromToolKits;
+        }
+
+
+        private void UpdateViewBags()
+        {
+            ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
+            ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
+            ViewBag.AvailableTools = this.Session["AvailableTools"];
+            NoRecordsViewBag();
+            NoRecords2ViewBag();
+        }
+
 
 
 
         public ActionResult AddTool(string toolCode, int use)
         {
-
             ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
-            List<ToolModel> toolsFromToolKits;
 
-            var a = this.Session["toolsFromToolKits"];
-            toolsFromToolKits = (List<ToolModel>)a;
-            toolsFromToolKits.Add(SelectedTool);
-            this.Session["toolsFromToolKits"] = toolsFromToolKits;
-            ViewBag.ToolKit = this.Session["toolsFromToolKits"];
+            UpdateToolsFromToolkitData(SelectedTool);
 
-            NoRecordsViewBag();
-            NoRecords2ViewBag();
-
-            this.Session["toolkitCodes"] = GetToolkitCodes();
-            ViewBag.toolkitCodes = this.Session["toolkitCodes"];
-            ViewBag.AvailableTools = this.Session["AvailableTools"];
-
+            UpdateViewBags();
 
             return View("Index");
         }
+
+
+
 
 
 
@@ -108,14 +111,12 @@ namespace Laboratorio.Controllers
 
         public void InsToolKit(string kitCode)
         {
-            var toolsFromToolKits = (List<ToolModel>)this.Session["toolsFromToolKits"];
+            var toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
             foreach (var item in toolsFromToolKits)
             {
                 DataAccess.InsToolKit(kitCode, item.Code);
             }
-
-            
-               
+      
         }
 
 
@@ -124,7 +125,7 @@ namespace Laboratorio.Controllers
 
         public ActionResult RemoveTool(string toolCode)
         {
-            List<ToolModel> toolsFromToolKits = (List<ToolModel>)this.Session["toolsFromToolKits"];
+            List<ToolModel> toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
             ToolModel SelectedTool = toolsFromToolKits.FirstOrDefault(tool => tool.Code == toolCode);
             toolsFromToolKits.Remove(SelectedTool);
             ViewBag.ToolKit = toolsFromToolKits;
@@ -169,46 +170,42 @@ namespace Laboratorio.Controllers
 
         private void FillToolKitViewBag()
         {
-            var toolkits = GetToolkitCodes();
-            ViewBag.toolkitCodes = toolkits;
+            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog();
+            this.Session["ToolKitCatalog"] = ToolKitCatalog;
+            ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
         }
 
         private void FillAvailableToolsViewBag()
         {
-            var AvailableTools = DataAccess.GetAvailableTools();
+            List<ToolModel> AvailableTools = DataAccess.GetAvailableTools();
             this.Session["AvailableTools"] = AvailableTools;
             ViewBag.AvailableTools = this.Session["AvailableTools"];
         }
 
-        private void FillToolkitsViewBag(string ToolKitCode = "Abc") //Valor por default para prueba, esto se va a poner en BD
+        private void FillToolkitsViewBag(string ToolKitCode) //Valor por default para prueba, esto se va a poner en BD
         {
-            var toolsFromToolKits = GetToolsFromToolKit(ToolKitCode);
-            this.Session["toolsFromToolKits"] = toolsFromToolKits;
-            ViewBag.ToolKit = this.Session["toolsFromToolKits"];
+            List<ToolModel> toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
+            this.Session["ToolsFromToolKit"] = toolsFromToolKit;
+            ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             
         }
 
-        private bool ToolKitCodeExists(string ToolKitCode)
+
+        private List<ToolModel> GetToolsFromSelectedToolKit(string ToolKitCode)
         {
-            if (ToolKitCode is null)
-                return false;
-            return true;
+            List<ToolModel> toolsFromToolKit = DataAccess.GetToolsFromToolKit(ToolKitCode);
+            return toolsFromToolKit;
         }
 
-        public List<ToolModel> GetToolsFromToolKit(string ToolKitCode)
+        private List<SelectListItem> GetToolkitCodesFromCatalog()
         {
-            List<ToolModel> Tools = DataAccess.GetToolsFromToolKit(ToolKitCode);
-
-            return Tools;
+            List<SelectListItem> ToolKitCatalog = new List<SelectListItem>();
+            ToolKitCatalog = DataAccess.GetToolKitCodes();
+            return ToolKitCatalog;
         }
 
-        public List<SelectListItem> GetToolkitCodes()
-        {
-            List<SelectListItem> lista = new List<SelectListItem>();
-            lista = DataAccess.GetToolKitCodes();
 
-            return lista;
-        }
+
 
         private ToolModel GetSelectedToolFromAvailableTools(string toolCode, int use)
         {
@@ -219,6 +216,9 @@ namespace Laboratorio.Controllers
 
             return SelectedTool;
         }
+
+
+
 
         public ActionResult UpdateToolPage(string code, string validation)
         {
@@ -334,5 +334,7 @@ namespace Laboratorio.Controllers
                 return RedirectToAction("Index", "Assignment", new { machineCode = machineCode });
             }
         }
+
+
     }
 }
