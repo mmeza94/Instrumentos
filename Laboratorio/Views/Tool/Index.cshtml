@@ -33,63 +33,108 @@
                     Estado
                 </th>
                 <th>
-                    
+                    Flag
                 </th>
                 <th>
-                    
+
+                </th>
+                <th>
+
                 </th>
             </tr>
             @if (ViewBag.NoRecords)
             {
                 <tr class="noRecords">
-                    <td colspan="8" class="gridRowOdd">@MyResource.NoRecords
-                    </td>
-                </tr>
-            }
-            else
+                    <td colspan="8" class="gridRowOdd">
+                        @MyResource.NoRecords
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var tm in Model)
             {
-                foreach (var tm in Model)
-                {
                 <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                    <td>@tm.Code
+                    <td>
+                        @tm.Code
                     </td>
-                    <td>@tm.Type
+                    <td>
+                        @tm.Type
                     </td>
-                    <td class="centeredTD">@tm.CalibrationDate.ToString("dd/MM/yy")
+                    <td class="centeredTD">
+                        @tm.CalibrationDate.ToString("dd/MM/yy")
                     </td>
-                    <td class="centeredTD">@tm.ExpirationDate.ToString("dd/MM/yy")
+                    <td class="centeredTD">
+                        @tm.ExpirationDate.ToString("dd/MM/yy")
                     </td>
-                    <td class="centeredTD">@tm.Machine
+                    <td class="centeredTD">
+                        @tm.Machine
                     </td>
                     @switch ((int)tm.Available)
                     {
-                        case 1: <td>
-                        @MyResource.Available
-                    </td> break;
-                        case 2: <td>
-                    </td> break;
-                        case 3: <td class="down">@MyResource.Down
-                    </td> break;
-                        default: <td>
-                    </td>break;
+                        case 1:
+                            <td >
+                                @MyResource.Available
+                            </td>
+                            break;
+                        case 2:
+                            <td>
+                            </td>
+                            break;
+                        case 3:
+                            <td class="down">
+                                @MyResource.Down
+                            </td>
+                            break;
+                        default:
+                            <td>
+                            </td>
+                            break;
                     }
+
+                    @switch ((string)tm.ExpirationFlag)
+                    {
+                        case "0":
+                            <td class="centeredTD">
+                                <img alt="Expirado" src="@Url.Content("~/Content/images/cancel.png")" />
+
+                            </td>
+                            break;
+                        case "1":
+                            <td class="centeredTD">
+
+                            <img alt="Warning" src="@Url.Content("~/Content/images/warning16.png")" />
+                            </td>
+                            break;
+                        case "2":
+                            <td class="centeredTD">
+                            <img alt="Ok" src="@Url.Content("~/Content/images/accept.png")" />
+
+                            </td>
+                            break;
+
+                    }
+
+
                     <td>
                         @if (tm.Available == 1)
-                        { <a href="@Url.Action("DeleteTool", "Tool", new { code = tm.Code })">
-                        <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/delete.png")" /></a>
+                        {<a href="@Url.Action("DeleteTool", "Tool", new { code = tm.Code })">
+                                <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/delete.png")" />
+                            </a>
                         }
                     </td>
                     <td>
                         @if (tm.Available == 1)
-                        { <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" /></a>
+                        {<a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                            </a>
                         }
                     </td>
                 </tr>
-        
-                        odd = odd ? false : true;
-                }
+
+                odd = odd ? false : true;
             }
+        }
         </table>
     </fieldset>
     <fieldset>
@@ -106,7 +151,7 @@
             @Html.TextBox("ExpirationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
             if (ViewBag.ValidationMessage != null)
             {
-            <label class="validationError">@ViewBag.ValidationMessage</label>
+                <label class="validationError">@ViewBag.ValidationMessage</label>
             }
             <input type="submit" value="@MyResource.Add" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
         }
