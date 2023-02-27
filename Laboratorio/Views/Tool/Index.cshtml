@@ -27,10 +27,10 @@
                     Fecha de expiraci&oacute;n
                 </th>
                 <th>
-                    Asignado a
+                    Operación
                 </th>
                 <th>
-                    Estado
+                    Plantilla
                 </th>
                 <th>
                     Flag
@@ -70,46 +70,25 @@
                     <td class="centeredTD">
                         @tm.Machine
                     </td>
-                    @switch ((int)tm.Available)
-                    {
-                        case 1:
-                            <td >
-                                @MyResource.Available
-                            </td>
-                            break;
-                        case 2:
-                            <td>
-                            </td>
-                            break;
-                        case 3:
-                            <td class="down">
-                                @MyResource.Down
-                            </td>
-                            break;
-                        default:
-                            <td>
-                            </td>
-                            break;
-                    }
+                    <td class="centeredTD">
+                        Abc
+                    </td>
 
                     @switch ((string)tm.ExpirationFlag)
                     {
                         case "0":
-                            <td class="centeredTD">
-                                <img alt="Expirado" src="@Url.Content("~/Content/images/cancel.png")" />
-
+                            <td class="centeredTD Danger">
+                                Vencido
                             </td>
                             break;
                         case "1":
-                            <td class="centeredTD">
-
-                            <img alt="Warning" src="@Url.Content("~/Content/images/warning16.png")" />
+                            <td class="centeredTD Warning">
+                                Próximo a vencer
                             </td>
                             break;
                         case "2":
-                            <td class="centeredTD">
-                            <img alt="Ok" src="@Url.Content("~/Content/images/accept.png")" />
-
+                            <td class="centeredTD ">
+                                En Tiempo
                             </td>
                             break;
 

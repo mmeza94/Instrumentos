@@ -32,10 +32,6 @@ namespace Laboratorio.Controllers
         }
 
 
-
-
-
-
         public ActionResult AddTool(string toolCode, int use)
         {
             ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
@@ -46,11 +42,6 @@ namespace Laboratorio.Controllers
 
             return View("Index");
         }
-
-
-
-
-
 
 
         public ActionResult InsertNewToolKitCatalog(string KitCode)
@@ -81,9 +72,6 @@ namespace Laboratorio.Controllers
         }
 
 
-
-
-
         public ActionResult RemoveTool(string toolCode)
         {
 
@@ -95,7 +83,6 @@ namespace Laboratorio.Controllers
 
 
         }
-
 
 
         private void UpdateToolsFromToolkitData(ToolModel SelectedTool)
@@ -313,6 +300,9 @@ namespace Laboratorio.Controllers
                 return RedirectToAction("Index", "Assignment", new { machineCode = machineCode });
             }
         }
+
+
+
 
 
     }

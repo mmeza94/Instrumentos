@@ -160,6 +160,9 @@
                     <th>
                         Control
                     </th>
+                    <th>
+
+                    </th>
                 </tr>
                 @if (ViewBag.NoRecords2)
                 {
@@ -172,24 +175,37 @@
                 {
                     foreach (var tm in ViewBag.AvailableTools)
                     {
-                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                        <td>@tm.Code
-                        </td>
-                        <td>@tm.Type
-                        </td>
-                        <td class="centeredTD">@tm.CalibrationDate.ToString("dd/MM/yy")
-                        </td>
-                        <td class="centeredTD">@tm.ExpirationDate.ToString("dd/MM/yy")
-                        </td>
-                        <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
-                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" /></a>
-                        </td>
-                        <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
-                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" /></a>
-                        </td>
-                    </tr>
+            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                <td>
+                    @tm.Code
+            </td>
+            <td>
+                @tm.Type
+            </td>
+            <td class="centeredTD">
+                @tm.CalibrationDate.ToString("dd/MM/yy")
+            </td>
+            <td class="centeredTD">
+                @tm.ExpirationDate.ToString("dd/MM/yy")
+            </td>
+            <td class="centeredTD">
+                <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                    <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                </a>
+            </td>
+            <td class="centeredTD">
+                <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                    <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                </a>
+            </td>
+            <td>
+
+                <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                    <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                </a>
+
+            </td>
+            </tr>
         
                         odd = odd ? false : true;
                     }
