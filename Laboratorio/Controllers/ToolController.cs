@@ -120,9 +120,13 @@ namespace Laboratorio.Controllers
                 return View("Error");
             }
             else
+            {
+                DataAccess.DeactivateToolFromToolKitCatalog(code);
                 DataAccess.InsertLogEntry(User.Identity.Name,
-                    String.Format("Instrumento dado de baja: \"{0}\"" ,code));
+                    String.Format("Instrumento dado de baja: \"{0}\"", code));
                 return RedirectToAction("Index");
+            }
+                
         }
 
         public ActionResult UpdateToolPage(string code, string validation)
