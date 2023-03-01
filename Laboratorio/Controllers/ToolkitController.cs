@@ -23,6 +23,7 @@ namespace Laboratorio.Controllers
                 MachineCode = ConfigurationManager.AppSettings["GranalladoraCode"].ToString();
             }
 
+
             FillMachineIdViewBag();
 
             //Se llena el segundo combobox
@@ -43,6 +44,22 @@ namespace Laboratorio.Controllers
             NoRecords2ViewBag();
             return View();
         }
+
+
+
+        public ActionResult DeleteToolkit(string ToolKitCode)
+        {
+
+            DataAccess.DeleteTool(ToolKitCode);
+            FillToolkitsViewBag(ToolKitCode);
+            UpdateViewBags();
+            return View("Index");
+        }
+
+
+
+
+
 
         private void FillMachineIdViewBag()
         {
@@ -87,6 +104,8 @@ namespace Laboratorio.Controllers
             if (IsInsertionSuccesful)
             {
                 InsToolKit(KitCode);
+                FillToolKitViewBag();
+                FillToolkitsViewBag();
                 UpdateViewBags();
                 return View("Index");// "OperacionExitosa";
             }
@@ -169,7 +188,9 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillToolKitViewBag(int idMachine)
+
+        //Por defecto el idMachine es el de Granalladora 
+        private void FillToolKitViewBag(int idMachine = 7)
         {
 
 
@@ -188,7 +209,7 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillToolkitsViewBag(string ToolKitCode) //Valor por default para prueba, esto se va a poner en BD
+        private void FillToolkitsViewBag(string ToolKitCode = null) //Valor por default para prueba, esto se va a poner en BD
         {
             //Validamos que la plantilla si exista en el catalogo de la maquina, si no, seleccionamos la primer plantilla que traiga.
             List<SelectListItem> codes = (List<SelectListItem>)this.Session["ToolKitCatalog"];
@@ -201,6 +222,10 @@ namespace Laboratorio.Controllers
             ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             
         }
+
+
+
+
 
 
         private List<ToolModel> GetToolsFromSelectedToolKit(string ToolKitCode)

@@ -35,6 +35,8 @@ namespace Laboratorio.Models.DataAccess
         private static string storeProcedureInsToolKitCode = ConfigurationManager.AppSettings["SP_InsToolKitCode"].ToString();
         private static string storeProcedureInsToolKit = ConfigurationManager.AppSettings["SP_InsToolKit"].ToString();
         private static string storeProcedureDeactiveToolFromToolkitCatalog = ConfigurationManager.AppSettings["SP_DeactiveToolFromToolkitCatalog"].ToString();
+        private static string storeProcedureDeleteToolKit = ConfigurationManager.AppSettings["SP_DeleteToolKit"].ToString();
+        private static string storeProcedureGetToolKitCodesPerTool = ConfigurationManager.AppSettings["SP_GetToolKitCodesPerTool"].ToString();
 
         static DataAccess()
         {
@@ -62,10 +64,50 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.AddCommand(storeProcedureInsToolKitCode);
             dbClientGrana.AddCommand(storeProcedureInsToolKit);
             dbClientGrana.AddCommand(storeProcedureDeactiveToolFromToolkitCatalog);
+            dbClientGrana.AddCommand(storeProcedureDeleteToolKit);
+            dbClientGrana.AddCommand(storeProcedureGetToolKitCodesPerTool);
 
             dbClientGrana.Activate();
         }
 
+
+
+
+        public static string GetToolKitCodesPerTool(string ToolCode)
+        {
+            dbClientGrana.GetCommand(storeProcedureGetToolKitCodesPerTool).Parameters["@ToolCode"].Value = ToolCode;
+
+            string listCodes = "";
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureGetToolKitCodesPerTool).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string Code = "";
+
+                    Code = reader["ToolKitCode"].ToString();
+                    listCodes = $"{listCodes},{Code}";
+                }
+
+            }
+
+            return listCodes;
+
+
+        }
+
+
+
+
+
+
+        public static void DeleteToolkit(string ToolkitCode)
+        {
+            dbClientGrana.GetCommand(storeProcedureActivateTool).Parameters["@ToolkitCode"].Value = ToolkitCode;
+
+            dbClientGrana.GetCommand(storeProcedureActivateTool).ExecuteNonQuery();
+            
+        }
 
 
 
@@ -78,10 +120,6 @@ namespace Laboratorio.Models.DataAccess
         }
 
 
-
-
-
-
         public static void InsToolKit(string ToolKitCode, string ToolCode)
         {
             dbClientGrana.GetCommand(storeProcedureInsToolKit).Parameters["@ToolKitCode"].Value = ToolKitCode;
@@ -91,8 +129,6 @@ namespace Laboratorio.Models.DataAccess
 
            
         }
-
-
 
 
         public static bool InsToolKitCatalog(string ToolKitCode, int idMachine)
@@ -137,8 +173,6 @@ namespace Laboratorio.Models.DataAccess
 
 
         }
-
-
 
 
         public static List<SelectListItem> GetToolKitCodes(int idMachine)
@@ -224,16 +258,6 @@ namespace Laboratorio.Models.DataAccess
 
 
 
-
-
-
-
-
-
-
-
-
-
         public static List<ToolTypeModel> GetToolTypes()
         {
             List<ToolTypeModel> l = new List<ToolTypeModel>();
@@ -288,7 +312,7 @@ namespace Laboratorio.Models.DataAccess
                     tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
                     tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
                     tm.Machine = reader["MachineName"].ToString();
-
+                    tm.Plantilla = reader["Plantilla"].ToString();
                     bool active = Boolean.Parse(reader["Active"].ToString());
                     if (tm.Machine.Equals(String.Empty))
                     {
@@ -441,8 +465,6 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.GetCommand(storeProcedureInsLog).ExecuteNonQuery();
         }
 
-
-
         public static int ShareMachineTool(string toolCode, string machineCode,bool meassure)
         {
             dbClientGrana.GetCommand(storeProcedureShareMachineTool).Parameters["@ToolCode"].Value = toolCode;
@@ -453,5 +475,12 @@ namespace Laboratorio.Models.DataAccess
 
             return Int32.Parse(dbClientGrana.GetCommand(storeProcedureShareMachineTool).Parameters["@Success"].Value.ToString());
         }
+
+
+
+
+
+
+
     }
 }
