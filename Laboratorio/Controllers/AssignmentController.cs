@@ -34,7 +34,8 @@ namespace Laboratorio.Controllers
 
 
             //Se llena el segundo combobox
-            List<SelectListItem> toolkits = GetToolkitCodes();
+            int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
+            List<SelectListItem> toolkits = GetToolkitCodes(idMachine);
             ViewBag.toolkits = toolkits;
 
 
@@ -68,10 +69,13 @@ namespace Laboratorio.Controllers
 
 
 
-        public List<SelectListItem> GetToolkitCodes()
+        public List<SelectListItem> GetToolkitCodes(int idMachine)
         {
             List<SelectListItem> lista = new List<SelectListItem>();
-            lista = DataAccess.GetToolKitCodes();
+
+            //HardCode de Prueba 
+            //int idMachine = 7;
+            lista = DataAccess.GetToolKitCodes(idMachine);
 
             return lista;
         }

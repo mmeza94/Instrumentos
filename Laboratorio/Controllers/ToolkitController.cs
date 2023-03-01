@@ -7,6 +7,7 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Web.Mvc;
+using System.CodeDom;
 
 namespace Laboratorio.Controllers
 {
@@ -14,13 +15,25 @@ namespace Laboratorio.Controllers
     {
         // GET: /Assignment/
 
-        public ActionResult Index(string ToolKitCode, string validation)
+        public ActionResult Index(string MachineCode,string ToolKitCode, string validation)
         {
 
-                
+            if (MachineCode == null)
+            {
+                MachineCode = ConfigurationManager.AppSettings["GranalladoraCode"].ToString();
+            }
+
+            FillMachineIdViewBag();
+
+            //Se llena el segundo combobox
+            int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
+            List<SelectListItem> toolkits = GetToolkitCodesFromCatalog(idMachine);
+            ViewBag.toolkits = toolkits;
+
+
             ViewBag.ValidationMessage = validation;
 
-            FillToolKitViewBag();
+            FillToolKitViewBag(idMachine);
             FillAvailableToolsViewBag();
             FillToolkitsViewBag(ToolKitCode);
 
@@ -30,6 +43,23 @@ namespace Laboratorio.Controllers
             NoRecords2ViewBag();
             return View();
         }
+
+        private void FillMachineIdViewBag()
+        {
+            //Se llena el primer comboBox
+            List<SelectListItem> sli = LoadMachines();
+            this.Session["MachineIds"]= sli;
+            ViewBag.Sli = sli;
+        }
+
+
+
+        public ActionResult AddToolMassive(string Code)
+        {
+            return View("Index");
+        }
+
+
 
 
         public ActionResult AddTool(string toolCode, int use)
@@ -44,10 +74,15 @@ namespace Laboratorio.Controllers
         }
 
 
-        public ActionResult InsertNewToolKitCatalog(string KitCode)
+
+
+        public ActionResult InsertNewToolKitCatalog(string KitCode, string MachineCode)
         {
 
-            bool IsInsertionSuccesful = DataAccess.InsToolKitCatalog(KitCode);
+            int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
+
+
+            bool IsInsertionSuccesful = DataAccess.InsToolKitCatalog(KitCode, idMachine);
 
             if (IsInsertionSuccesful)
             {
@@ -99,6 +134,7 @@ namespace Laboratorio.Controllers
             ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
             ViewBag.AvailableTools = this.Session["AvailableTools"];
+            ViewBag.Sli = this.Session["MachineIds"];
             NoRecordsViewBag();
             NoRecords2ViewBag();
         }
@@ -133,9 +169,12 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillToolKitViewBag()
+        private void FillToolKitViewBag(int idMachine)
         {
-            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog();
+
+
+
+            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog(idMachine);
             this.Session["ToolKitCatalog"] = ToolKitCatalog;
             ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
         }
@@ -151,7 +190,13 @@ namespace Laboratorio.Controllers
 
         private void FillToolkitsViewBag(string ToolKitCode) //Valor por default para prueba, esto se va a poner en BD
         {
-            List<ToolModel> toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
+            //Validamos que la plantilla si exista en el catalogo de la maquina, si no, seleccionamos la primer plantilla que traiga.
+            List<SelectListItem> codes = (List<SelectListItem>)this.Session["ToolKitCatalog"];
+            var validacion = codes.Any(c => c.Value == ToolKitCode);
+            ToolKitCode = validacion ? ToolKitCode : codes.FirstOrDefault().Value;
+
+
+            List <ToolModel> toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
             this.Session["ToolsFromToolKit"] = toolsFromToolKit;
             ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             
@@ -165,10 +210,13 @@ namespace Laboratorio.Controllers
         }
 
 
-        private List<SelectListItem> GetToolkitCodesFromCatalog()
+        private List<SelectListItem> GetToolkitCodesFromCatalog(int idMachine)
         {
             List<SelectListItem> ToolKitCatalog = new List<SelectListItem>();
-            ToolKitCatalog = DataAccess.GetToolKitCodes();
+
+            //HardCode  de prueba 
+            //int idMachine = 7;
+            ToolKitCatalog = DataAccess.GetToolKitCodes(idMachine);
             return ToolKitCatalog;
         }
 
@@ -302,7 +350,7 @@ namespace Laboratorio.Controllers
         }
 
 
-
+    
 
 
     }
