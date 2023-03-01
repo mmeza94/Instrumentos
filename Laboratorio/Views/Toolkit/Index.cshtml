@@ -21,19 +21,12 @@
         </div>
         @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>)
         <p>
-            <input type="submit" value="Crear" />
+            <input class="csbutton" type="submit" value="Crear" />
         </p>
-    }
-
-
-
-    @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
-    {
         
-        <p class="Margincutsom">
-            <input type="submit" value="HolaMudno" />
-        </p>
     }
+
+
 
 
 
@@ -57,6 +50,13 @@
                     ToolKitCode:
                 </label>
                 @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
+
+                <br />
+
+                <a href="@Url.Action("DeleteToolkit", "Toolkit")">
+                    <input class="csbutton" type="button" value="Borrar" />
+                </a>
+
             </div>
             <table class="center">
                 <tr class="TableHeader">
@@ -206,6 +206,7 @@
             }
             else
             {
+
                 foreach (var tm in ViewBag.AvailableTools)
                 {
                     <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
@@ -239,9 +240,7 @@
 
                         </td>
                         <td>
-                            <a href="@Url.Action("AddToolMassive", "Toolkit", new { toolCode = tm.Code })">
-                                <input type="checkbox" />
-                            </a>
+                            <input type="checkbox"/>
                         </td>
 
                     </tr>

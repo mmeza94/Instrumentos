@@ -34,10 +34,13 @@ namespace Laboratorio.Controllers
 
             ViewBag.ValidationMessage = validation;
 
+            
+
             FillToolKitViewBag(idMachine);
             FillAvailableToolsViewBag();
             FillToolkitsViewBag(ToolKitCode);
 
+            
 
             //Validamos que las dos tablas tenga informacion
             NoRecordsViewBag();
@@ -47,11 +50,11 @@ namespace Laboratorio.Controllers
 
 
 
-        public ActionResult DeleteToolkit(string ToolKitCode)
+        public ActionResult DeleteToolkit()
         {
-
-            DataAccess.DeleteTool(ToolKitCode);
-            FillToolkitsViewBag(ToolKitCode);
+            string ToolkitCode = this.Session["SelectedToolKitCode123"].ToString();
+            DataAccess.DeleteToolkit(ToolkitCode);
+            FillToolkitsViewBag(ToolkitCode);
             UpdateViewBags();
             return View("Index");
         }
@@ -189,7 +192,7 @@ namespace Laboratorio.Controllers
 
 
 
-        //Por defecto el idMachine es el de Granalladora 
+        //Por defecto el idMachine es el de Granalladora // To-Do: Hay que modificar para que agarre el idMachine Diferente
         private void FillToolKitViewBag(int idMachine = 7)
         {
 
@@ -198,6 +201,8 @@ namespace Laboratorio.Controllers
             List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog(idMachine);
             this.Session["ToolKitCatalog"] = ToolKitCatalog;
             ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
+
+
         }
 
 
@@ -213,11 +218,15 @@ namespace Laboratorio.Controllers
         {
             //Validamos que la plantilla si exista en el catalogo de la maquina, si no, seleccionamos la primer plantilla que traiga.
             List<SelectListItem> codes = (List<SelectListItem>)this.Session["ToolKitCatalog"];
+
+
+            //TO-DO : Validar si Codes esta vacio, esto para en caso qeu no haya una plantilla definida para la maquina
             var validacion = codes.Any(c => c.Value == ToolKitCode);
             ToolKitCode = validacion ? ToolKitCode : codes.FirstOrDefault().Value;
 
 
             List <ToolModel> toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
+            this.Session["SelectedToolKitCode123"] = ToolKitCode;
             this.Session["ToolsFromToolKit"] = toolsFromToolKit;
             ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             

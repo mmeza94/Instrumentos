@@ -384,6 +384,9 @@ namespace Laboratorio.Models.DataAccess
             return l;
         }
 
+
+
+        //Se modifico este SP en BD
         public static List<ToolModel> GetAvailableTools()
         {
             List<ToolModel> l = new List<ToolModel>();
