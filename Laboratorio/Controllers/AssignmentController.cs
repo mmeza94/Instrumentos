@@ -7,6 +7,7 @@ using Laboratorio.Models;
 using Laboratorio.Models.DataAccess;
 using System.Configuration;
 using System.Resources;
+using System.Web.UI.WebControls.WebParts;
 
 namespace Laboratorio.Controllers
 {
@@ -42,6 +43,10 @@ namespace Laboratorio.Controllers
 
             List<ToolModel> tm;
             tm = DataAccess.GetToolsByMachineCode(MachineCode);
+
+            this.Session["MachineCodeAssigned"] = MachineCode;
+
+
             ViewBag.MachineTools = tm;
             if (tm.Count == 0)
             {
@@ -66,6 +71,39 @@ namespace Laboratorio.Controllers
 
             return View();
         }
+
+
+
+
+        public ActionResult AssignMultipleTools(string ToolKit)
+        {
+            var tools = DataAccess.GetToolsFromToolKit(ToolKit);
+            var MachineCode = this.Session["MachineCodeAssigned"].ToString();
+            foreach (var item in tools)
+            {
+                AddTool(item.Code, MachineCode, 1);
+            }
+
+
+
+            //int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
+            //List<SelectListItem> toolkits = GetToolkitCodes(idMachine);
+            //ViewBag.toolkits = toolkits;
+            //List<SelectListItem> sli = LoadMachines();
+            //ViewBag.Sli = sli;
+
+            return RedirectToAction("Index", "Assignment", new { machineCode = MachineCode, });
+
+        }
+
+
+        //private void AddToolsNew(string toolCode, string machineCode, int use)
+        //{
+        //    int result = DataAccess.InsertMachineTool(toolCode, machineCode, use);
+        //}
+
+
+
 
 
 

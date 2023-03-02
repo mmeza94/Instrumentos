@@ -7,57 +7,176 @@
 }
 @if (Request.IsAuthenticated)
 {
-<fieldset>
-    <legend>Creación de plantillas</legend>
+    <fieldset>
+        <legend>Creación de plantillas</legend>
 
 
-    @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
-    {
-        <div class="editor-label">
-            @Html.Label("Nombre Plantilla")
-        </div>
-        <div class="textBox textBoxEnable">
-            @Html.TextBox("KitCode")
-        </div>
-        @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>)
-        <p>
-            <input class="csbutton" type="submit" value="Crear" />
-        </p>
-        
-    }
-
-
-
-
-
-
-    @using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
-    {
-        <fieldset>
-            <legend>Plantilla-Herramientas</legend>
-
-            <div class="ui-corner-left">
-                <br />
-                <label for="MachineCode">
-                    Machine:
-                </label>
-                @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
-
-
-                <br />
-                <br />
-                <label for="ToolKitCode">
-                    ToolKitCode:
-                </label>
-                @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
-
-                <br />
-
-                <a href="@Url.Action("DeleteToolkit", "Toolkit")">
-                    <input class="csbutton" type="button" value="Borrar" />
-                </a>
-
+        @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
+        {
+            <div class="editor-label">
+                @Html.Label("Nombre Plantilla")
             </div>
+            <div class="textBox textBoxEnable">
+                @Html.TextBox("KitCode")
+            </div>
+            @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>)
+            <p>
+                <input class="csbutton" type="submit" value="Crear" />
+            </p>
+
+        }
+
+
+
+
+
+
+        @using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
+        {
+            <fieldset>
+                <legend>Plantilla-Herramientas</legend>
+
+                <div class="ui-corner-left">
+                    <br />
+                    <label for="MachineCode">
+                        Machine:
+                    </label>
+                    @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
+
+
+                    <br />
+                    <br />
+                    <label for="ToolKitCode">
+                        ToolKitCode:
+                    </label>
+                    @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
+
+                    <br />
+
+                    <a href="@Url.Action("DeleteToolkit", "Toolkit")">
+                        <input class="csbutton" type="button" value="Borrar" />
+                    </a>
+
+                </div>
+                <table class="center">
+                    <tr class="TableHeader">
+                        <th>
+                            C&oacute;digo
+                        </th>
+                        <th>
+                            Tipo
+                        </th>
+                        <th>
+                            Fecha de calibraci&oacute;n
+                        </th>
+                        <th>
+                            Fecha de expiraci&oacute;n
+                        </th>
+                        <th>
+                            Uso
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+
+                        </th>
+                        @*<th>
+                                Checkbox
+                            </th>*@
+
+                        @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
+                        {
+                            if (ViewBag.MachineCode == "EMBAL1")
+                            {
+                                <th>Compartir con Pintado Tina B</th>
+                            }
+                            else
+                            {
+                                <th>Compartir con Pintado Tina A</th>
+                            }
+                        }
+                    </tr>
+
+                    @*Aqui comienza contenido de primera tabla*@
+                    @if (ViewBag.NoRecords)
+                    {
+                        <tr class="noRecords">
+                            <td colspan="5" class="gridRowOdd">
+                                @MyResource.NoRecords
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var tm in ViewBag.ToolKit)
+                        {
+                            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                                <td>
+                                    @tm.Code
+                                </td>
+                                <td>
+                                    @tm.Type
+                                </td>
+                                <td class="centeredTD">
+                                    @tm.CalibrationDate.ToString("dd/MM/yy")
+                                </td>
+                                <td class="centeredTD">
+                                    @tm.ExpirationDate.ToString("dd/MM/yy")
+                                </td>
+                                @if (tm.Measure)
+                                {
+                                    <td class="centeredTD">
+                                        Medici&oacute;n
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="centeredTD">
+                                        Control
+                                    </td>
+
+                                }
+                                <td>
+                                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code })">
+                                        <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                    </a>
+
+                                </td>
+                                @*<td>
+                                        <input type="checkbox" />
+                                    </td>*@
+
+
+
+                            </tr>
+
+                            odd = odd ? false : true;
+                        }
+                    }
+                </table>
+                @if (ViewBag.ValidationMessage != null)
+                {
+                    <label class="validationError">@ViewBag.ValidationMessage</label>
+                }
+            </fieldset>
+            <br />
+        }
+        <fieldset>
+            <legend>Herramientas disponibles</legend>
+
+
+
+
+
+
+
+
             <table class="center">
                 <tr class="TableHeader">
                     <th>
@@ -73,32 +192,19 @@
                         Fecha de expiraci&oacute;n
                     </th>
                     <th>
-                        Uso
+                        Medición
                     </th>
                     <th>
+                        Control
                     </th>
                     <th>
 
                     </th>
-                    @*<th>
-                            Checkbox
-                        </th>*@
-
-                    @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
-                    {
-                        if (ViewBag.MachineCode == "EMBAL1")
-                        {
-                            <th>Compartir con Pintado Tina B</th>
-                        }
-                        else
-                        {
-                            <th>Compartir con Pintado Tina A</th>
-                        }
-                    }
+                    <th>
+                        C
+                    </th>
                 </tr>
-
-                @*Aqui comienza contenido de primera tabla*@
-                @if (ViewBag.NoRecords)
+                @if (ViewBag.NoRecords2)
                 {
                     <tr class="noRecords">
                         <td colspan="5" class="gridRowOdd">
@@ -108,151 +214,89 @@
                 }
                 else
                 {
-                    foreach (var tm in ViewBag.ToolKit)
+                    using (Html.BeginForm("AddToolMassive", "Toolkit", FormMethod.Post))
                     {
-                        <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                            <td>
-                                @tm.Code
-                            </td>
-                            <td>
-                                @tm.Type
-                            </td>
-                            <td class="centeredTD">
-                                @tm.CalibrationDate.ToString("dd/MM/yy")
-                            </td>
-                            <td class="centeredTD">
-                                @tm.ExpirationDate.ToString("dd/MM/yy")
-                            </td>
-                            @if (tm.Measure)
-                            {
-                                <td class="centeredTD">
-                                    Medici&oacute;n
+
+                        <div class="editor-label">
+                            @Html.Label("Agregar a plantilla:")
+                        </div>
+                        <p>
+                            <input class="csbutton" id="bttn_Click" type="submit" value="Add" />
+                        </p>
+
+                        foreach (var tm in ViewBag.AvailableTools)
+                        {
+                            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                                <td>
+                                    @tm.Code
                                 </td>
-                            }
-                            else
-                            {
+                                <td>
+                                    @tm.Type
+                                </td>
                                 <td class="centeredTD">
-                                    Control
+                                    @tm.CalibrationDate.ToString("dd/MM/yy")
+                                </td>
+                                <td class="centeredTD">
+                                    @tm.ExpirationDate.ToString("dd/MM/yy")
+                                </td>
+                                <td class="centeredTD">
+                                    <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, use = 1 })">
+                                        <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                    </a>
+                                </td>
+                                <td class="centeredTD">
+                                    <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, use = 0 })">
+                                        <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                    </a>
+
+                                </td>
+                                <td>
+
+                                    <input type="checkbox"
+                                           value=@tm.Code
+                                           id=@tm.Code
+                                           />
+
                                 </td>
 
-                            }
-                            <td>
-                                <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code })">
-                                    <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
-                                </a>
-                            </td>
-                            <td>
+                            </tr>
 
-                                <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                    <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                                </a>
-
-                            </td>
-                            @*<td>
-                                    <input type="checkbox" />
-                                </td>*@
-
-
-
-                        </tr>
-
-                        odd = odd ? false : true;
+                            odd = odd ? false : true;
+                        }
                     }
                 }
             </table>
-            @if (ViewBag.ValidationMessage != null)
-            {
-                <label class="validationError">@ViewBag.ValidationMessage</label>
-            }
+
         </fieldset>
-        <br />
-    }
-    <fieldset>
-        <legend>Herramientas disponibles</legend>
-        <table class="center">
-            <tr class="TableHeader">
-                <th>
-                    C&oacute;digo
-                </th>
-                <th>
-                    Tipo
-                </th>
-                <th>
-                    Fecha de calibraci&oacute;n
-                </th>
-                <th>
-                    Fecha de expiraci&oacute;n
-                </th>
-                <th>
-                    Medición
-                </th>
-                <th>
-                    Control
-                </th>
-                <th>
-
-                </th>
-                <th>
-                    C
-                </th>
-            </tr>
-            @if (ViewBag.NoRecords2)
-            {
-                <tr class="noRecords">
-                    <td colspan="5" class="gridRowOdd">
-                        @MyResource.NoRecords
-                    </td>
-                </tr>
-            }
-            else
-            {
-
-                foreach (var tm in ViewBag.AvailableTools)
-                {
-                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                        <td>
-                            @tm.Code
-                        </td>
-                        <td>
-                            @tm.Type
-                        </td>
-                        <td class="centeredTD">
-                            @tm.CalibrationDate.ToString("dd/MM/yy")
-                        </td>
-                        <td class="centeredTD">
-                            @tm.ExpirationDate.ToString("dd/MM/yy")
-                        </td>
-                        <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, use = 1  })">
-                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                            </a>
-                        </td>
-                        <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code,  use = 0 })">
-                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                            </a>
-                        </td>
-                        <td>
-
-                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                            </a>
-
-                        </td>
-                        <td>
-                            <input type="checkbox"/>
-                        </td>
-
-                    </tr>
-
-                    odd = odd ? false : true;
-                }
-            }
-        </table>
     </fieldset>
-</fieldset>
 }
 else
 {
     @Html.Partial("_LogInFormPartial")
 }
+
+
+
+
+
+@*<script>
+    $('#bttn_Click').click(function () {
+        var studentListVal = null;
+        studentListVal = [];
+
+        $('input:checkbox:checked').each(function () {
+            studentListVal.push($(this).attr('value'));
+        });  
+
+        $.ajax({
+            type: "post",
+            url: "/Student/Studentl",
+            data: { Name: studentListVal },    
+
+</script>*@

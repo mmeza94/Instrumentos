@@ -8,74 +8,65 @@ using System.Resources;
 using System.Text;
 using System.Web.Mvc;
 using System.CodeDom;
+using System.Web.UI.WebControls.WebParts;
 
 namespace Laboratorio.Controllers
 {
     public class ToolkitController: Controller
     {
+
+
+
+        // this.Session["SelectedToolKitCode123"] -- El toolkitcode seleccionado
+        // this.Session["MachineIds"] - la lista de machineId's
+        // this.Session["ToolsFromToolKit"] -- Tabla superior --instrumentos de la plantilla
+        //this.Session["AvailableTools"]; -- Tabla inferior -- instrumentos disponibles
+        //this.Session["ToolKitCatalog"] -- Codigos de plantillas
+
+
+
         // GET: /Assignment/
+
+        #region EndPoints
+
 
         public ActionResult Index(string MachineCode,string ToolKitCode, string validation)
         {
-
-            if (MachineCode == null)
-            {
-                MachineCode = ConfigurationManager.AppSettings["GranalladoraCode"].ToString();
-            }
-
-
+            //Estas no dependen de nada
             FillMachineIdViewBag();
-
-            //Se llena el segundo combobox
-            int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
-            List<SelectListItem> toolkits = GetToolkitCodesFromCatalog(idMachine);
-            ViewBag.toolkits = toolkits;
-
-
+            FillAvailableToolsSession();
             ViewBag.ValidationMessage = validation;
 
-            
 
-            FillToolKitViewBag(idMachine);
-            FillAvailableToolsViewBag();
+
+
+            MachineCode = SetDefaultMachineCodeIfNull(MachineCode);
+            this.Session["idSelectedMachine"] = ConfigurationManager.AppSettings[MachineCode].ToString();
+
+
+            //Llenamos el combobox de codigos de plantillas
+            FillToolKitCatalogSession();
+            //Llenamos la tabla de instrumentos que contiene la plantilla
             FillToolkitsViewBag(ToolKitCode);
 
-            
+
 
             //Validamos que las dos tablas tenga informacion
-            NoRecordsViewBag();
-            NoRecords2ViewBag();
+            UpdateViewBags();
             return View();
         }
 
 
 
-        public ActionResult DeleteToolkit()
+
+        public ActionResult AddToolMassive(List<string> Code)
         {
-            string ToolkitCode = this.Session["SelectedToolKitCode123"].ToString();
-            DataAccess.DeleteToolkit(ToolkitCode);
-            FillToolkitsViewBag(ToolkitCode);
-            UpdateViewBags();
-            return View("Index");
-        }
-
-
-
-
-
-
-        private void FillMachineIdViewBag()
-        {
-            //Se llena el primer comboBox
-            List<SelectListItem> sli = LoadMachines();
-            this.Session["MachineIds"]= sli;
-            ViewBag.Sli = sli;
-        }
-
-
-
-        public ActionResult AddToolMassive(string Code)
-        {
+            List<string> list = new List<string>();
+            foreach (var item in Code)
+            {
+                int use = 1;
+                AddTool(item, use);
+            }
             return View("Index");
         }
 
@@ -107,7 +98,7 @@ namespace Laboratorio.Controllers
             if (IsInsertionSuccesful)
             {
                 InsToolKit(KitCode);
-                FillToolKitViewBag();
+                FillToolKitCatalogSession();
                 FillToolkitsViewBag();
                 UpdateViewBags();
                 return View("Index");// "OperacionExitosa";
@@ -118,14 +109,15 @@ namespace Laboratorio.Controllers
         }
 
 
-        public void InsToolKit(string kitCode)
+
+        public ActionResult DeleteToolkit()
         {
-            var toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
-            foreach (var item in toolsFromToolKits)
-            {
-                DataAccess.InsToolKit(kitCode, item.Code);
-            }
-      
+            string ToolkitCode = this.Session["SelectedToolKitCode123"].ToString();
+            DataAccess.DeleteToolkit(ToolkitCode);
+            FillToolKitCatalogSession();
+            FillToolkitsViewBag(ToolkitCode);
+            UpdateViewBags();
+            return View("Index");
         }
 
 
@@ -142,6 +134,79 @@ namespace Laboratorio.Controllers
         }
 
 
+
+        public ActionResult UpdateToolPage(string code, string validation)
+        {
+            List<ToolModel> tm = DataAccess.GetTools();
+
+            ViewBag.ValidationMessage = validation;
+
+            return View(tm.Single(s => s.Code.Equals(code)));
+        }
+
+
+
+        public ActionResult ShareTool(string toolCode, string machineCode, bool meassure)
+        {
+            int result = DataAccess.ShareMachineTool(toolCode, machineCode, meassure);
+
+            if (result < 0)
+            {
+                ViewBag.ValidationMessage = "Error al compartir instrumento, podría deberse a que ya existe en la otra máquina.";
+                return RedirectToAction("Index", "Assignment", new { machineCode = machineCode, validation = ViewBag.ValidationMessage });
+                //return View("Error");
+            }
+            else
+            {
+                DataAccess.InsertLogEntry(User.Identity.Name,
+                   String.Format("Instrumento Compartido : \"{0}\"  a la máquina \"{1}\"", toolCode, machineCode));
+                ViewBag.MachineCode = machineCode;
+                return RedirectToAction("Index", "Assignment", new { machineCode = machineCode });
+            }
+        }
+
+
+
+        #endregion
+
+
+
+
+
+
+
+        private string SetDefaultMachineCodeIfNull(string MachineCode)
+        {
+            if (MachineCode == null)
+            {
+                MachineCode = ConfigurationManager.AppSettings["GranalladoraCode"].ToString();
+            }
+
+            return MachineCode;
+
+        }
+
+
+        private void FillMachineIdViewBag()
+        {
+            //Se llena el primer comboBox
+            List<SelectListItem> sli = LoadMachines();
+            this.Session["MachineIds"]= sli;
+            ViewBag.Sli = sli;
+        }
+
+
+        public void InsToolKit(string kitCode)
+        {
+            var toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
+            foreach (var item in toolsFromToolKits)
+            {
+                DataAccess.InsToolKit(kitCode, item.Code);
+            }
+      
+        }
+
+       
         private void UpdateToolsFromToolkitData(ToolModel SelectedTool)
         {
             var UpdatedToolsFromToolskit = this.Session["ToolsFromToolKit"];
@@ -191,26 +256,20 @@ namespace Laboratorio.Controllers
         }
 
 
-
-        //Por defecto el idMachine es el de Granalladora // To-Do: Hay que modificar para que agarre el idMachine Diferente
-        private void FillToolKitViewBag(int idMachine = 7)
+        private void FillToolKitCatalogSession()
         {
 
-
-
-            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog(idMachine);
-            this.Session["ToolKitCatalog"] = ToolKitCatalog;
-            ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
-
+            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog();
+            this.Session["ToolKitCatalog"] = ToolKitCatalog;         
 
         }
 
 
-        private void FillAvailableToolsViewBag()
+        private void FillAvailableToolsSession()
         {
             List<ToolModel> AvailableTools = DataAccess.GetAvailableTools();
             this.Session["AvailableTools"] = AvailableTools;
-            ViewBag.AvailableTools = this.Session["AvailableTools"];
+
         }
 
 
@@ -237,6 +296,8 @@ namespace Laboratorio.Controllers
 
 
 
+
+
         private List<ToolModel> GetToolsFromSelectedToolKit(string ToolKitCode)
         {
             List<ToolModel> toolsFromToolKit = DataAccess.GetToolsFromToolKit(ToolKitCode);
@@ -244,12 +305,10 @@ namespace Laboratorio.Controllers
         }
 
 
-        private List<SelectListItem> GetToolkitCodesFromCatalog(int idMachine)
+        private List<SelectListItem> GetToolkitCodesFromCatalog()
         {
+            int idMachine = Convert.ToInt32(this.Session["idSelectedMachine"].ToString());
             List<SelectListItem> ToolKitCatalog = new List<SelectListItem>();
-
-            //HardCode  de prueba 
-            //int idMachine = 7;
             ToolKitCatalog = DataAccess.GetToolKitCodes(idMachine);
             return ToolKitCatalog;
         }
@@ -263,16 +322,6 @@ namespace Laboratorio.Controllers
             SelectedTool.Measure = valorMeasure;
 
             return SelectedTool;
-        }
-
-
-        public ActionResult UpdateToolPage(string code, string validation)
-        {
-            List<ToolModel> tm = DataAccess.GetTools();
-
-            ViewBag.ValidationMessage = validation;
-
-            return View(tm.Single(s => s.Code.Equals(code)));
         }
 
 
@@ -364,27 +413,7 @@ namespace Laboratorio.Controllers
         }
 
 
-        public ActionResult ShareTool(string toolCode, string machineCode, bool meassure)
-        {
-            int result = DataAccess.ShareMachineTool(toolCode, machineCode, meassure);
 
-            if (result < 0)
-            {
-                ViewBag.ValidationMessage = "Error al compartir instrumento, podría deberse a que ya existe en la otra máquina.";
-                return RedirectToAction("Index", "Assignment", new { machineCode = machineCode, validation = ViewBag.ValidationMessage });
-                //return View("Error");
-            }
-            else
-            {
-                DataAccess.InsertLogEntry(User.Identity.Name,
-                   String.Format("Instrumento Compartido : \"{0}\"  a la máquina \"{1}\"", toolCode, machineCode));
-                ViewBag.MachineCode = machineCode;
-                return RedirectToAction("Index", "Assignment", new { machineCode = machineCode });
-            }
-        }
-
-
-    
 
 
     }

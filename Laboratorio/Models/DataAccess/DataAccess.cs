@@ -103,9 +103,9 @@ namespace Laboratorio.Models.DataAccess
 
         public static void DeleteToolkit(string ToolkitCode)
         {
-            dbClientGrana.GetCommand(storeProcedureActivateTool).Parameters["@ToolkitCode"].Value = ToolkitCode;
+            dbClientGrana.GetCommand(storeProcedureDeleteToolKit).Parameters["@ToolKitCode"].Value = ToolkitCode;
 
-            dbClientGrana.GetCommand(storeProcedureActivateTool).ExecuteNonQuery();
+            dbClientGrana.GetCommand(storeProcedureDeleteToolKit).ExecuteNonQuery();
             
         }
 
