@@ -268,8 +268,25 @@ namespace Laboratorio.Controllers
         private void FillAvailableToolsSession()
         {
             List<ToolModel> AvailableTools = DataAccess.GetAvailableTools();
+            FillFlag(AvailableTools);
             this.Session["AvailableTools"] = AvailableTools;
 
+        }
+
+        private void FillFlag(List<ToolModel> tm)
+        {
+            foreach (var item in tm)
+            {
+                var flag = item.ExpirationDate.Subtract(DateTime.Now).Days;
+
+                if (flag <= 0)
+                    item.ExpirationFlag = "0";//expirado
+                if (flag <= 10 && flag > 0)
+                    item.ExpirationFlag = "1";//proximo a expirar
+                if (flag > 10)
+                    item.ExpirationFlag = "2";//todo bien
+
+            }
         }
 
 
@@ -286,6 +303,7 @@ namespace Laboratorio.Controllers
 
             List <ToolModel> toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
             this.Session["SelectedToolKitCode123"] = ToolKitCode;
+            FillFlag(toolsFromToolKit);
             this.Session["ToolsFromToolKit"] = toolsFromToolKit;
             ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             
