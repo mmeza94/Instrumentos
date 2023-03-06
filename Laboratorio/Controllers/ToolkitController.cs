@@ -53,7 +53,7 @@ namespace Laboratorio.Controllers
 
 
             //Llenamos el combobox de codigos de plantillas
-            FillToolKitCatalogSession();
+            FillToolKitCatalogSession(model);
             //Llenamos la tabla de instrumentos que contiene la plantilla
             FillToolkitsViewBag(ToolKitCode);
 
@@ -126,7 +126,7 @@ namespace Laboratorio.Controllers
             if (IsInsertionSuccesful)
             {
                 InsToolKit(KitCode);
-                FillToolKitCatalogSession();
+                //FillToolKitCatalogSession();
                 FillToolkitsViewBag();
                 UpdateViewBags();
                 return View("Index");// "OperacionExitosa";
@@ -142,7 +142,7 @@ namespace Laboratorio.Controllers
         {
             string ToolkitCode = this.Session["SelectedToolKitCode123"].ToString();
             DataAccess.DeleteToolkit(ToolkitCode);
-            FillToolKitCatalogSession();
+            //FillToolKitCatalogSession();
             FillToolkitsViewBag(ToolkitCode);
             UpdateViewBags();
             return View("Index");
@@ -289,10 +289,19 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillToolKitCatalogSession()
+        private void FillToolKitCatalogSession(ToolKitModel model)
         {
 
             List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog();
+
+            foreach (var item in ToolKitCatalog)
+            {
+
+                model.ToolKitCodes.Add(item.Value);
+
+            }
+            
+            
             this.Session["ToolKitCatalog"] = ToolKitCatalog;         
 
         }
