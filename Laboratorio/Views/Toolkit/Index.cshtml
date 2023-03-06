@@ -219,8 +219,48 @@
                             @Html.Label("Agregar a plantilla:")
                         </div>
 
-                        <input class="csbutton" type="submit" value="submit" />
+                        <br />
+                    
 
+
+
+
+
+                        <table>
+                            <tr class="TableHeader">
+                                <th>
+                                    ToolKit
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+
+                            @foreach (var item in ViewBag.toolkitCodes)
+                            {
+                                var contCode = 0;
+                                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                                    <td>
+                                        @item.Value
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="@String.Format("checked{0}", contCode)" onclick="checarActivos()" />
+                                    </td>
+
+                                </tr>
+
+                                odd = odd ? false : true;
+
+                            }
+
+
+                        </table>
+
+                        <br />
+                        <br />
+                        <br />
+
+                        <input class="csbutton" type="submit" value="submit" />
 
 
 
@@ -250,9 +290,9 @@
                                 <th>
 
                                 </th>
-                                @*<th>
-                    C
-                </th>*@
+                                <th>
+                                    C
+                                </th>
                             </tr>
 
 
@@ -267,43 +307,39 @@
                             }
                             else
                             {
-                                //using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
-                                //{
 
 
 
 
-                                for (int i = 0; i < Model.Tools.Count; i++)
+
+                                int cont = 0;
+                                foreach (Laboratorio.Models.ToolModel tool in Model.Tools)
                                 {
-                                    <tr class="@((i % 2 == 0) ? "gridRowOdd" : "gridRowEven")">
+                                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
                                         <td>
-                                            @Model.Tools[i].Code
+                                            @Html.Label("Code" + cont, tool.Code)
                                         </td>
                                         <td>
-                                            @Model.Tools[i].Type
+                                            @tool.Type
                                         </td>
                                         <td class="centeredTD">
-                                            @Model.Tools[i].CalibrationDate.ToString("dd/MM/yy")
+                                            @tool.CalibrationDate.ToString("dd/MM/yy")
                                         </td>
                                         <td class="centeredTD">
-                                            @Model.Tools[i].ExpirationDate.ToString("dd/MM/yy")
+                                            @tool.ExpirationDate.ToString("dd/MM/yy")
                                         </td>
-                                        @switch ((string)Model.Tools[i].ExpirationFlag)
+                                        @switch ((string)tool.ExpirationFlag)
                                         {
                                             case "0":
                                                 <td class="centeredTD Danger">
                                                     Vencido
                                                 </td>
                                                 break;
-
-
                                             case "1":
                                                 <td class="centeredTD Warning">
                                                     Próximo a vencer
                                                 </td>
                                                 break;
-
-
                                             case "2":
                                                 <td class="centeredTD ">
                                                     En Tiempo
@@ -312,44 +348,46 @@
 
                                         }
                                         <td class="centeredTD">
-                                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = Model.Tools[i].Code, use = 1 })">
+                                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 1 })">
                                                 <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
                                             </a>
                                         </td>
                                         <td class="centeredTD">
-                                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = Model.Tools[i].Code, use = 0 })">
+                                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 0 })">
                                                 <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
                                             </a>
                                         </td>
                                         <td>
 
-                                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = Model.Tools[i].Code })">
+                                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
                                                 <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
                                             </a>
 
                                         </td>
-                                        @*<td>
-
-
-                                             <input  type="checkbox" value="Model.Tools[i].isChecked" onchange="Check_Clicked"/>
-
-
-                                         </td>*@
+                                        <td>
+                                            <input type="checkbox" id="@String.Format("checked{0}", cont)" onclick="checarActivos()" />
+                                            @*@Html.CheckBox("isChecked"+cont, tool.isChecked,  )*@
+                                        </td>
 
                                     </tr>
-
-
-
-
+                                    odd = odd ? false : true;
+                                    cont++;
                                 }
 
 
 
+                                <input type="hidden" id="hdncount" value="@cont" />
 
-                                
+                                <input type="hidden" id="activos" name="activos" />
 
-          
-            
+
+
+
+
+
+
+
+
 
                             }
                         </table>
@@ -359,7 +397,26 @@
 
 
                 }
+                
+        <script>
+            function checarActivos() {
+                let codesActive = "";
+                let cont = parseInt($('input#hdncount').val()) - 1;
+                let result = $('input#activos');
 
+                for (let x = 0; x <= cont; x++) {
+                    let ischecked = $('#checked'+x).is(":checked")
+                    let codeChecked = $('input#Code' + x).val();
+
+                    if (ischecked) {
+                        codesActive += codeChecked + ',';
+                    }
+                }
+
+                console.log(codesActive)
+                result.val(codesActive);
+            }
+        </script>
         
     </fieldset>
 }

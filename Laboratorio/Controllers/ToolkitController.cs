@@ -30,6 +30,8 @@ namespace Laboratorio.Controllers
         #region EndPoints
 
 
+
+
         public ActionResult Index(string MachineCode,string ToolKitCode, string validation)
         {
 
@@ -75,13 +77,13 @@ namespace Laboratorio.Controllers
 
 
 
-   
-        public ActionResult AddToolMassive(ToolKitModel model)
+        [HttpPost]
+        public ActionResult AddToolMassive(string activos)
         {
 
-            var abc = model.Tools.Where(x => x.isChecked == true);
+            //var abc = model.Where(x => x.isChecked == true);
 
-            UpdateViewBags();
+            //UpdateViewBags();
             return View("Index");
         }
 
