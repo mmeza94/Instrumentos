@@ -32,9 +32,15 @@ namespace Laboratorio.Controllers
 
         public ActionResult Index(string MachineCode,string ToolKitCode, string validation)
         {
+
+            ToolKitModel model = new ToolKitModel();
+
+
+
+
             //Estas no dependen de nada
             FillMachineIdViewBag();
-            FillAvailableToolsSession();
+            FillAvailableToolsSession(model);
             ViewBag.ValidationMessage = validation;
 
 
@@ -53,23 +59,43 @@ namespace Laboratorio.Controllers
 
             //Validamos que las dos tablas tenga informacion
             UpdateViewBags();
-            return View();
+
+
+
+
+
+
+            return View(model);
         }
 
 
 
 
-        public ActionResult AddToolMassive(List<string> Code)
+
+
+
+
+   
+        public ActionResult AddToolMassive(ToolKitModel model)
         {
-            List<string> list = new List<string>();
-            foreach (var item in Code)
-            {
-                int use = 1;
-                AddTool(item, use);
-            }
+
+            var abc = model.Tools.Where(x => x.isChecked == true);
+
+            UpdateViewBags();
             return View("Index");
         }
 
+
+
+        //[HttpPost]
+        //public ActionResult AddToolMassive(List<ToolModel> model)
+        //{
+
+        //    var abc = model.Where(x => x.isChecked == true);
+
+
+        //    return View("Index");
+        //}
 
 
 
@@ -227,6 +253,11 @@ namespace Laboratorio.Controllers
         }
 
 
+
+
+
+
+
         private void NoRecordsViewBag()
         {
             //if (toolkits.Count == 0)
@@ -265,10 +296,12 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillAvailableToolsSession()
+        private void FillAvailableToolsSession(ToolKitModel model)
         {
             List<ToolModel> AvailableTools = DataAccess.GetAvailableTools();
             FillFlag(AvailableTools);
+            //Prueba -- llenando el modelo
+            model.Tools = AvailableTools;
             this.Session["AvailableTools"] = AvailableTools;
 
         }

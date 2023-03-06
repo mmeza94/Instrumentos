@@ -53,7 +53,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -111,6 +113,7 @@
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
     <Compile Include="Models\DataAccess\DataAccess.cs" />
+    <Compile Include="Models\ToolKitModel.cs" />
     <Compile Include="Models\ToolModel.cs" />
     <Compile Include="Models\ToolTypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

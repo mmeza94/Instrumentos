@@ -58,9 +58,13 @@ namespace Laboratorio.Controllers
         }
 
 
+        //public ActionResult DeleteToolFromIndex(string code)
+        //{
+        //    DataAccess.DeleteDeactivatedTool(code);
+        //    return RedirectToAction("Index");
+        //}
 
-
-
+       
 
     }
 }

@@ -17,6 +17,8 @@ namespace Laboratorio.Models
         public string Shared { get; set; }
         public string Plantilla { get; set; } = "";
 
+        public bool isChecked { get; set; }
+
         public string ExpirationFlag { get; set; } //0 expirado, 1:proximo a expirar, 2: suficiente tiempo
     }
 }

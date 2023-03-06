@@ -1,4 +1,9 @@
-﻿@using MyResource = Laboratorio.Messages;
+﻿@using MyResource = Laboratorio.Messages;   
+
+
+@model  Laboratorio.Models.ToolKitModel
+
+
 @{
     ViewBag.Title = "Index";
     bool odd = true;
@@ -9,6 +14,11 @@
 {
     <fieldset>
         <legend>Creación de plantillas</legend>
+
+
+
+
+
 
 
         @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
@@ -28,7 +38,7 @@
 
 
 
-
+        @*Primera Tabla -- Contiene los instrumentos de cada plantilla seleccionada*@
 
 
         @using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
@@ -114,72 +124,70 @@
                     {
                         foreach (var tm in ViewBag.ToolKit)
                         {
-                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                    <td>
-                        @tm.Code
-                    </td>
-                    <td>
-                        @tm.Type
-                    </td>
-                    <td class="centeredTD">
-                        @tm.CalibrationDate.ToString("dd/MM/yy")
-                    </td>
-                    <td class="centeredTD">
-                        @tm.ExpirationDate.ToString("dd/MM/yy")
-                    </td>
+                            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                                <td>
+                                    @tm.Code
+                                </td>
+                                <td>
+                                    @tm.Type
+                                </td>
+                                <td class="centeredTD">
+                                    @tm.CalibrationDate.ToString("dd/MM/yy")
+                                </td>
+                                <td class="centeredTD">
+                                    @tm.ExpirationDate.ToString("dd/MM/yy")
+                                </td>
 
-                    @switch ((string)tm.ExpirationFlag)
-                    {
-                        case "0":
-                            <td class="centeredTD Danger">
-                                Vencido
-                            </td>
-                            break;
-                        case "1":
-                            <td class="centeredTD Warning">
-                                Próximo a vencer
-                            </td>
-                            break;
-                        case "2":
-                            <td class="centeredTD ">
-                                En Tiempo
-                            </td>
-                            break;
+                                @switch ((string)tm.ExpirationFlag)
+                                {
+                                    case "0":
+                                        <td class="centeredTD Danger">
+                                            Vencido
+                                        </td>
+                                        break;
+                                    case "1":
+                                        <td class="centeredTD Warning">
+                                            Próximo a vencer
+                                        </td>
+                                        break;
+                                    case "2":
+                                        <td class="centeredTD ">
+                                            En Tiempo
+                                        </td>
+                                        break;
 
-                    }
+                                }
 
-                    @if (tm.Measure)
-                    {
-                        <td class="centeredTD">
-                            Medici&oacute;n
-                        </td>
-                    }
-                    else
-                    {
-                        <td class="centeredTD">
-                            Control
-                        </td>
+                                @if (tm.Measure)
+                                {
+                                    <td class="centeredTD">
+                                        Medici&oacute;n
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="centeredTD">
+                                        Control
+                                    </td>
 
-                    }
-                    <td>
-                        <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code })">
-                            <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
-                        </a>
-                    </td>
-                    <td>
+                                }
+                                <td>
+                                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code })">
+                                        <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                                    </a>
+                                </td>
+                                <td>
 
-                        <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                        </a>
+                                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                    </a>
 
-                    </td>
-                    @*<td>
-            <input type="checkbox" />
-        </td>*@
+                                </td>
 
 
 
-                </tr>
+
+                            </tr>
 
                             odd = odd ? false : true;
                         }
@@ -192,134 +200,167 @@
             </fieldset>
             <br />
         }
-        <fieldset>
-            <legend>Herramientas disponibles</legend>
 
 
 
 
+        @*Segunda tabla -- contiene todas los instrumentos disponibles*@
 
 
 
-
-            <table class="center">
-                <tr class="TableHeader">
-                    <th>
-                        C&oacute;digo
-                    </th>
-                    <th>
-                        Tipo
-                    </th>
-                    <th>
-                        Fecha de calibraci&oacute;n
-                    </th>
-                    <th>
-                        Fecha de expiraci&oacute;n
-                    </th>
-                    <th>
-                        Flag
-                    </th>
-                    <th>
-                        Medición
-                    </th>
-                    <th>
-                        Control
-                    </th>
-                    <th>
-
-                    </th>
-                    <th>
-                        C
-                    </th>
-                </tr>
-                @if (ViewBag.NoRecords2)
+        @using (Html.BeginForm("AddToolMassive", "Toolkit", FormMethod.Post))
                 {
-                    <tr class="noRecords">
-                        <td colspan="5" class="gridRowOdd">
-                            @MyResource.NoRecords
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    using (Html.BeginForm("AddToolMassive", "Toolkit", FormMethod.Post))
-                    {
+                    <fieldset>
+                        <legend>Herramientas disponibles</legend>
+
+
 
                         <div class="editor-label">
                             @Html.Label("Agregar a plantilla:")
                         </div>
-                        <p>
-                            <input class="csbutton" id="bttn_Click" type="submit" value="Add" />
-                        </p>
 
-                        foreach (var tm in ViewBag.AvailableTools)
-                        {
-                        <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                         <td>
-                           @tm.Code
-                         </td>
-                      <td>
-                          @tm.Type
-                      </td>
-                         <td class="centeredTD">
-                     @tm.CalibrationDate.ToString("dd/MM/yy")
-                     </td>
-                     <td class="centeredTD">
-                         @tm.ExpirationDate.ToString("dd/MM/yy")
-                     </td>
-                     @switch ((string)tm.ExpirationFlag)
-                     {
-                             case "0":
-                          <td class="centeredTD Danger">
-                            Vencido
-                          </td>
-                          break;
-                          case "1":
-                        <td class="centeredTD Warning">
-                            Próximo a vencer
-                        </td>
-                        break;
-                         case "2":
-                        <td class="centeredTD ">
-                            En Tiempo
-                        </td>
-                        break;
+                        <input class="csbutton" type="submit" value="submit" />
+
+
+
+
+                        <table class="center">
+                            <tr class="TableHeader">
+                                <th>
+                                    C&oacute;digo
+                                </th>
+                                <th>
+                                    Tipo
+                                </th>
+                                <th>
+                                    Fecha de calibraci&oacute;n
+                                </th>
+                                <th>
+                                    Fecha de expiraci&oacute;n
+                                </th>
+                                <th>
+                                    Flag
+                                </th>
+                                <th>
+                                    Medición
+                                </th>
+                                <th>
+                                    Control
+                                </th>
+                                <th>
+
+                                </th>
+                                @*<th>
+                    C
+                </th>*@
+                            </tr>
+
+
+
+                            @if (ViewBag.NoRecords2)
+                            {
+                                <tr class="noRecords">
+                                    <td colspan="5" class="gridRowOdd">
+                                        @MyResource.NoRecords
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                //using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
+                                //{
+
+
+
+
+                                for (int i = 0; i < Model.Tools.Count; i++)
+                                {
+                                    <tr class="@((i % 2 == 0) ? "gridRowOdd" : "gridRowEven")">
+                                        <td>
+                                            @Model.Tools[i].Code
+                                        </td>
+                                        <td>
+                                            @Model.Tools[i].Type
+                                        </td>
+                                        <td class="centeredTD">
+                                            @Model.Tools[i].CalibrationDate.ToString("dd/MM/yy")
+                                        </td>
+                                        <td class="centeredTD">
+                                            @Model.Tools[i].ExpirationDate.ToString("dd/MM/yy")
+                                        </td>
+                                        @switch ((string)Model.Tools[i].ExpirationFlag)
+                                        {
+                                            case "0":
+                                                <td class="centeredTD Danger">
+                                                    Vencido
+                                                </td>
+                                                break;
+
+
+                                            case "1":
+                                                <td class="centeredTD Warning">
+                                                    Próximo a vencer
+                                                </td>
+                                                break;
+
+
+                                            case "2":
+                                                <td class="centeredTD ">
+                                                    En Tiempo
+                                                </td>
+                                                break;
+
+                                        }
+                                        <td class="centeredTD">
+                                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = Model.Tools[i].Code, use = 1 })">
+                                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                            </a>
+                                        </td>
+                                        <td class="centeredTD">
+                                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = Model.Tools[i].Code, use = 0 })">
+                                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                            </a>
+                                        </td>
+                                        <td>
+
+                                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = Model.Tools[i].Code })">
+                                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                            </a>
+
+                                        </td>
+                                        @*<td>
+
+
+                                             <input  type="checkbox" value="Model.Tools[i].isChecked" onchange="Check_Clicked"/>
+
+
+                                         </td>*@
+
+                                    </tr>
+
+
+
+
+                                }
+
+
+
+
+                                
+
+          
+            
+
+                            }
+                        </table>
+
+                    </fieldset>
+
+
 
                 }
-                <td class="centeredTD">
-                    <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, use = 1 })">
-                        <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                    </a>
-                </td>
-                <td class="centeredTD">
-                    <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tm.Code, use = 0 })">
-                        <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                    </a>
-                </td>
-                <td>
 
-                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                    </a>
-
-                </td>
-                <td>
-
-                    <input type="checkbox"
-                           value=@tm.Code
-                           id=@tm.Code />
-
-                </td>
-
-            </tr>
-
-                            odd = odd ? false : true;
-                        }
-                    }
-                }
-            </table>
-
-        </fieldset>
+        
     </fieldset>
 }
 else
@@ -331,18 +372,3 @@ else
 
 
 
-@*<script>
-    $('#bttn_Click').click(function () {
-        var studentListVal = null;
-        studentListVal = [];
-
-        $('input:checkbox:checked').each(function () {
-            studentListVal.push($(this).attr('value'));
-        });  
-
-        $.ajax({
-            type: "post",
-            url: "/Student/Studentl",
-            data: { Name: studentListVal },    
-
-</script>*@
