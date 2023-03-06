@@ -429,6 +429,25 @@
                 result.val(codesActive);
             }
 
+
+            function checarActivosCodeToolkit() {
+                let codesActive = "";
+                let cont = parseInt($('input#hdncountCodeToolkit').val()) - 1;
+                let result = $('input#activosCodeToolkit');
+
+                for (let x = 0; x <= cont; x++) {
+                    let ischecked = $('#checkedCode' + x).is(":checked")
+                    let codeChecked = $('input#CodeToolkit' + x).val();
+
+                    if (ischecked) {
+                        codesActive += codeChecked + ',';
+                    }
+                }
+
+                console.log(codesActive)
+                result.val(codesActive);
+            }
+
             
 
 

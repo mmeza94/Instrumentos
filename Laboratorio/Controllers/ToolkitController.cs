@@ -78,7 +78,7 @@ namespace Laboratorio.Controllers
 
 
         [HttpPost]
-        public ActionResult AddToolMassive(string activos, string activosCodes)
+        public ActionResult AddToolMassive(string activos, string activosCodeToolkit)
         {
 
             //var abc = model.Where(x => x.isChecked == true);
