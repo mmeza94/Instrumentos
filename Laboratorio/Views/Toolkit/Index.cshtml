@@ -219,48 +219,8 @@
                             @Html.Label("Agregar a plantilla:")
                         </div>
 
-                        <br />
-                    
-
-
-
-
-
-                        <table>
-                            <tr class="TableHeader">
-                                <th>
-                                    ToolKit
-                                </th>
-                                <th>
-
-                                </th>
-                            </tr>
-
-                            @foreach (var item in ViewBag.toolkitCodes)
-                            {
-                                var contCode = 0;
-                                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                                    <td>
-                                        @item.Value
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" id="@String.Format("checked{0}", contCode)" onclick="checarActivos()" />
-                                    </td>
-
-                                </tr>
-
-                                odd = odd ? false : true;
-
-                            }
-
-
-                        </table>
-
-                        <br />
-                        <br />
-                        <br />
-
                         <input class="csbutton" type="submit" value="submit" />
+
 
 
 
@@ -291,7 +251,7 @@
 
                                 </th>
                                 <th>
-                                    C
+                                     C
                                 </th>
                             </tr>
 
@@ -315,68 +275,67 @@
                                 int cont = 0;
                                 foreach (Laboratorio.Models.ToolModel tool in Model.Tools)
                                 {
-                                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                                        <td>
-                                            @Html.Label("Code" + cont, tool.Code)
-                                        </td>
-                                        <td>
-                                            @tool.Type
-                                        </td>
-                                        <td class="centeredTD">
-                                            @tool.CalibrationDate.ToString("dd/MM/yy")
-                                        </td>
-                                        <td class="centeredTD">
-                                            @tool.ExpirationDate.ToString("dd/MM/yy")
-                                        </td>
-                                        @switch ((string)tool.ExpirationFlag)
-                                        {
-                                            case "0":
-                                                <td class="centeredTD Danger">
-                                                    Vencido
-                                                </td>
-                                                break;
-                                            case "1":
-                                                <td class="centeredTD Warning">
-                                                    Próximo a vencer
-                                                </td>
-                                                break;
-                                            case "2":
-                                                <td class="centeredTD ">
-                                                    En Tiempo
-                                                </td>
-                                                break;
+                                <tr>
+                                    <td>
+                                        @Html.TextBox("Code" + cont, tool.Code);
+                                    </td>
+                                    <td>
+                                        @tool.Type
+                                    </td>
+                                    <td class="centeredTD">
+                                        @tool.CalibrationDate.ToString("dd/MM/yy")
+                                    </td>
+                                    <td class="centeredTD">
+                                        @tool.ExpirationDate.ToString("dd/MM/yy")
+                                    </td>
+                                    @switch ((string)tool.ExpirationFlag)
+                                    {
+                                        case "0":
+                                            <td class="centeredTD Danger">
+                                                Vencido
+                                            </td>
+                                            break;
+                                        case "1":
+                                            <td class="centeredTD Warning">
+                                                Próximo a vencer
+                                            </td>
+                                            break;
+                                        case "2":
+                                            <td class="centeredTD ">
+                                                En Tiempo
+                                            </td>
+                                            break;
 
-                                        }
-                                        <td class="centeredTD">
-                                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 1 })">
-                                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                                            </a>
-                                        </td>
-                                        <td class="centeredTD">
-                                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 0 })">
-                                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                                            </a>
-                                        </td>
-                                        <td>
+                                    }
+                                    <td class="centeredTD">
+                                        <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                                            <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                        </a>
+                                    </td>
+                                    <td class="centeredTD">
+                                        <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                                            <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                        </a>
+                                    </td>
+                                    <td>
 
-                                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
-                                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                                            </a>
+                                        <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
+                                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                        </a>
 
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" id="@String.Format("checked{0}", cont)" onclick="checarActivos()" />
-                                            @*@Html.CheckBox("isChecked"+cont, tool.isChecked,  )*@
-                                        </td>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="@String.Format("checked{0}", cont)" onclick="checarActivos()" />
+                                        @*@Html.CheckBox("isChecked"+cont, tool.isChecked,  )*@
+                                    </td>
 
-                                    </tr>
-                                    odd = odd ? false : true;
+                                </tr>
                                     cont++;
                                 }
 
 
 
-                                <input type="hidden" id="hdncount" value="@cont" />
+                                <input type="hidden" id="hdncount" value="@cont"/>
 
                                 <input type="hidden" id="activos" name="activos" />
 
