@@ -360,12 +360,12 @@
 
                                             }
                                             <td class="centeredTD">
-                                                <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                                                <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 1 })">
                                                     <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
                                                 </a>
                                             </td>
                                             <td class="centeredTD">
-                                                <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tool.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                                                <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 0 })">
                                                     <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
                                                 </a>
                                             </td>

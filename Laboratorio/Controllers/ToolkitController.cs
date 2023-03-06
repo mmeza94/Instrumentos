@@ -81,23 +81,28 @@ namespace Laboratorio.Controllers
         public ActionResult AddToolMassive(string activos, string activosCodeToolkit)
         {
 
-            //var abc = model.Where(x => x.isChecked == true);
+            List<string> codigosInstrumentos = new List<string>();
+            List<string> codigosPlantillas = new List<string>();
+            codigosInstrumentos = activos.Split(',').Where(x=>x != "").ToList();
+            codigosPlantillas = activosCodeToolkit.Split(',').Where(x => x != "").ToList();
 
-            //UpdateViewBags();
+            List<string> ResultadoPrueba = new List<string>(); 
+
+
+            foreach (string Plantilla in codigosPlantillas)
+            {
+                foreach (string Instrumento in codigosInstrumentos)
+                {
+                    DataAccess.InsToolKit(Plantilla, Instrumento);
+                }
+            }
+
+
+
             return View("Index");
         }
 
 
-
-        //[HttpPost]
-        //public ActionResult AddToolMassive(List<ToolModel> model)
-        //{
-
-        //    var abc = model.Where(x => x.isChecked == true);
-
-
-        //    return View("Index");
-        //}
 
 
 
