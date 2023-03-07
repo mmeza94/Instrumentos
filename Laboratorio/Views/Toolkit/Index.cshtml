@@ -220,13 +220,24 @@
                         </div>
 
 
+
+
+                        @*radiobutton*@
                         <div>
                             <label>Control</label>
-                            <input id="Control" name="Control" value="0" type="radio" />
+                            <input id="Control" name="Control" value="0" type="radio" onclick="SetMeasure(0)" />
 
                             <label>Medicion</label>
-                            <input id="Medicion" name="Medicion" value="1" type="radio" />
+                            <input id="Medicion" name="Control" value="1" type="radio"  onclick="SetMeasure(1)"/>
                         </div>
+
+
+
+
+
+
+
+                        <input type="hidden" id="MeasureUse" name="MeasureUse" />
 
 
 
@@ -454,7 +465,12 @@
                 result.val(codesActive);
             }
 
-            
+            function SetMeasure(numero) {
+                let result = $('input#MeasureUse'); 
+                
+                console.log(numero);
+                result.val(numero);
+            }
 
 
         </script>

@@ -124,13 +124,15 @@ namespace Laboratorio.Controllers
 
 
         [HttpPost]
-        public ActionResult AddToolMassive(string activos, string activosCodeToolkit)
+        public ActionResult AddToolMassive(string activos, string activosCodeToolkit, string MeasureUse)
         {
 
             List<string> codigosInstrumentos = new List<string>();
             List<string> codigosPlantillas = new List<string>();
             codigosInstrumentos = activos.Split(',').Where(x=>x != "").ToList();
             codigosPlantillas = activosCodeToolkit.Split(',').Where(x => x != "").ToList();
+
+            var measure = Convert.ToInt32(MeasureUse);
 
             List<string> ResultadoPrueba = new List<string>(); 
 
@@ -139,7 +141,7 @@ namespace Laboratorio.Controllers
             {
                 foreach (string Instrumento in codigosInstrumentos)
                 {
-                    DataAccess.InsToolKit(Plantilla, Instrumento);
+                    DataAccess.InsToolKit(Plantilla, Instrumento, measure);
                 }
             }
 
