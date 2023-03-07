@@ -20,21 +20,29 @@
 
 
 
-
-        @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
-        {
-            <div class="editor-label">
-                @Html.Label("Nombre Plantilla")
-            </div>
-            <div class="textBox textBoxEnable">
-                @Html.TextBox("KitCode")
-            </div>
+        <fieldset>
+            @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
+            {
+                <div class="editor-label">
+                    @Html.Label("Nombre Plantilla")
+                </div>
+                <div class="textBox textBoxEnable">
+                    @Html.TextBox("KitCode")
+                </div>
+                <div class="editor-label">
+                    @Html.Label("Máquina")
+                </div>
                 @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>)
-            <p>
-                <input class="csbutton" type="submit" value="Crear" />
-            </p>
+                <p>
+                    <input class="csbutton" type="submit" value="Crear" />
+                </p>
 
-        }
+            }
+
+        </fieldset>
+           
+       
+       
 
 
 
@@ -289,6 +297,8 @@
 
 
                         <input class="csbutton" type="submit" value="submit" />
+
+                        <button class="csbutton">Delete</button>
 
 
 

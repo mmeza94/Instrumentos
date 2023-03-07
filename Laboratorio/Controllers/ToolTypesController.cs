@@ -16,6 +16,8 @@ namespace Laboratorio.Controllers
         public ActionResult Index(string validation, string tableError)
         {
             List<ToolTypeModel> l;
+
+
             l = DataAccess.GetToolTypes();
 
             if (l.Count == 0)

@@ -378,7 +378,7 @@ namespace Laboratorio.Controllers
         private bool ExistingCodes()
         {
             List<SelectListItem> codes = (List<SelectListItem>)this.Session["ToolKitCatalog"];
-            return (codes == null) ? false : true;            
+            return (codes == null || codes.Count == 0) ? false : true;            
 
         }
 
