@@ -54,16 +54,20 @@ namespace Laboratorio.Controllers
 
             //Llenamos el combobox de codigos de plantillas
             FillToolKitCatalogSession();
+
+
             //Llenamos la tabla de instrumentos que contiene la plantilla
             FillToolkitsViewBag(ToolKitCode);
 
+
+
+
             FillModel(model);
+
+
 
             //Validamos que las dos tablas tenga informacion
             UpdateViewBags();
-
-
-
 
 
 
@@ -71,54 +75,7 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillModel(ToolKitModel model)
-        {
-            var lista = ((List<SelectListItem>)this.Session["ToolKitCatalog"]);
-            model.ToolKitCodes = lista.Select(x => x.Value).ToList();
-            model.Tools = (List<ToolModel>)this.Session["AvailableTools"];
-        }
-
-
-
-
-
-        [HttpPost]
-        public ActionResult AddToolMassive(string activos, string activosCodeToolkit)
-        {
-
-            List<string> codigosInstrumentos = new List<string>();
-            List<string> codigosPlantillas = new List<string>();
-            codigosInstrumentos = activos.Split(',').Where(x=>x != "").ToList();
-            codigosPlantillas = activosCodeToolkit.Split(',').Where(x => x != "").ToList();
-
-            List<string> ResultadoPrueba = new List<string>(); 
-
-
-            foreach (string Plantilla in codigosPlantillas)
-            {
-                foreach (string Instrumento in codigosInstrumentos)
-                {
-                    DataAccess.InsToolKit(Plantilla, Instrumento);
-                }
-            }
-
-
-
-            return View("Index");
-        }
-
-
-
-        public ActionResult AddTool(string toolCode, int use)
-        {
-            ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
-
-            UpdateToolsFromToolkitData(SelectedTool);
-
-            UpdateViewBags();
-
-            return View("Index");
-        }
+        
 
 
         public ActionResult InsertNewToolKitCatalog(string KitCode, string MachineCode)
@@ -147,17 +104,71 @@ namespace Laboratorio.Controllers
             return View("Index", model); // Operacion no exitosa
         }
 
-
-
         public ActionResult DeleteToolkit()
         {
+            ToolKitModel model = new ToolKitModel();
             string ToolkitCode = this.Session["SelectedToolKitCode123"].ToString();
             DataAccess.DeleteToolkit(ToolkitCode);
-            //FillToolKitCatalogSession();
+            FillToolKitCatalogSession();
             FillToolkitsViewBag(ToolkitCode);
+            FillModel(model);
             UpdateViewBags();
+            return View("Index", model);
+        }
+
+
+
+
+
+
+
+
+        [HttpPost]
+        public ActionResult AddToolMassive(string activos, string activosCodeToolkit)
+        {
+
+            List<string> codigosInstrumentos = new List<string>();
+            List<string> codigosPlantillas = new List<string>();
+            codigosInstrumentos = activos.Split(',').Where(x=>x != "").ToList();
+            codigosPlantillas = activosCodeToolkit.Split(',').Where(x => x != "").ToList();
+
+            List<string> ResultadoPrueba = new List<string>(); 
+
+
+            foreach (string Plantilla in codigosPlantillas)
+            {
+                foreach (string Instrumento in codigosInstrumentos)
+                {
+                    DataAccess.InsToolKit(Plantilla, Instrumento);
+                }
+            }
+
+
+
+            ToolKitModel model = new ToolKitModel();
+            FillModel(model);
+            UpdateViewBags();
+            
+            return View("Index", model);
+        }
+
+
+
+        public ActionResult AddTool(string toolCode, int use)
+        {
+            ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
+
+            UpdateToolsFromToolkitData(SelectedTool);
+
+            UpdateViewBags();
+
             return View("Index");
         }
+
+
+
+
+
 
 
         public ActionResult RemoveTool(string toolCode)
@@ -213,6 +224,15 @@ namespace Laboratorio.Controllers
 
 
 
+        #region Utils
+
+        private void FillModel(ToolKitModel model)
+        {
+            var lista = ((List<SelectListItem>)this.Session["ToolKitCatalog"]);
+            model.ToolKitCodes = lista.Select(x => x.Value).ToList();
+            model.Tools = (List<ToolModel>)this.Session["AvailableTools"];
+        }
+
 
         private string SetDefaultMachineCodeIfNull(string MachineCode)
         {
@@ -264,7 +284,6 @@ namespace Laboratorio.Controllers
             NoRecordsViewBag();
             NoRecords2ViewBag();
         }
-
 
 
         private void NoRecordsViewBag()
@@ -335,19 +354,30 @@ namespace Laboratorio.Controllers
         {
             //Validamos que la plantilla si exista en el catalogo de la maquina, si no, seleccionamos la primer plantilla que traiga.
             List<SelectListItem> codes = (List<SelectListItem>)this.Session["ToolKitCatalog"];
+            List<ToolModel> toolsFromToolKit = new List<ToolModel>();
+
+            if (ExistingCodes())
+            {
+                var IsToolkitMachineValid = codes.Any(c => c.Value == ToolKitCode);
+                ToolKitCode = IsToolkitMachineValid ? ToolKitCode : codes.FirstOrDefault().Value;
+                toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
+                FillFlag(toolsFromToolKit);
+
+                this.Session["SelectedToolKitCode123"] = ToolKitCode;
+                this.Session["ToolsFromToolKit"] = toolsFromToolKit;
+                ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
+            }
 
 
-            //TO-DO : Validar si Codes esta vacio, esto para en caso qeu no haya una plantilla definida para la maquina
-            var validacion = codes.Any(c => c.Value == ToolKitCode);
-            ToolKitCode = validacion ? ToolKitCode : codes.FirstOrDefault().Value;
-
-
-            List <ToolModel> toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
-            this.Session["SelectedToolKitCode123"] = ToolKitCode;
-            FillFlag(toolsFromToolKit);
-            this.Session["ToolsFromToolKit"] = toolsFromToolKit;
-            ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             
+        }
+
+
+        private bool ExistingCodes()
+        {
+            List<SelectListItem> codes = (List<SelectListItem>)this.Session["ToolKitCatalog"];
+            return (codes == null) ? false : true;            
+
         }
 
 
@@ -465,7 +495,7 @@ namespace Laboratorio.Controllers
             return sli;
         }
 
-
+        #endregion
 
 
 
