@@ -42,7 +42,7 @@ namespace Laboratorio.Controllers
 
             //Estas no dependen de nada
             FillMachineIdViewBag();
-            FillAvailableToolsSession(model);
+            FillAvailableToolsSession();
             ViewBag.ValidationMessage = validation;
 
 
@@ -53,11 +53,11 @@ namespace Laboratorio.Controllers
 
 
             //Llenamos el combobox de codigos de plantillas
-            FillToolKitCatalogSession(model);
+            FillToolKitCatalogSession();
             //Llenamos la tabla de instrumentos que contiene la plantilla
             FillToolkitsViewBag(ToolKitCode);
 
-
+            FillModel(model);
 
             //Validamos que las dos tablas tenga informacion
             UpdateViewBags();
@@ -71,7 +71,12 @@ namespace Laboratorio.Controllers
         }
 
 
-
+        private void FillModel(ToolKitModel model)
+        {
+            var lista = ((List<SelectListItem>)this.Session["ToolKitCatalog"]);
+            model.ToolKitCodes = lista.Select(x => x.Value).ToList();
+            model.Tools = (List<ToolModel>)this.Session["AvailableTools"];
+        }
 
 
 
@@ -104,8 +109,6 @@ namespace Laboratorio.Controllers
 
 
 
-
-
         public ActionResult AddTool(string toolCode, int use)
         {
             ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
@@ -118,8 +121,6 @@ namespace Laboratorio.Controllers
         }
 
 
-
-
         public ActionResult InsertNewToolKitCatalog(string KitCode, string MachineCode)
         {
 
@@ -127,18 +128,23 @@ namespace Laboratorio.Controllers
 
 
             bool IsInsertionSuccesful = DataAccess.InsToolKitCatalog(KitCode, idMachine);
+            ToolKitModel model = new ToolKitModel();
+
 
             if (IsInsertionSuccesful)
             {
-                InsToolKit(KitCode);
-                //FillToolKitCatalogSession();
+                //Rellenamos todos los viewbags con los session actualizados y el model y mandamos a llamar a la vista
+                FillToolKitCatalogSession();
                 FillToolkitsViewBag();
+                FillModel(model);
                 UpdateViewBags();
-                return View("Index");// "OperacionExitosa";
+                return View("Index",model);// "OperacionExitosa";
             }
 
+            //Rellenamos el modelo solamente y los viewbags
+            FillModel(model);
             UpdateViewBags();
-            return View("Index"); // Operacion no exitosa
+            return View("Index", model); // Operacion no exitosa
         }
 
 
@@ -261,10 +267,6 @@ namespace Laboratorio.Controllers
 
 
 
-
-
-
-
         private void NoRecordsViewBag()
         {
             //if (toolkits.Count == 0)
@@ -294,33 +296,23 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void FillToolKitCatalogSession(ToolKitModel model)
+        private void FillToolKitCatalogSession()
         {
 
-            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog();
-
-            foreach (var item in ToolKitCatalog)
-            {
-
-                model.ToolKitCodes.Add(item.Value);
-
-            }
-            
-            
+            List<SelectListItem> ToolKitCatalog = GetToolkitCodesFromCatalog();                    
             this.Session["ToolKitCatalog"] = ToolKitCatalog;         
 
         }
 
 
-        private void FillAvailableToolsSession(ToolKitModel model)
+        private void FillAvailableToolsSession()
         {
             List<ToolModel> AvailableTools = DataAccess.GetAvailableTools();
-            FillFlag(AvailableTools);
-            //Prueba -- llenando el modelo
-            model.Tools = AvailableTools;
+            FillFlag(AvailableTools);   
             this.Session["AvailableTools"] = AvailableTools;
 
         }
+
 
         private void FillFlag(List<ToolModel> tm)
         {
@@ -357,12 +349,6 @@ namespace Laboratorio.Controllers
             ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             
         }
-
-
-
-
-
-
 
 
         private List<ToolModel> GetToolsFromSelectedToolKit(string ToolKitCode)
