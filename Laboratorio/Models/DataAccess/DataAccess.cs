@@ -132,14 +132,14 @@ namespace Laboratorio.Models.DataAccess
         }
 
 
-        public static void InsToolKit(string ToolKitCode, string ToolCode)
+
+        //Valor default de prueba DWF
+        public static void InsToolKit(string ToolKitCode, string ToolCode, int Use=1)
         {
             dbClientGrana.GetCommand(storeProcedureInsToolKit).Parameters["@ToolKitCode"].Value = ToolKitCode;
             dbClientGrana.GetCommand(storeProcedureInsToolKit).Parameters["@ToolCode"].Value = ToolCode;
-
-            dbClientGrana.GetCommand(storeProcedureInsToolKit).ExecuteNonQuery();
-
-           
+            dbClientGrana.GetCommand(storeProcedureInsToolKit).Parameters["@Measure"].Value = Use;
+            dbClientGrana.GetCommand(storeProcedureInsToolKit).ExecuteNonQuery();          
         }
 
 
@@ -167,12 +167,43 @@ namespace Laboratorio.Models.DataAccess
                 while (reader.Read())
                 {
                     ToolModel tm = new ToolModel();
-
+                    //Aqui se cambio --tener cuidado en proudctivo DWF
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["Name"].ToString();
                     tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
                     tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
                     tm.Measure =  reader.GetSchemaTable().Select("ColumnName='Measure'") == null ? Boolean.Parse(reader["Measure"].ToString()) : false;
+                    tm.Shared = reader["Shared"].ToString();
+                    ToolsFromToolKit.Add(tm);
+                }
+
+            }
+
+            return ToolsFromToolKit;
+
+
+
+
+        }
+
+
+        public static List<ToolModel> GetToolsFromToolKit123(string toolKitCode)
+        {
+            List<ToolModel> ToolsFromToolKit = new List<ToolModel>();
+
+            dbClientGrana.GetCommand(storeProcedureGetToolKit).Parameters["@ToolKitCode"].Value = toolKitCode;
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureGetToolKit).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+                    //Aqui se cambio --tener cuidado en proudctivo DWF
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["Name"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.Measure = reader["Measure"].ToString() == "1" ? true : false;
                     tm.Shared = reader["Shared"].ToString();
                     ToolsFromToolKit.Add(tm);
                 }

@@ -383,7 +383,7 @@ namespace Laboratorio.Controllers
 
         private List<ToolModel> GetToolsFromSelectedToolKit(string ToolKitCode)
         {
-            List<ToolModel> toolsFromToolKit = DataAccess.GetToolsFromToolKit(ToolKitCode);
+            List<ToolModel> toolsFromToolKit = DataAccess.GetToolsFromToolKit123(ToolKitCode);
             return toolsFromToolKit;
         }
 
