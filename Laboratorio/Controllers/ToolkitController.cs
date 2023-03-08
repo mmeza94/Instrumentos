@@ -49,6 +49,7 @@ namespace Laboratorio.Controllers
 
 
             MachineCode = SetDefaultMachineCodeIfNull(MachineCode);
+            this.Session["MachineCode"] = MachineCode;
             this.Session["idSelectedMachine"] = ConfigurationManager.AppSettings[MachineCode].ToString();
 
 
@@ -140,8 +141,9 @@ namespace Laboratorio.Controllers
 
 
             ToolKitModel model = new ToolKitModel();
-            FillModel(model);
+            FillToolkitsViewBag();
             UpdateViewBags();
+            FillModel(model);
             
             return View("Index", model);
         }
@@ -154,13 +156,16 @@ namespace Laboratorio.Controllers
 
         public ActionResult AddTool(string toolCode, int use)
         {
-            ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
+            //ToolModel SelectedTool = GetSelectedToolFromAvailableTools(toolCode, use);
 
-            UpdateToolsFromToolkitData(SelectedTool);
-
+            //UpdateToolsFromToolkitData(SelectedTool);
+            var toolkitcode = this.Session["SelectedToolKitCode123"].ToString();
+            DataAccess.InsToolKit(toolkitcode, toolCode, use);
+            ToolKitModel model = new ToolKitModel();
+            FillToolkitsViewBag(toolkitcode);
             UpdateViewBags();
-
-            return View("Index");
+            FillModel(model);
+            return View("Index",model);
         }
 
 
@@ -170,9 +175,14 @@ namespace Laboratorio.Controllers
 
             List<ToolModel> toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
             ToolModel SelectedTool = toolsFromToolKits.FirstOrDefault(tool => tool.Code == toolCode);
-            toolsFromToolKits.Remove(SelectedTool);
+            var toolkitcode = this.Session["SelectedToolKitCode123"].ToString();
+            DataAccess.DeleteToolByToolkit(toolkitcode, toolCode);
+            //toolsFromToolKits.Remove(SelectedTool);
+            ToolKitModel model = new ToolKitModel();
+            FillToolkitsViewBag(toolkitcode);
             UpdateViewBags();
-            return View("Index");
+            FillModel(model);
+            return View("Index",model);
 
 
         }
