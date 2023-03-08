@@ -12,7 +12,8 @@
             <label for="ToolKit">
                 ToolKit:
             </label>
-            @Html.DropDownList("ToolKit", ViewBag.toolkits as List<SelectListItem>, new { onchange = "this.form.submit()" })
+            @Html.DropDownList("ToolKit", ViewBag.toolkits as List<SelectListItem>)
+            <input class="csbutton" type="submit" name ="submit" value="submit"/>
         }
         @using (Html.BeginForm("Index", "Assignment", FormMethod.Post))
         {

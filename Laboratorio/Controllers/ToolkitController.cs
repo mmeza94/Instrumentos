@@ -148,16 +148,11 @@ namespace Laboratorio.Controllers
 
 
 
-       
-
-
-
+      
         private bool IsActionInsert(string Action)
         {
             return (Action == "Insert") ? true : false;
         }
-
-
 
 
         private void MassiveDeleteTools(string activos, string activosCodeToolkit)
@@ -175,10 +170,6 @@ namespace Laboratorio.Controllers
 
             //DeleteToolByToolkit
         }
-
-
-
-
 
         
         private void MassiveInsertTools(string activos, string activosCodeToolkit, string MeasureUse)
@@ -200,14 +191,13 @@ namespace Laboratorio.Controllers
             }
         }
 
+
         private List<string> GetCodesList(string ConcatenatedCodes)
         {
             List<string> CleanedCodes = new List<string>();
             CleanedCodes = ConcatenatedCodes.Split(',').Where(x => x != "").ToList();
             return CleanedCodes;
         }
-
-
 
 
         public ActionResult AddTool(string toolCode, int use)
@@ -220,7 +210,6 @@ namespace Laboratorio.Controllers
 
             return View("Index");
         }
-
 
 
 

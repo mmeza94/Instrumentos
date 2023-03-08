@@ -79,9 +79,14 @@ namespace Laboratorio.Controllers
         {
             var tools = DataAccess.GetToolsFromToolKit(ToolKit);
             var MachineCode = this.Session["MachineCodeAssigned"].ToString();
+
+            
+
+
             foreach (var item in tools)
             {
-                AddTool(item.Code, MachineCode, 1);
+                int Use = (item.Measure == true) ? 1 : 0;
+                AddTool(item.Code, MachineCode, Use);
             }
 
 
