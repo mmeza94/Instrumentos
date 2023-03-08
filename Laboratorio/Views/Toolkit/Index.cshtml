@@ -216,7 +216,7 @@
 
 
 
-        @using (Html.BeginForm("AddToolMassive", "Toolkit", FormMethod.Post))
+        @using (Html.BeginForm("ToolMassiveAction", "Toolkit", FormMethod.Post))
                 {
                     <fieldset>
                         <legend>Herramientas disponibles</legend>
@@ -236,7 +236,7 @@
                             <input id="Control" name="Control" value="0" type="radio" onclick="SetMeasure(0)" />
 
                             <label>Medicion</label>
-                            <input id="Medicion" name="Control" value="1" type="radio"  onclick="SetMeasure(1)"/>
+                            <input id="Medicion" name="Control" value="1" type="radio" onclick="SetMeasure(1)" />
                         </div>
 
 
@@ -294,130 +294,130 @@
                         </table>
 
 
+                        @*Botones Submit del formulario*@
+
+                        <input class="csbutton" name="Action" type="submit" value="Insert" />
+                        <input class="csbutton" name="Action" type="submit" value="Delete" />
 
 
-                        <input class="csbutton" type="submit" value="submit" />
-
-                        <button class="csbutton">Delete</button>
 
 
 
+                        <table class="center">
+                            <tr class="TableHeader">
+                                <th>
+                                    C&oacute;digo
+                                </th>
+                                <th>
+                                    Tipo
+                                </th>
+                                <th>
+                                    Fecha de calibraci&oacute;n
+                                </th>
+                                <th>
+                                    Fecha de expiraci&oacute;n
+                                </th>
+                                <th>
+                                    Flag
+                                </th>
+                                <th>
+                                    Medición
+                                </th>
+                                <th>
+                                    Control
+                                </th>
+                                <th>
 
-                            <table class="center">
-                                <tr class="TableHeader">
-                                    <th>
-                                        C&oacute;digo
-                                    </th>
-                                    <th>
-                                        Tipo
-                                    </th>
-                                    <th>
-                                        Fecha de calibraci&oacute;n
-                                    </th>
-                                    <th>
-                                        Fecha de expiraci&oacute;n
-                                    </th>
-                                    <th>
-                                        Flag
-                                    </th>
-                                    <th>
-                                        Medición
-                                    </th>
-                                    <th>
-                                        Control
-                                    </th>
-                                    <th>
+                                </th>
+                                <th>
+                                    C
+                                </th>
+                            </tr>
 
-                                    </th>
-                                    <th>
-                                        C
-                                    </th>
+
+
+                            @if (ViewBag.NoRecords2)
+                            {
+                                <tr class="noRecords">
+                                    <td colspan="5" class="gridRowOdd">
+                                        @MyResource.NoRecords
+                                    </td>
                                 </tr>
+                            }
+                            else
+                            {
 
 
 
-                                @if (ViewBag.NoRecords2)
+
+
+                                int cont = 0;
+                                foreach (Laboratorio.Models.ToolModel tool in Model.Tools)
                                 {
-                                    <tr class="noRecords">
-                                        <td colspan="5" class="gridRowOdd">
-                                            @MyResource.NoRecords
+                                    <tr>
+                                        <td>
+                                            @Html.TextBox("Code" + cont, tool.Code)
                                         </td>
+                                        <td>
+                                            @tool.Type
+                                        </td>
+                                        <td class="centeredTD">
+                                            @tool.CalibrationDate.ToString("dd/MM/yy")
+                                        </td>
+                                        <td class="centeredTD">
+                                            @tool.ExpirationDate.ToString("dd/MM/yy")
+                                        </td>
+                                        @switch ((string)tool.ExpirationFlag)
+                                        {
+                                            case "0":
+                                                <td class="centeredTD Danger">
+                                                    Vencido
+                                                </td>
+                                                break;
+                                            case "1":
+                                                <td class="centeredTD Warning">
+                                                    Próximo a vencer
+                                                </td>
+                                                break;
+                                            case "2":
+                                                <td class="centeredTD ">
+                                                    En Tiempo
+                                                </td>
+                                                break;
+
+                                        }
+                                        <td class="centeredTD">
+                                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 1 })">
+                                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                            </a>
+                                        </td>
+                                        <td class="centeredTD">
+                                            <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 0 })">
+                                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                            </a>
+                                        </td>
+                                        <td>
+
+                                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
+                                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                            </a>
+
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" id="@String.Format("checked{0}", cont)" onclick="checarActivos()" />
+                                            @*@Html.CheckBox("isChecked"+cont, tool.isChecked,  )*@
+                                        </td>
+
                                     </tr>
+                                    odd = odd ? false : true;
+                                    cont++;
                                 }
-                                else
-                                {
 
 
 
+                                <input type="hidden" id="hdncount" value="@cont" />
 
-
-                                    int cont = 0;
-                                    foreach (Laboratorio.Models.ToolModel tool in Model.Tools)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.TextBox("Code" + cont, tool.Code);
-                                            </td>
-                                            <td>
-                                                @tool.Type
-                                            </td>
-                                            <td class="centeredTD">
-                                                @tool.CalibrationDate.ToString("dd/MM/yy")
-                                            </td>
-                                            <td class="centeredTD">
-                                                @tool.ExpirationDate.ToString("dd/MM/yy")
-                                            </td>
-                                            @switch ((string)tool.ExpirationFlag)
-                                            {
-                                                case "0":
-                                                    <td class="centeredTD Danger">
-                                                        Vencido
-                                                    </td>
-                                                    break;
-                                                case "1":
-                                                    <td class="centeredTD Warning">
-                                                        Próximo a vencer
-                                                    </td>
-                                                    break;
-                                                case "2":
-                                                    <td class="centeredTD ">
-                                                        En Tiempo
-                                                    </td>
-                                                    break;
-
-                                            }
-                                            <td class="centeredTD">
-                                                <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 1 })">
-                                                    <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                                                </a>
-                                            </td>
-                                            <td class="centeredTD">
-                                                <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 0 })">
-                                                    <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                                                </a>
-                                            </td>
-                                            <td>
-
-                                                <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
-                                                    <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                                                </a>
-
-                                            </td>
-                                            <td>
-                                                <input type="checkbox" id="@String.Format("checked{0}", cont)" onclick="checarActivos()" />
-                                                @*@Html.CheckBox("isChecked"+cont, tool.isChecked,  )*@
-                                            </td>
-
-                                        </tr>
-                                        odd = odd ? false : true;
-                                        cont++;
-                                    }
-
-
-
-                                    <input type="hidden" id="hdncount" value="@cont" />
-
-                                    <input type="hidden" id="activos" name="activos" />
+                                <input type="hidden" id="activos" name="activos" />
 
 
 
@@ -428,8 +428,8 @@
 
 
 
-                                }
-                            </table>
+                            }
+                        </table>
 
                     </fieldset>
 

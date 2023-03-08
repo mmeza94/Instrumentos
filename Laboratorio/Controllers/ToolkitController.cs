@@ -104,6 +104,8 @@ namespace Laboratorio.Controllers
             return View("Index", model); // Operacion no exitosa
         }
 
+
+
         public ActionResult DeleteToolkit()
         {
             ToolKitModel model = new ToolKitModel();
@@ -120,29 +122,19 @@ namespace Laboratorio.Controllers
 
 
 
-
-
-
         [HttpPost]
-        public ActionResult AddToolMassive(string activos, string activosCodeToolkit, string MeasureUse)
+        public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse, string Action)
         {
 
-            List<string> codigosInstrumentos = new List<string>();
-            List<string> codigosPlantillas = new List<string>();
-            codigosInstrumentos = activos.Split(',').Where(x=>x != "").ToList();
-            codigosPlantillas = activosCodeToolkit.Split(',').Where(x => x != "").ToList();
-
-            var measure = Convert.ToInt32(MeasureUse);
-
-            List<string> ResultadoPrueba = new List<string>(); 
 
 
-            foreach (string Plantilla in codigosPlantillas)
+            if (IsActionInsert(Action))
             {
-                foreach (string Instrumento in codigosInstrumentos)
-                {
-                    DataAccess.InsToolKit(Plantilla, Instrumento, measure);
-                }
+                MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+            }
+            else
+            {
+                MassiveDeleteTools(activos, activosCodeToolkit);
             }
 
 
@@ -153,6 +145,68 @@ namespace Laboratorio.Controllers
             
             return View("Index", model);
         }
+
+
+
+       
+
+
+
+        private bool IsActionInsert(string Action)
+        {
+            return (Action == "Insert") ? true : false;
+        }
+
+
+
+
+        private void MassiveDeleteTools(string activos, string activosCodeToolkit)
+        {
+            List<string> codigosInstrumentos = GetCodesList(activos);
+            List<string> codigosPlantillas = GetCodesList(activosCodeToolkit);
+
+            foreach (string Plantilla in codigosPlantillas)
+            {
+                foreach (string Instrumento in codigosInstrumentos)
+                {
+                    DataAccess.DeleteToolByToolkit(Plantilla, Instrumento);
+                }
+            }
+
+            //DeleteToolByToolkit
+        }
+
+
+
+
+
+        
+        private void MassiveInsertTools(string activos, string activosCodeToolkit, string MeasureUse)
+        {
+            //TODO Validar el valor del agregar para saber si borro o agrego
+            List<string> codigosInstrumentos = GetCodesList(activos);
+            List<string> codigosPlantillas = GetCodesList(activosCodeToolkit);
+            var measure = Convert.ToInt32(MeasureUse);
+
+            
+
+
+            foreach (string Plantilla in codigosPlantillas)
+            {
+                foreach (string Instrumento in codigosInstrumentos)
+                {
+                    DataAccess.InsToolKit(Plantilla, Instrumento, measure);
+                }
+            }
+        }
+
+        private List<string> GetCodesList(string ConcatenatedCodes)
+        {
+            List<string> CleanedCodes = new List<string>();
+            CleanedCodes = ConcatenatedCodes.Split(',').Where(x => x != "").ToList();
+            return CleanedCodes;
+        }
+
 
 
 
@@ -170,9 +224,6 @@ namespace Laboratorio.Controllers
 
 
 
-
-
-
         public ActionResult RemoveTool(string toolCode)
         {
 
@@ -184,6 +235,7 @@ namespace Laboratorio.Controllers
 
 
         }
+
 
 
 

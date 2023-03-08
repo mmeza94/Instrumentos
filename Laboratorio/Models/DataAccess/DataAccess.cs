@@ -6,6 +6,7 @@ using Tenaris.Library.DbClient;
 using System.Data;
 using System.Configuration;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 
 namespace Laboratorio.Models.DataAccess
 {
@@ -38,6 +39,7 @@ namespace Laboratorio.Models.DataAccess
         private static string storeProcedureDeleteToolKit = ConfigurationManager.AppSettings["SP_DeleteToolKit"].ToString();
         private static string storeProcedureGetToolKitCodesPerTool = ConfigurationManager.AppSettings["SP_GetToolKitCodesPerTool"].ToString();
         private static string storeProcedureDeleteDeactivatedTool = ConfigurationManager.AppSettings["SP_DeleteDeactivatedTool"].ToString();
+        private static string storeProcedureDeleteToolInToolkit = ConfigurationManager.AppSettings["SP_DeleteToolInToolkit"].ToString();
 
         static DataAccess()
         {
@@ -68,9 +70,21 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.AddCommand(storeProcedureDeleteToolKit);
             dbClientGrana.AddCommand(storeProcedureGetToolKitCodesPerTool);
             dbClientGrana.AddCommand(storeProcedureDeleteDeactivatedTool);
+            dbClientGrana.AddCommand(storeProcedureDeleteToolInToolkit);
 
             dbClientGrana.Activate();
         }
+
+
+
+        public static void DeleteToolByToolkit( string ToolKitCode, string ToolCode)
+        {
+            dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).Parameters["@ToolkitCode"].Value = ToolKitCode;
+            dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).Parameters["@ToolCode"].Value = ToolCode;         
+            dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).ExecuteNonQuery();
+        }
+
+
 
 
 
