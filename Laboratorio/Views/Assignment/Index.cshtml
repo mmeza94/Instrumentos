@@ -45,6 +45,9 @@
                             Uso
                         </th>
                         <th>
+                            Flag
+                        </th>
+                        <th>
                         </th>
                         <th>
                         </th>
@@ -72,67 +75,86 @@
                 {
                     foreach (var tm in ViewBag.MachineTools)
                     {
-                        <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                            <td>
-                                @tm.Code
-                            </td>
-                            <td>
-                                @tm.Type
-                            </td>
-                            <td class="centeredTD">
-                                @tm.CalibrationDate.ToString("dd/MM/yy")
-                            </td>
-                            <td class="centeredTD">
-                                @tm.ExpirationDate.ToString("dd/MM/yy")
-                            </td>
-                            @if (tm.Measure)
-                            {
-                                <td class="centeredTD">
-                                    Medici&oacute;n
-                                </td>
-                            }
-                            else
-                            {
-                                <td class="centeredTD">
-                                    Control
-                                </td>
+                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                    <td>
+                        @tm.Code
+                    </td>
+                    <td>
+                        @tm.Type
+                    </td>
+                    <td class="centeredTD">
+                        @tm.CalibrationDate.ToString("dd/MM/yy")
+                    </td>
+                    <td class="centeredTD">
+                        @tm.ExpirationDate.ToString("dd/MM/yy")
+                    </td>
+                    @if (tm.Measure)
+                    {
+                        <td class="centeredTD">
+                            Medici&oacute;n
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="centeredTD">
+                            Control
+                        </td>
 
-                            }
-                            <td>
-                                <a href="@Url.Action("RemoveTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
-                                    <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                    }
+                    @switch ((string)tm.ExpirationFlag)
+                    {
+                        case "0":
+                            <td class="centeredTD Danger">
+                                Vencido
+                            </td>
+                            break;
+                        case "1":
+                            <td class="centeredTD Warning">
+                                Próximo a vencer
+                            </td>
+                            break;
+                        case "2":
+                            <td class="centeredTD ">
+                                En Tiempo
+                            </td>
+                            break;
+
+                    }
+                    <td>
+                        <a href="@Url.Action("RemoveTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
+                            <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                        </a>
+                    </td>
+                    @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
+                    {
+                        if (string.IsNullOrEmpty(tm.Shared))
+                        {
+                            <td class="centeredTD">
+                                No Compartido
+                                <a href="@Url.Action("ShareTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, meassure = tm.Measure })">
+                                    <img alt="@MyResource.RightArrow" src="@Url.Content("~/Content/images/rightarrow2.png")" />
                                 </a>
                             </td>
-                            @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
-                            {
-                                if (string.IsNullOrEmpty(tm.Shared))
-                                {
-                                    <td class="centeredTD">
-                                        No Compartido
-                                        <a href="@Url.Action("ShareTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, meassure = tm.Measure })">
-                                            <img alt="@MyResource.RightArrow" src="@Url.Content("~/Content/images/rightarrow2.png")" />
-                                        </a>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="centeredTD">
-                                        Compartido
-                                        <a href="@Url.Action("ShareTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, meassure = tm.Measure })">
-                                            <img alt="@MyResource.RightArrow" src="@Url.Content("~/Content/images/rightarrow2.png")" />
-                                        </a>
-                                    </td>
-                                }
-                            }
-                            <td>
-
-                                <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                    <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                        }
+                        else
+                        {
+                            <td class="centeredTD">
+                                Compartido
+                                <a href="@Url.Action("ShareTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, meassure = tm.Measure })">
+                                    <img alt="@MyResource.RightArrow" src="@Url.Content("~/Content/images/rightarrow2.png")" />
                                 </a>
-
                             </td>
+                        }
+                    }
+                    <td>
 
-                        </tr>
+                        <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                        </a>
+
+                    </td>
+
+                </tr>
 
                         odd = odd ? false : true;
                     }
@@ -162,6 +184,9 @@
                         Fecha de expiraci&oacute;n
                     </th>
                     <th>
+                        Flag
+                    </th>
+                    <th>
                         Medición
                     </th>
                     <th>
@@ -183,37 +208,56 @@
             {
                 foreach (var tm in ViewBag.AvailableTools)
                 {
-                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                        <td>
-                            @tm.Code
+            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                <td>
+                    @tm.Code
+                </td>
+                <td>
+                    @tm.Type
+                </td>
+                <td class="centeredTD">
+                    @tm.CalibrationDate.ToString("dd/MM/yy")
+                </td>
+                <td class="centeredTD">
+                    @tm.ExpirationDate.ToString("dd/MM/yy")
+                </td>
+                @switch ((string)tm.ExpirationFlag)
+                {
+                    case "0":
+                        <td class="centeredTD Danger">
+                            Vencido
                         </td>
-                        <td>
-                            @tm.Type
+                        break;
+                    case "1":
+                        <td class="centeredTD Warning">
+                            Próximo a vencer
                         </td>
-                        <td class="centeredTD">
-                            @tm.CalibrationDate.ToString("dd/MM/yy")
+                        break;
+                    case "2":
+                        <td class="centeredTD ">
+                            En Tiempo
                         </td>
-                        <td class="centeredTD">
-                            @tm.ExpirationDate.ToString("dd/MM/yy")
-                        </td>
-                        <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
-                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                            </a>
-                        </td>
-                        <td class="centeredTD">
-                            <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
-                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
-                            </a>
-                        </td>
-                        <td>
+                        break;
 
-                            <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                            </a>
+                }
+                <td class="centeredTD">
+                    <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                        <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                    </a>
+                </td>
+                <td class="centeredTD">
+                    <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                        <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                    </a>
+                </td>
+                <td>
 
-                        </td>
-                    </tr>
+                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                    </a>
+
+                </td>
+            </tr>
 
                     odd = odd ? false : true;
                 }

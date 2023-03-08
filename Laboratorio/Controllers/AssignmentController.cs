@@ -68,8 +68,26 @@ namespace Laboratorio.Controllers
             {
                 ViewBag.NoRecords2 = false;
             }
-
+            FillFlag(tm);
+            FillFlag(available);
             return View();
+        }
+
+
+        private void FillFlag(List<ToolModel> tm)
+        {
+            foreach (var item in tm)
+            {
+                var flag = item.ExpirationDate.Subtract(DateTime.Now).Days;
+
+                if (flag <= 0)
+                    item.ExpirationFlag = "0";//expirado
+                if (flag <= 10 && flag > 0)
+                    item.ExpirationFlag = "1";//proximo a expirar
+                if (flag > 10)
+                    item.ExpirationFlag = "2";//todo bien
+
+            }
         }
 
 

@@ -20,5 +20,10 @@ namespace Laboratorio.Models
         public bool isChecked { get; set; }
 
         public string ExpirationFlag { get; set; } //0 expirado, 1:proximo a expirar, 2: suficiente tiempo
+
+
+
+
+
     }
 }
