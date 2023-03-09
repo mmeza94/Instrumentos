@@ -127,25 +127,39 @@ namespace Laboratorio.Controllers
         public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse, string Action)
         {
 
-
-
-            if (IsActionInsert(Action))
+            if(MeasureUse == "" || activos == "" || activosCodeToolkit == "")
             {
-                MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+                ToolKitModel model = new ToolKitModel();
+                FillToolkitsViewBag();
+                UpdateViewBags();
+                FillModel(model);
+
+                return View("Index", model);
             }
             else
             {
-                MassiveDeleteTools(activos, activosCodeToolkit);
+                if (IsActionInsert(Action))
+                {
+                    MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+                }
+                else
+                {
+                    MassiveDeleteTools(activos, activosCodeToolkit, MeasureUse);
+                }
+
+
+
+                ToolKitModel model = new ToolKitModel();
+                FillToolkitsViewBag();
+                UpdateViewBags();
+                FillModel(model);
+
+                return View("Index", model);
             }
 
 
 
-            ToolKitModel model = new ToolKitModel();
-            FillToolkitsViewBag();
-            UpdateViewBags();
-            FillModel(model);
             
-            return View("Index", model);
         }
 
 
@@ -170,13 +184,13 @@ namespace Laboratorio.Controllers
 
 
 
-        public ActionResult RemoveTool(string toolCode)
+        public ActionResult RemoveTool(string toolCode, bool Measure)
         {
-
+            var measure = (Measure == true) ? 1 : 0;
             List<ToolModel> toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
             ToolModel SelectedTool = toolsFromToolKits.FirstOrDefault(tool => tool.Code == toolCode);
             var toolkitcode = this.Session["SelectedToolKitCode123"].ToString();
-            DataAccess.DeleteToolByToolkit(toolkitcode, toolCode);
+            DataAccess.DeleteToolByToolkit(toolkitcode, toolCode, measure);
             //toolsFromToolKits.Remove(SelectedTool);
             ToolKitModel model = new ToolKitModel();
             FillToolkitsViewBag(toolkitcode);
@@ -246,16 +260,17 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void MassiveDeleteTools(string activos, string activosCodeToolkit)
+        private void MassiveDeleteTools(string activos, string activosCodeToolkit, string MeasureUse)
         {
             List<string> codigosInstrumentos = GetCodesList(activos);
             List<string> codigosPlantillas = GetCodesList(activosCodeToolkit);
+            var measure = Convert.ToInt32(MeasureUse);
 
             foreach (string Plantilla in codigosPlantillas)
             {
                 foreach (string Instrumento in codigosInstrumentos)
                 {
-                    DataAccess.DeleteToolByToolkit(Plantilla, Instrumento);
+                    DataAccess.DeleteToolByToolkit(Plantilla, Instrumento,measure);
                 }
             }
 

@@ -180,7 +180,7 @@
 
                                 }
                                 <td>
-                                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code })">
+                                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code, measure = tm.Measure})">
                                         <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
                                     </a>
                                 </td>
