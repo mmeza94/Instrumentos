@@ -10,15 +10,15 @@
         @using (Html.BeginForm("AssignMultipleTools", "Assignment", FormMethod.Post))
         {
             <label for="ToolKit">
-                ToolKit:
+                Kit de Instrumentos:
             </label>
             @Html.DropDownList("ToolKit", ViewBag.toolkits as List<SelectListItem>)
-            <input class="csbutton" type="submit" name ="submit" value="submit"/>
+            <input class="csbutton" type="submit" name ="submit" value="Agregar"/>
         }
         @using (Html.BeginForm("Index", "Assignment", FormMethod.Post))
         {
             <fieldset>
-                <legend>Herramientas asignadas</legend>
+                <legend>Instrumentos asignados</legend>
                 <label for="MachineCode">
                     Máquina:
                 </label>
@@ -45,7 +45,7 @@
                             Uso
                         </th>
                         <th>
-                            Flag
+                            Estado
                         </th>
                         <th>
                         </th>
@@ -168,7 +168,7 @@
             <br />
         }
         <fieldset>
-            <legend>Herramientas disponibles</legend>
+            <legend>Instrumentos disponibles</legend>
             <table class="center">
                 <tr class="TableHeader">
                     <th>
@@ -184,7 +184,7 @@
                         Fecha de expiraci&oacute;n
                     </th>
                     <th>
-                        Flag
+                        Estado
                     </th>
                     <th>
                         Medición

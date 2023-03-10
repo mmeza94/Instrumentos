@@ -6,11 +6,11 @@
 @if (Request.IsAuthenticated)
 {
 <fieldset>
-    <legend>@MyResource.ToolTypeCatalog</legend>
+    <legend>Catálogo de instrumentos</legend>
     <table class="center">
         <tr class="TableHeader">
             <th>
-                Tipo de herramienta
+                Instrumentos
             </th>
             <th>
             </th>
@@ -45,7 +45,7 @@
     }
 </fieldset>
 <fieldset>
-    <legend>@MyResource.NewToolType</legend>
+    <legend>Nuevo Instrumento</legend>
     @using (Html.BeginForm("InsertToolType", "ToolTypes", FormMethod.Post))
     {
         <label for="ToolTypeName">@MyResource.Name</label>

@@ -11,7 +11,7 @@
         });
     </script>
     <fieldset>
-        <legend>@MyResource.ToolCatalog</legend>
+        <legend>Instrumentos</legend>
         <table class="center">
             <tr class="TableHeader">
                 <th>
@@ -33,7 +33,7 @@
                     Plantilla
                 </th>
                 <th>
-                    Flag
+                    Estado
                 </th>
                 <th>
 
@@ -122,7 +122,7 @@
         {
             <label for="Code">@MyResource.Code</label>
             @Html.TextBox("Code", "", new { @class = "textBox textBoxEnable" })
-            <label for="TypeName">@MyResource.ToolType</label>
+            <label for="TypeName">Tipo de Instrumento</label>
             @Html.DropDownList("TypeName", ViewBag.Types as List<SelectListItem>, MyResource.SelectOne, new { @class = "textBox textBoxEnable select" })
             <label for="CalibrationDate">@MyResource.CalibrationDate</label>
             @Html.TextBox("CalibrationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })

@@ -60,6 +60,8 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.AddCommand(storeProcedureInsLog);
             dbClientGrana.AddCommand(storeProcedureShareMachineTool);
             
+
+
             dbClientGrana.AddCommand(storeProcedureQryDeactivatedTools);
             dbClientGrana.AddCommand(storeProcedureActivateTool);
             dbClientGrana.AddCommand(storeProcedureGetToolKit);

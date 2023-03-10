@@ -30,7 +30,7 @@
                     @Html.TextBox("KitCode")
                 </div>
                 <div class="editor-label">
-                    @Html.Label("Máquina")
+                    @Html.Label("Operación")
                 </div>
                 @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>)
                 <p>
@@ -57,7 +57,7 @@
                 <div class="ui-corner-left">
                     <br />
                     <label for="MachineCode">
-                        Machine:
+                        Operación
                     </label>
                     @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
 
@@ -65,7 +65,7 @@
                     <br />
                     <br />
                     <label for="ToolKitCode">
-                        ToolKitCode:
+                        Plantilla
                     </label>
                     @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
 
@@ -91,7 +91,7 @@
                             Fecha de expiraci&oacute;n
                         </th>
                         <th>
-                            Flag
+                            Estado
                         </th>
 
                         <th>
@@ -219,7 +219,7 @@
         @using (Html.BeginForm("ToolMassiveAction", "Toolkit", FormMethod.Post))
                 {
                     <fieldset>
-                        <legend>Herramientas disponibles</legend>
+                        <legend>Instrumentos disponibles</legend>
 
 
 
@@ -252,7 +252,7 @@
                         <table>
                             <tr class="TableHeader">
                                 <th>
-                                    ToolKit
+                                    Plantilla
                                 </th>
                                 <th>
 
@@ -296,8 +296,8 @@
 
                         @*Botones Submit del formulario*@
 
-                        <input class="csbutton" name="Action" type="submit" value="Insert" />
-                        <input class="csbutton" name="Action" type="submit" value="Delete" />
+                        <input class="csbutton" name="Action" type="submit" value="Insertar" />
+                        <input class="csbutton" name="Action" type="submit" value="Borrar" />
 
 
 
@@ -318,7 +318,7 @@
                                     Fecha de expiraci&oacute;n
                                 </th>
                                 <th>
-                                    Flag
+                                    Estado
                                 </th>
                                 <th>
                                     Medición
@@ -354,9 +354,12 @@
                                 int cont = 0;
                                 foreach (Laboratorio.Models.ToolModel tool in Model.Tools)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.TextBox("Code" + cont, tool.Code)
+                                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                                        <td >
+                                            
+
+                                                @Html.TextBox("Code" + cont, tool.Code)
+                                            
                                         </td>
                                         <td>
                                             @tool.Type
