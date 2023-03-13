@@ -38,7 +38,7 @@ namespace Laboratorio.Models.DataAccess
         private static string storeProcedureDeactiveToolFromToolkitCatalog = ConfigurationManager.AppSettings["SP_DeactiveToolFromToolkitCatalog"].ToString();
         private static string storeProcedureDeleteToolKit = ConfigurationManager.AppSettings["SP_DeleteToolKit"].ToString();
         private static string storeProcedureGetToolKitCodesPerTool = ConfigurationManager.AppSettings["SP_GetToolKitCodesPerTool"].ToString();
-        private static string storeProcedureDeleteDeactivatedTool = ConfigurationManager.AppSettings["SP_DeleteDeactivatedTool"].ToString();
+        //private static string storeProcedureDeleteDeactivatedTool = ConfigurationManager.AppSettings["SP_DeleteDeactivatedTool"].ToString();
         private static string storeProcedureDeleteToolInToolkit = ConfigurationManager.AppSettings["SP_DeleteToolInToolkit"].ToString();
 
         static DataAccess()
@@ -71,7 +71,7 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.AddCommand(storeProcedureDeactiveToolFromToolkitCatalog);
             dbClientGrana.AddCommand(storeProcedureDeleteToolKit);
             dbClientGrana.AddCommand(storeProcedureGetToolKitCodesPerTool);
-            dbClientGrana.AddCommand(storeProcedureDeleteDeactivatedTool);
+           // dbClientGrana.AddCommand(storeProcedureDeleteDeactivatedTool);
             dbClientGrana.AddCommand(storeProcedureDeleteToolInToolkit);
 
             dbClientGrana.Activate();

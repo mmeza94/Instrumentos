@@ -5,7 +5,7 @@
 }
 @if (Request.IsAuthenticated)
 {
-<fieldset>
+<fieldset class="colorbase">
     <legend>Catálogo de instrumentos</legend>
     <table class="center">
         <tr class="TableHeader">
@@ -63,3 +63,6 @@ else
 {
     @Html.Partial("_LogInFormPartial")
 }
+
+
+

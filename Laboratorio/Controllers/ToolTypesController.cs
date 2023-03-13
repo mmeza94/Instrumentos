@@ -11,6 +11,9 @@ namespace Laboratorio.Controllers
 {
     public class ToolTypesController : Controller
     {
+
+
+
         //
         // GET: /ToolType/
         public ActionResult Index(string validation, string tableError)
@@ -34,6 +37,12 @@ namespace Laboratorio.Controllers
 
             return View(l);
         }
+
+
+
+
+
+
 
         //
         // POST: /InsertToolType/ 
