@@ -56,156 +56,160 @@
 
                 <div class="ui-corner-left">
                     <br />
-                    <label for="MachineCode">
-                        Operación
-                    </label>
+
+                    <div class="editor-label">
+                        <label for="MachineCode">
+                            Operación
+                        </label>
+
+                    </div>
                     @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                    <br/>
 
-
-                    <br />
-                    <br />
-                    <label for="ToolKitCode">
-                        Plantilla
-                    </label>
+                    <div class="editor-label">
+                        <label for="ToolKitCode">
+                            Plantilla
+                        </label>
+                    </div>
                     @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
 
-                    <br />
+                        <br />
 
-                    <a href="@Url.Action("DeleteToolkit", "Toolkit")">
-                        <input class="csbutton" type="button" value="Borrar" />
-                    </a>
+                        <a href="@Url.Action("DeleteToolkit", "Toolkit")">
+                            <input class="csbutton" type="button" value="Borrar" />
+                        </a>
 
-                </div>
-                <table class="center">
-                    <tr class="TableHeader">
-                        <th>
-                            C&oacute;digo
-                        </th>
-                        <th>
-                            Tipo
-                        </th>
-                        <th>
-                            Fecha de calibraci&oacute;n
-                        </th>
-                        <th>
-                            Fecha de expiraci&oacute;n
-                        </th>
-                        <th>
-                            Estado
-                        </th>
+                    </div>
+                    <table class="center">
+                        <tr class="TableHeader">
+                            <th>
+                                C&oacute;digo
+                            </th>
+                            <th>
+                                Tipo
+                            </th>
+                            <th>
+                                Fecha de calibraci&oacute;n
+                            </th>
+                            <th>
+                                Fecha de expiraci&oacute;n
+                            </th>
+                            <th>
+                                Estado
+                            </th>
 
-                        <th>
-                            Uso
-                        </th>
-                        <th>
-                        </th>
-                        <th>
+                            <th>
+                                Uso
+                            </th>
+                            <th>
+                            </th>
+                            <th>
 
-                        </th>
-                        @*<th>
-                                Checkbox
-                            </th>*@
+                            </th>
+                            @*<th>
+                    Checkbox
+                </th>*@
 
-                        @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
-                        {
-                            if (ViewBag.MachineCode == "EMBAL1")
+                            @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
                             {
-                                <th>Compartir con Pintado Tina B</th>
-                            }
-                            else
-                            {
-                                <th>Compartir con Pintado Tina A</th>
-                            }
-                        }
-                    </tr>
-
-                    @*Aqui comienza contenido de primera tabla*@
-                    @if (ViewBag.NoRecords)
-                    {
-                        <tr class="noRecords">
-                            <td colspan="5" class="gridRowOdd">
-                                @MyResource.NoRecords
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        foreach (var tm in ViewBag.ToolKit)
-                        {
-                            <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                                <td>
-                                    @tm.Code
-                                </td>
-                                <td>
-                                    @tm.Type
-                                </td>
-                                <td class="centeredTD">
-                                    @tm.CalibrationDate.ToString("dd/MM/yy")
-                                </td>
-                                <td class="centeredTD">
-                                    @tm.ExpirationDate.ToString("dd/MM/yy")
-                                </td>
-
-                                @switch ((string)tm.ExpirationFlag)
+                                if (ViewBag.MachineCode == "EMBAL1")
                                 {
-                                    case "0":
-                                        <td class="centeredTD Danger">
-                                            Vencido
-                                        </td>
-                                        break;
-                                    case "1":
-                                        <td class="centeredTD Warning">
-                                            Próximo a vencer
-                                        </td>
-                                        break;
-                                    case "2":
-                                        <td class="centeredTD ">
-                                            En Tiempo
-                                        </td>
-                                        break;
-
-                                }
-
-                                @if (tm.Measure)
-                                {
-                                    <td class="centeredTD">
-                                        Medici&oacute;n
-                                    </td>
+                                    <th>Compartir con Pintado Tina B</th>
                                 }
                                 else
                                 {
+                                    <th>Compartir con Pintado Tina A</th>
+                                }
+                            }
+                        </tr>
+
+                        @*Aqui comienza contenido de primera tabla*@
+                        @if (ViewBag.NoRecords)
+                        {
+                            <tr class="noRecords">
+                                <td colspan="5" class="gridRowOdd">
+                                    @MyResource.NoRecords
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var tm in ViewBag.ToolKit)
+                            {
+                                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
                                     <td class="centeredTD">
-                                        Control
+                                        @tm.Code
+                                    </td>
+                                    <td class="centeredTD">
+                                        @tm.Type
+                                    </td>
+                                    <td class="centeredTD">
+                                        @tm.CalibrationDate.ToString("dd/MM/yy")
+                                    </td>
+                                    <td class="centeredTD">
+                                        @tm.ExpirationDate.ToString("dd/MM/yy")
                                     </td>
 
-                                }
-                                <td>
-                                    <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code, measure = tm.Measure})">
-                                        <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
-                                    </a>
-                                </td>
-                                <td>
+                                    @switch ((string)tm.ExpirationFlag)
+                                    {
+                                        case "0":
+                                            <td class="centeredTD Danger">
+                                                Vencido
+                                            </td>
+                                            break;
+                                        case "1":
+                                            <td class="centeredTD Warning">
+                                                Próximo a vencer
+                                            </td>
+                                            break;
+                                        case "2":
+                                            <td class="centeredTD ">
+                                                En Tiempo
+                                            </td>
+                                            break;
 
-                                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
-                                    </a>
+                                    }
 
-                                </td>
+                                    @if (tm.Measure)
+                                    {
+                                        <td class="centeredTD">
+                                            Medici&oacute;n
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="centeredTD">
+                                            Control
+                                        </td>
+
+                                    }
+                                    <td>
+                                        <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code, measure = tm.Measure})">
+                                            <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                        </a>
+
+                                    </td>
 
 
 
 
-                            </tr>
+                                </tr>
 
-                            odd = odd ? false : true;
+                                odd = odd ? false : true;
+                            }
                         }
+                    </table>
+                    @if (ViewBag.ValidationMessage != null)
+                    {
+                        <label class="validationError">@ViewBag.ValidationMessage</label>
                     }
-                </table>
-                @if (ViewBag.ValidationMessage != null)
-                {
-                    <label class="validationError">@ViewBag.ValidationMessage</label>
-                }
-            </fieldset>
+</fieldset>
             <br />
         }
 
@@ -223,21 +227,14 @@
 
 
 
-                        <div class="editor-label">
+                        <div class="editor-label MarginCustomLabel" style="margin-bottom:10px">
                             @Html.Label("Agregar a plantilla:")
                         </div>
 
 
 
 
-                        @*radiobutton*@
-                        <div>
-                            <label>Control</label>
-                            <input id="Control" name="Control" value="0" type="radio" onclick="SetMeasure(0)" />
 
-                            <label>Medicion</label>
-                            <input id="Medicion" name="Control" value="1" type="radio" onclick="SetMeasure(1)" />
-                        </div>
 
 
 
@@ -249,7 +246,7 @@
 
 
 
-                        <table>
+                        <table style="margin-bottom:10px">
                             <tr class="TableHeader">
                                 <th>
                                     Plantilla
@@ -270,11 +267,14 @@
                             {
 
                                 <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                                    <td>
-                                        @Html.TextBox("CodeToolkit" + CodeCount, item)
-                                        @* @item.Value*@
+                                    <td class="centeredTD">
+                                        <div style="display:none">
+                                            @Html.TextBox("CodeToolkit" + CodeCount, item)
+
+                                        </div>
+                                        @item
                                     </td>
-                                    <td>
+                                    <td class="centeredTD">
                                         <input type="checkbox" id="@String.Format("checkedCode{0}", CodeCount)" onclick="checarActivosCodeToolkit()" />
                                     </td>
 
@@ -292,6 +292,20 @@
                             <input type="hidden" id="activosCodeToolkit" name="activosCodeToolkit" />
 
                         </table>
+
+
+
+                        @*radiobutton*@
+                        <div style="margin-bottom:10px">
+                            <label>Control</label>
+                            <input id="Control" name="Control" value="0" type="radio" onclick="SetMeasure(0)" />
+
+                            <label>Medicion</label>
+                            <input id="Medicion" name="Control" value="1" type="radio" onclick="SetMeasure(1)" />
+                        </div>
+
+
+
 
 
                         @*Botones Submit del formulario*@
@@ -330,7 +344,7 @@
 
                                 </th>
                                 <th>
-                                    
+
                                 </th>
                             </tr>
 
@@ -355,13 +369,16 @@
                                 foreach (Laboratorio.Models.ToolModel tool in Model.Tools)
                                 {
                                     <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                                        <td >
-                                            
+                                        <td class="centeredTD">
+                                            <div style="display:none">
 
                                                 @Html.TextBox("Code" + cont, tool.Code)
-                                            
+                                            </div>
+                                            @tool.Code
+
+
                                         </td>
-                                        <td>
+                                        <td class="centeredTD">
                                             @tool.Type
                                         </td>
                                         <td class="centeredTD">
@@ -399,7 +416,7 @@
                                                 <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
                                             </a>
                                         </td>
-                                        <td>
+                                        <td class="centeredTD">
 
                                             <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
                                                 <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />

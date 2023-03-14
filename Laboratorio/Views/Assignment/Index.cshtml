@@ -76,10 +76,10 @@
                     foreach (var tm in ViewBag.MachineTools)
                     {
                 <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                    <td>
+                    <td class="centeredTD">
                         @tm.Code
                     </td>
-                    <td>
+                    <td class="centeredTD">
                         @tm.Type
                     </td>
                     <td class="centeredTD">
@@ -209,10 +209,10 @@
                 foreach (var tm in ViewBag.AvailableTools)
                 {
             <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                <td>
+                <td  class="centeredTD">
                     @tm.Code
                 </td>
-                <td>
+                <td class="centeredTD"> 
                     @tm.Type
                 </td>
                 <td class="centeredTD">

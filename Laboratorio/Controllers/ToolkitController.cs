@@ -440,9 +440,20 @@ namespace Laboratorio.Controllers
                 this.Session["ToolsFromToolKit"] = toolsFromToolKit;
                 ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
             }
+            else
+            {
+
+                toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
+                FillFlag(toolsFromToolKit);
+
+                this.Session["SelectedToolKitCode123"] = ToolKitCode;
+                this.Session["ToolsFromToolKit"] = toolsFromToolKit;
+                ViewBag.ToolKit = this.Session["ToolsFromToolKit"];
+            }
 
 
-            
+
+
         }
 
 

@@ -16,7 +16,7 @@ namespace Laboratorio.Controllers
 
         public ActionResult Index(string validation, string tableError)
         {
-            List<ToolModel> tm = DataAccess.GetTools();
+            List<ToolModel> tm = DataAccess.GetToolsWithToolKitList();
             if (tm.Count == 0)
             {
                 ViewBag.NoRecords = true;
@@ -131,7 +131,7 @@ namespace Laboratorio.Controllers
 
         public ActionResult UpdateToolPage(string code, string validation)
         {
-            List<ToolModel> tm = DataAccess.GetTools();
+            List<ToolModel> tm = DataAccess.GetToolsWithToolKitList();
 
             ViewBag.ValidationMessage = validation;
 

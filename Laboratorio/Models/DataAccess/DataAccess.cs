@@ -40,6 +40,7 @@ namespace Laboratorio.Models.DataAccess
         private static string storeProcedureGetToolKitCodesPerTool = ConfigurationManager.AppSettings["SP_GetToolKitCodesPerTool"].ToString();
         //private static string storeProcedureDeleteDeactivatedTool = ConfigurationManager.AppSettings["SP_DeleteDeactivatedTool"].ToString();
         private static string storeProcedureDeleteToolInToolkit = ConfigurationManager.AppSettings["SP_DeleteToolInToolkit"].ToString();
+        private static string storeProcedureqryToolsWithToolkitList = ConfigurationManager.AppSettings["SP_qryToolsWithToolkitList"].ToString();
 
         static DataAccess()
         {
@@ -73,9 +74,64 @@ namespace Laboratorio.Models.DataAccess
             dbClientGrana.AddCommand(storeProcedureGetToolKitCodesPerTool);
            // dbClientGrana.AddCommand(storeProcedureDeleteDeactivatedTool);
             dbClientGrana.AddCommand(storeProcedureDeleteToolInToolkit);
+            dbClientGrana.AddCommand(storeProcedureqryToolsWithToolkitList);
 
             dbClientGrana.Activate();
         }
+
+
+
+
+
+
+        public static List<ToolModel> GetToolsWithToolKitList()
+        {
+            List<ToolModel> l = new List<ToolModel>();
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureqryToolsWithToolkitList).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["TypeName"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.Machine = reader["MachineName"].ToString();
+                    tm.Plantilla = reader["Plantilla"].ToString();
+                    bool active = Boolean.Parse(reader["Active"].ToString());
+                    if (tm.Machine.Equals(String.Empty))
+                    {
+                        if (active)
+                        {
+                            tm.Available = 1; //disponible
+                        }
+                        else
+                        {
+                            tm.Available = 3; //de baja
+                        }
+                    }
+                    else
+                    {
+                        tm.Available = 2; //no disponible porque esta asignado
+                    }
+
+                    l.Add(tm);
+                }
+            }
+
+            return l;
+        }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -356,6 +412,13 @@ namespace Laboratorio.Models.DataAccess
 
             return Int32.Parse(dbClientGrana.GetCommand(storeProcedureDelToolType).Parameters["@Success"].Value.ToString());
         }
+
+
+
+
+
+
+
 
         public static List<ToolModel> GetTools()
         {

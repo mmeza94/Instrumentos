@@ -27,10 +27,10 @@
             foreach (var ttm in Model)
             {
             <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                <td>
+                <td class="centeredTD">
                     @ttm.Name
                 </td>
-                <td>
+                <td class="centeredTD">
                     <a href="@Url.Action("DeleteToolType", "ToolTypes", new { id = ttm.ID, tipo=ttm.Name })">
                         <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/delete.png")" /></a>
                 </td>
