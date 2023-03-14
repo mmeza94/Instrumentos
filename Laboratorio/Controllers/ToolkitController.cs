@@ -84,10 +84,10 @@ namespace Laboratorio.Controllers
 
             var cleanedToolkitCode = KitCode.Trim();
 
-            int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
+            //int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
 
 
-            bool IsInsertionSuccesful = DataAccess.InsToolKitCatalog(cleanedToolkitCode, idMachine);
+            bool IsInsertionSuccesful = DataAccess.InsToolKitCatalog(cleanedToolkitCode, MachineCode);
             ToolKitModel model = new ToolKitModel();
 
 
@@ -256,7 +256,7 @@ namespace Laboratorio.Controllers
 
         private bool IsActionInsert(string Action)
         {
-            return (Action == "Insert") ? true : false;
+            return (Action == "Insertar") ? true : false;
         }
 
 
@@ -463,9 +463,9 @@ namespace Laboratorio.Controllers
 
         private List<SelectListItem> GetToolkitCodesFromCatalog()
         {
-            int idMachine = Convert.ToInt32(this.Session["idSelectedMachine"].ToString());
+            string MachineCode = this.Session["MachineCode"].ToString();
             List<SelectListItem> ToolKitCatalog = new List<SelectListItem>();
-            ToolKitCatalog = DataAccess.GetToolKitCodes(idMachine);
+            ToolKitCatalog = DataAccess.GetToolKitCodes(MachineCode);
             return ToolKitCatalog;
         }
 

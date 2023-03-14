@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Laboratorio.Models.DataAccess;
 using Laboratorio.Models;
 using System.Resources;
+using System.Threading.Tasks;
+
 
 namespace Laboratorio.Controllers
 {
@@ -39,6 +41,7 @@ namespace Laboratorio.Controllers
         }
 
 
+        
 
 
 

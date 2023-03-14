@@ -160,12 +160,12 @@ namespace Laboratorio.Models.DataAccess
         }
 
 
-        public static bool InsToolKitCatalog(string ToolKitCode, int idMachine)
+        public static bool InsToolKitCatalog(string ToolKitCode, string MachineCode)
         {
             dbClientGrana.GetCommand(storeProcedureInsToolKitCode).Parameters["@ToolKitCode"].Value = ToolKitCode;
-            dbClientGrana.GetCommand(storeProcedureInsToolKitCode).Parameters["@idMachine"].Value = idMachine;
+            dbClientGrana.GetCommand(storeProcedureInsToolKitCode).Parameters["@MachineCode"].Value = MachineCode;
 
-            var result = dbClientGrana.GetCommand(storeProcedureInsToolKitCode).ExecuteScalar();
+            var result = dbClientGrana.GetCommand(storeProcedureInsToolKitCode).ExecuteScalar().ToString();
 
             return (result.ToString() == "1") ? true : false;
 
@@ -235,10 +235,10 @@ namespace Laboratorio.Models.DataAccess
         }
 
 
-        public static List<SelectListItem> GetToolKitCodes(int idMachine)
+        public static List<SelectListItem> GetToolKitCodes(string MachineCode)
         {
             var list = new List<SelectListItem>();
-            dbClientGrana.GetCommand(storeProcedureGetToolKitCodesByIdMachine).Parameters["@IdMachine"].Value = idMachine;
+            dbClientGrana.GetCommand(storeProcedureGetToolKitCodesByIdMachine).Parameters["@MachineCode"].Value = MachineCode;
 
             using (var reader = dbClientGrana.GetCommand(storeProcedureGetToolKitCodesByIdMachine).ExecuteReader())
             {
