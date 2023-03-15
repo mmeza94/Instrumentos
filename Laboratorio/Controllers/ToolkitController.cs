@@ -50,7 +50,7 @@ namespace Laboratorio.Controllers
 
             MachineCode = SetDefaultMachineCodeIfNull(MachineCode);
             this.Session["MachineCode"] = MachineCode;
-            this.Session["idSelectedMachine"] = ConfigurationManager.AppSettings[MachineCode].ToString();
+            //this.Session["idSelectedMachine"] = ConfigurationManager.AppSettings[MachineCode].ToString();
 
 
             //Llenamos el combobox de codigos de plantillas
@@ -123,33 +123,91 @@ namespace Laboratorio.Controllers
 
 
 
+        //[HttpPost]
+        //public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse, string Action)
+        //{
+
+        //    if (MeasureUse == "" || activos == "" || activosCodeToolkit == "")
+        //    {
+        //        ToolKitModel model = new ToolKitModel();
+        //        FillToolkitsViewBag();
+        //        UpdateViewBags();
+        //        FillModel(model);
+
+        //        return View("Index", model);
+        //    }
+        //    else
+        //    {
+        //        if (IsActionInsert(Action))
+        //        {
+
+        //            MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+        //        }
+        //        else
+        //        {
+        //            MassiveDeleteTools(activos, activosCodeToolkit, MeasureUse);
+        //        }
+
+
+
+        //        ToolKitModel model = new ToolKitModel();
+        //        FillToolkitsViewBag();
+        //        UpdateViewBags();
+        //        FillModel(model);
+
+        //        return View("Index", model);
+        //    }
+
+
+
+
+        //}
+
+
+
+
         [HttpPost]
         public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse, string Action)
         {
+            ToolKitModel model = new ToolKitModel();
 
-            if(MeasureUse == "" || activos == "" || activosCodeToolkit == "")
+            if (IsActionInsert(Action))
             {
-                ToolKitModel model = new ToolKitModel();
-                FillToolkitsViewBag();
-                UpdateViewBags();
-                FillModel(model);
-
-                return View("Index", model);
-            }
-            else
-            {
-                if (IsActionInsert(Action))
+                if (MeasureUse == "" || activos == "" || activosCodeToolkit == "")
                 {
-                    MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+
+                    FillToolkitsViewBag();
+                    UpdateViewBags();
+                    FillModel(model);
+
+                    return View("Index", model);
                 }
                 else
                 {
-                    MassiveDeleteTools(activos, activosCodeToolkit, MeasureUse);
+
+                    MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+                    FillToolkitsViewBag();
+                    UpdateViewBags();
+                    FillModel(model);
+
+                    return View("Index", model);
                 }
 
+            }
+            else
+            {
 
+                if (activos == "" || activosCodeToolkit == "")
+                {
 
-                ToolKitModel model = new ToolKitModel();
+                    FillToolkitsViewBag();
+                    UpdateViewBags();
+                    FillModel(model);
+
+                    return View("Index", model);
+                }
+
+                MassiveDeleteTools(activos, activosCodeToolkit);
                 FillToolkitsViewBag();
                 UpdateViewBags();
                 FillModel(model);
@@ -158,14 +216,12 @@ namespace Laboratorio.Controllers
             }
 
 
-
-            
         }
 
 
 
 
-        
+
 
 
         public ActionResult AddTool(string toolCode, int use)
@@ -190,7 +246,7 @@ namespace Laboratorio.Controllers
             List<ToolModel> toolsFromToolKits = (List<ToolModel>)this.Session["ToolsFromToolKit"];
             ToolModel SelectedTool = toolsFromToolKits.FirstOrDefault(tool => tool.Code == toolCode);
             var toolkitcode = this.Session["SelectedToolKitCode123"].ToString();
-            DataAccess.DeleteToolByToolkit(toolkitcode, toolCode, measure);
+            DataAccess.DeleteToolByToolkit(toolkitcode, toolCode);
             //toolsFromToolKits.Remove(SelectedTool);
             ToolKitModel model = new ToolKitModel();
             FillToolkitsViewBag(toolkitcode);
@@ -260,17 +316,17 @@ namespace Laboratorio.Controllers
         }
 
 
-        private void MassiveDeleteTools(string activos, string activosCodeToolkit, string MeasureUse)
+        private void MassiveDeleteTools(string activos, string activosCodeToolkit)
         {
             List<string> codigosInstrumentos = GetCodesList(activos);
             List<string> codigosPlantillas = GetCodesList(activosCodeToolkit);
-            var measure = Convert.ToInt32(MeasureUse);
+            //var measure = Convert.ToInt32(MeasureUse);
 
             foreach (string Plantilla in codigosPlantillas)
             {
                 foreach (string Instrumento in codigosInstrumentos)
                 {
-                    DataAccess.DeleteToolByToolkit(Plantilla, Instrumento,measure);
+                    DataAccess.DeleteToolByToolkit(Plantilla, Instrumento);
                 }
             }
 

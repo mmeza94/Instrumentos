@@ -135,11 +135,11 @@ namespace Laboratorio.Models.DataAccess
 
 
 
-        public static void DeleteToolByToolkit( string ToolKitCode, string ToolCode, int Measure )
+        public static void DeleteToolByToolkit( string ToolKitCode, string ToolCode)
         {
             dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).Parameters["@ToolkitCode"].Value = ToolKitCode;
             dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).Parameters["@ToolCode"].Value = ToolCode;         
-            dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).Parameters["@Measure"].Value = Measure;         
+            //dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).Parameters["@Measure"].Value = Measure;         
             dbClientGrana.GetCommand(storeProcedureDeleteToolInToolkit).ExecuteNonQuery();
         }
 
