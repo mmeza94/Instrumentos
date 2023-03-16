@@ -143,6 +143,11 @@
     <Content Include="Content\images\dropicon.gif" />
     <Content Include="Content\images\edit.png" />
     <Content Include="Content\images\edit16.png" />
+    <Content Include="Content\images\Hopstarter-Button-Button-Close.48.png" />
+    <Content Include="Content\images\Hopstarter-Soft-Scraps-Button-Add.48.png" />
+    <Content Include="Content\images\Hopstarter-Soft-Scraps-Button-Download.48.png" />
+    <Content Include="Content\images\Hopstarter-Soft-Scraps-Button-Refresh.48.png" />
+    <Content Include="Content\images\Hopstarter-Soft-Scraps-Button-Upload.48.png" />
     <Content Include="Content\images\iconArrowFin.gif" />
     <Content Include="Content\images\iconArrowIni.gif" />
     <Content Include="Content\images\iconsim.gif" />
@@ -194,6 +199,7 @@
     <Content Include="Content\images\webmessagebox_success.png" />
     <Content Include="Content\images\webmessagebox_warning.png" />
     <Content Include="Content\Styles\customStyle.css" />
+    <Content Include="Content\Styles\DataTable.css" />
     <Content Include="Content\Styles\SweetAlertStyle.css" />
     <Content Include="Content\Styles\TenarisWebApplications.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

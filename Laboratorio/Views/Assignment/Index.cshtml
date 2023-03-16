@@ -9,20 +9,26 @@
         <legend>@MyResource.ToolAssignation</legend>
         @using (Html.BeginForm("AssignMultipleTools", "Assignment", FormMethod.Post))
         {
-            <label for="ToolKit">
+            <label style="font-size:11pt; margin-bottom:5px" for="ToolKit">
                 Kit de Instrumentos:
             </label>
-            @Html.DropDownList("ToolKit", ViewBag.toolkits as List<SelectListItem>)
-            <input class="csbutton" type="submit" name ="submit" value="Agregar"/>
+            <div style="font-size:11pt">
+
+                @Html.DropDownList("ToolKit", ViewBag.toolkits as List<SelectListItem>, new { @class = "customFont" })
+            </div>
+            <input class="csbutton" type="submit" name ="submit" value="Asignar"/>
         }
         @using (Html.BeginForm("Index", "Assignment", FormMethod.Post))
         {
             <fieldset>
                 <legend>Instrumentos asignados</legend>
-                <label for="MachineCode">
-                    Máquina:
+                <label style="font-size:11pt; margin-bottom:5px" for="MachineCode" class="editor-label">
+                    Máquina
                 </label>
-                @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                <div>
+
+                    @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { @class = "customFont", onchange = "this.form.submit()" })
+                </div>
                 <div class="ui-corner-left">
                     <br />
 
@@ -121,8 +127,8 @@
 
                     }
                     <td>
-                        <a href="@Url.Action("RemoveTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
-                            <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                        <a  style="height:22px;width:22px" href="@Url.Action("RemoveTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode })">
+                            <img style="height:22px;width:22px" alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Download.48.png")" />
                         </a>
                     </td>
                     @if (ViewBag.MachineCode == "EMBAL1" || ViewBag.MachineCode == "EMBAL2")
@@ -148,8 +154,8 @@
                     }
                     <td>
 
-                        <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                        <a style="height:22px;width:22px" href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                            <img  style="height:22px;width:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
                         </a>
 
                     </td>
@@ -241,19 +247,19 @@
 
                 }
                 <td class="centeredTD">
-                    <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
-                        <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                    <a style="height:22px;width:22px" href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 1 })">
+                        <img style="height:22px;width:22px" alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Upload.48.png")" />
                     </a>
                 </td>
                 <td class="centeredTD">
-                    <a href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
-                        <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                    <a style="height:22px;width:22px" href="@Url.Action("AddTool", "Assignment", new { toolCode = tm.Code, machineCode = ViewBag.MachineCode, use = 0 })">
+                        <img style="height:22px;width:22px" alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Upload.48.png")" />
                     </a>
                 </td>
                 <td>
 
-                    <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                        <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                    <a style="height:22px;width:22px" href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                        <img style="height:22px;width:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
                     </a>
 
                 </td>

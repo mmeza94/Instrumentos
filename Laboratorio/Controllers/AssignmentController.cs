@@ -78,13 +78,13 @@ namespace Laboratorio.Controllers
         {
             foreach (var item in tm)
             {
-                var flag = item.ExpirationDate.Subtract(DateTime.Now).Days;
+                var flag = item.ExpirationDate.Date.Subtract(DateTime.Now.Date).Days;
 
                 if (flag <= 0)
                     item.ExpirationFlag = "0";//expirado
-                if (flag <= 10 && flag > 0)
+                if (flag <= 7 && flag > 0)
                     item.ExpirationFlag = "1";//proximo a expirar
-                if (flag > 10)
+                if (flag > 7)
                     item.ExpirationFlag = "2";//todo bien
 
             }

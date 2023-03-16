@@ -23,22 +23,31 @@
         <fieldset>
             @using (Html.BeginForm("InsertNewToolKitCatalog", "Toolkit", FormMethod.Post))
             {
-                <div class="editor-label">
-                    @Html.Label("Nombre Plantilla")
-                </div>
-                <div class="textBox textBoxEnable">
+
+                <label style="font-size:11pt; margin-bottom:5px" for="KitCode" class="editor-label">
+                    Nombre Plantilla
+                </label>
+                @*<div class="editor-label" style=" font-size:11pt">
+                @Html.Label("Nombre Plantilla")
+            </div>*@
+                <div class="textBox textBoxEnable" style=" font-size:11pt">
                     @Html.TextBox("KitCode")
                 </div>
-                <div class="editor-label">
-                    @Html.Label("Operación")
+                <label style="font-size:11pt; margin-bottom:5px" for="KitCode" class="editor-label">
+                    Operación
+                </label>
+                @*<div class="editor-label" style=" font-size:11pt">
+                    @Html.Label("Operación", " ", new { @class = "customFont" })
+                </div>*@
+                <div>
+                    @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>,new { @class = "customFont" })
+
                 </div>
-                @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>)
                 <p>
                     <input class="csbutton" type="submit" value="Crear" />
                 </p>
 
             }
-
         </fieldset>
            
        
@@ -52,26 +61,26 @@
         @using (Html.BeginForm("Index", "Toolkit", FormMethod.Post))
         {
             <fieldset>
-                <legend>Plantilla-Herramientas</legend>
+                <legend>Plantilla - Instrumentos</legend>
 
                 <div class="ui-corner-left">
                     <br />
 
                     <div class="editor-label">
-                        <label for="MachineCode">
+                        <label style="font-size:11pt; margin-bottom:5px" for="MachineCode">
                             Operación
                         </label>
 
                     </div>
-                    @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                    @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>, new { @class= "customFont", onchange = "this.form.submit()" })
                     <br/>
 
-                    <div class="editor-label">
-                        <label for="ToolKitCode">
+                    <div class="editor-label" style="margin-top:.5rem">
+                        <label style="font-size:11pt; margin-bottom:5px; margin-top:5px" for="ToolKitCode">
                             Plantilla
                         </label>
                     </div>
-                    @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { onchange = "this.form.submit()" })
+                    @Html.DropDownList("ToolKitCode", ViewBag.toolkitCodes as List<SelectListItem>, new { @class = "customFont", onchange = "this.form.submit()" })
 
                         <br />
 
@@ -185,13 +194,13 @@
                                     }
                                     <td>
                                         <a href="@Url.Action("RemoveTool", "Toolkit", new { toolCode = tm.Code, measure = tm.Measure})">
-                                            <img alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/downarrow.png")" />
+                                            <img style="width:22px;height:22px" alt="@MyResource.DownArrowImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Download.48.png")" />
                                         </a>
                                     </td>
                                     <td>
 
                                         <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                            <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                            <img style="width:22px;height:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
                                         </a>
 
                                     </td>
@@ -227,9 +236,13 @@
 
 
 
-                        <div class="editor-label MarginCustomLabel" style="margin-bottom:10px">
+                        @*<div class="editor-label MarginCustomLabel" style="margin-bottom:10px">
                             @Html.Label("Agregar a plantilla:")
-                        </div>
+                        </div>*@
+
+                        <label style="font-size:11pt; margin-bottom:5px" for="KitCode" class="editor-label">
+                            Agregar a plantilla:
+                        </label>
 
 
 
@@ -297,10 +310,10 @@
 
                         @*radiobutton*@
                         <div style="margin-bottom:10px">
-                            <label>Control</label>
+                            <label style="font-size:11pt; margin-bottom:5px">Control</label>
                             <input id="Control" name="Control" value="0" type="radio" onclick="SetMeasure(0)" />
 
-                            <label>Medicion</label>
+                            <label style="font-size:11pt; margin-bottom:5px">Medicion</label>
                             <input id="Medicion" name="Control" value="1" type="radio" onclick="SetMeasure(1)" />
                         </div>
 
@@ -408,18 +421,18 @@
                                         }
                                         <td class="centeredTD">
                                             <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 1 })">
-                                                <img alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                                <img style="height:22px;width:22px" alt="@MyResource.UpArrowMeasureImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Upload.48.png")" />
                                             </a>
                                         </td>
                                         <td class="centeredTD">
                                             <a href="@Url.Action("AddTool", "Toolkit", new { toolCode = tool.Code,  use = 0 })">
-                                                <img alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/uparrow.png")" />
+                                                <img style="height:22px;width:22px" alt="@MyResource.UpArrowControlImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Upload.48.png")" />
                                             </a>
                                         </td>
                                         <td class="centeredTD">
 
                                             <a href="@Url.Action("UpdateToolPage", "Tool", new { code = tool.Code })">
-                                                <img alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/change.png")" />
+                                                <img style="height:22px;width:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
                                             </a>
 
                                         </td>

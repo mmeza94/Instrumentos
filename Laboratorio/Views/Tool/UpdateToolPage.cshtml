@@ -27,39 +27,45 @@
                 </th>
             </tr>
             <tr class="gridRowOdd">
-                <td>@Model.Code
+                <td class="centeredTD">@Model.Code
                 </td>
-                <td>@Model.Type
+                <td class="centeredTD">@Model.Type
                 </td>
-                <td>@Model.CalibrationDate.ToString("dd/MM/yy")
+                <td class="centeredTD">@Model.CalibrationDate.ToString("dd/MM/yy")
                 </td>
-                <td>@Model.ExpirationDate.ToString("dd/MM/yy")
+                <td class="centeredTD">@Model.ExpirationDate.ToString("dd/MM/yy")
                 </td>
             </tr>
         </table>
     </fieldset>
     <fieldset>
         <legend>@MyResource.NewData</legend>
-        @using (Html.BeginForm("UpdateTool", "Tool", FormMethod.Post))
-        {
-            @Html.Hidden("code", Model.Code as string)
-            @Html.Hidden("previousCalibration", Model.CalibrationDate.ToString("dd/MM/yy") as string)
-            @Html.Hidden("previousExpiration", Model.CalibrationDate.ToString("dd/MM/yy") as string)
-            <label for="CalibrationDate">@MyResource.CalibrationDate</label>
-            @Html.TextBox("CalibrationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
-            <label for="ExpirationDate">@MyResource.ExpirationDate</label>
-            @Html.TextBox("ExpirationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
-            if (ViewBag.ValidationMessage != null)
+        <div >
+
+
+            @using (Html.BeginForm("UpdateTool", "Tool", FormMethod.Post))
             {
-            <label class="validationError">@ViewBag.ValidationMessage</label>
+                @Html.Hidden("code", Model.Code as string)
+                @Html.Hidden("previousCalibration", Model.CalibrationDate.ToString("dd/MM/yy") as string)
+                @Html.Hidden("previousExpiration", Model.CalibrationDate.ToString("dd/MM/yy") as string)
+                <label for="CalibrationDate">@MyResource.CalibrationDate</label>
+                @Html.TextBox("CalibrationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
+                <label for="ExpirationDate">@MyResource.ExpirationDate</label>
+                @Html.TextBox("ExpirationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
+                if (ViewBag.ValidationMessage != null)
+                {
+                    <label class="validationError">@ViewBag.ValidationMessage</label>
+                }
+                <input type="submit" value="@MyResource.Update" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
             }
-            <input type="submit" value="@MyResource.Update" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
-        }
+            @using (Html.BeginForm("Index", "Tool"))
+            {
+                <input type="submit" value="@MyResource.Cancel" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/cancel.png"))" />
+            }
+
+        </div>
     </fieldset>
-    using (Html.BeginForm("Index", "Tool"))
-    {
-    <input type="submit" value="@MyResource.Cancel" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/cancel.png"))" />
-    }
+    
 }
 else
 {

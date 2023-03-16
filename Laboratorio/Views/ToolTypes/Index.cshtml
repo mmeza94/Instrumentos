@@ -30,9 +30,9 @@
                 <td class="centeredTD">
                     @ttm.Name
                 </td>
-                <td class="centeredTD">
-                    <a href="@Url.Action("DeleteToolType", "ToolTypes", new { id = ttm.ID, tipo=ttm.Name })">
-                        <img alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/delete.png")" /></a>
+                <td class="centeredTD" style="padding:0 10px">
+                    <a style="height:22px;width:22px"  href="@Url.Action("DeleteToolType", "ToolTypes", new { id = ttm.ID, tipo=ttm.Name })">
+                        <img style="height:22px;width:22px" alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Button-Button-Close.48.png")" /></a>
                 </td>
             </tr>
         
@@ -50,7 +50,7 @@
     @using (Html.BeginForm("InsertToolType", "ToolTypes", FormMethod.Post))
     {
         <label for="ToolTypeName">@MyResource.Name</label>
-        @Html.TextBox("ToolTypeName", "", new { @class = "textBox textBoxEnable" })
+         @Html.TextBox("ToolTypeName", "", new { @class = "textBox textBoxEnable" })
         if (ViewBag.ValidationMessage != null)
         {
         <label class="validationError">@ViewBag.ValidationMessage</label>
