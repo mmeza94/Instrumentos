@@ -5,116 +5,127 @@
 }
 @if (Request.IsAuthenticated)
 {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.date').datepicker({ dateFormat: "dd/mm/yy" });
-        });
-    </script>
-    <fieldset>
+    
+
+    <fieldset >
         <legend>Instrumentos</legend>
-        <table class="center">
-            <tr class="TableHeader">
-                <th>
-                    C&oacute;digo
-                </th>
-                <th>
-                    Tipo
-                </th>
-                <th>
-                    Fecha de calibraci&oacute;n
-                </th>
-                <th>
-                    Fecha de expiraci&oacute;n
-                </th>
-                <th>
-                    Operación
-                </th>
-                <th>
-                    Plantilla
-                </th>
-                <th>
-                    Estado
-                </th>
-                <th>
+        <table class="center" id="ToolTable" style="width: 80vh; display: table; border-collapse: separate; box-sizing: border-box; text-indent: initial; border-spacing: 2px; border-color: gray;">
+            <thead>
 
-                </th>
-                <th>
+                <tr class="TableHeader">
+                    <th>
+                        C&oacute;digo
+                    </th>
+                    <th>
+                        Tipo
+                    </th>
+                    <th>
+                        Fecha de calibraci&oacute;n
+                    </th>
+                    <th>
+                        Fecha de expiraci&oacute;n
+                    </th>
+                    <th>
+                        Operación
+                    </th>
+                    <th>
+                        Plantilla
+                    </th>
+                    <th>
+                        Estado
+                    </th>
+                    <th>
 
-                </th>
-            </tr>
-            @if (ViewBag.NoRecords)
-            {
-                <tr class="noRecords">
-                    <td colspan="8" class="gridRowOdd">
-                        @MyResource.NoRecords
-                </td>
-            </tr>
-        }
-        else
-        {
-            foreach (var tm in Model)
-            {
-                <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
-                    <td class="centeredTD">
-                        @tm.Code
-                    </td>
-                    <td class="centeredTD">
-                        @tm.Type
-                    </td>
-                    <td class="centeredTD">
-                        @tm.CalibrationDate.ToString("dd/MM/yy")
-                    </td>
-                    <td class="centeredTD">
-                        @tm.ExpirationDate.ToString("dd/MM/yy")
-                    </td>
-                    <td class="centeredTD">
-                        @tm.Machine
-                    </td>
-                    <td class="centeredTD">
-                        @tm.Plantilla
-                    </td>
+                    </th>
+                    <th>
 
-                    @switch ((string)tm.ExpirationFlag)
-                    {
-                        case "0":
-                            <td class="centeredTD Danger">
-                                Vencido
-                            </td>
-                            break;
-                        case "1":
-                            <td class="centeredTD Warning">
-                                Próximo a vencer
-                            </td>
-                            break;
-                        case "2":
-                            <td class="centeredTD ">
-                                En Tiempo
-                            </td>
-                            break;
-
-                    }
-
-
-                    <td style="padding:0 10px">
-                        @if (tm.Available == 1)
-                        {<a style="height:22px;width:22px" href="@Url.Action("DeleteTool", "Tool", new { code = tm.Code })">
-                                <img style="height:22px;width:22px" alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Button-Button-Close.48.png")" />
-                            </a>
-                        }
-                    </td>
-                    <td style="padding:0 10px">
-                        @if (tm.Available == 1)
-                        {<a style="height:22px;width:22px" href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
-                                <img style="height:22px;width:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
-                            </a>
-                        }
-                    </td>
+                    </th>
                 </tr>
 
-                
 
-                odd = odd ? false : true;
-                }
+            </thead>
+
+            @if (ViewBag.NoRecords)
+            {
+                <tbody>
+                    <tr class="noRecords">
+                        <td colspan="8" class="gridRowOdd">
+                            @MyResource.NoRecords
+                        </td>
+                    </tr>
+                </tbody>
+
+            }
+            else
+            {
+                <tbody>
+                    @foreach (var tm in Model)
+                    {
+
+                    <tr class="@(odd ? "gridRowOdd" : "gridRowEven")">
+                        <td class="centeredTD">
+                            @tm.Code
+                        </td>
+                        <td class="centeredTD">
+                            @tm.Type
+                        </td>
+                        <td class="centeredTD">
+                            @tm.CalibrationDate.ToString("dd/MM/yy")
+                        </td>
+                        <td class="centeredTD">
+                            @tm.ExpirationDate.ToString("dd/MM/yy")
+                        </td>
+                        <td class="centeredTD">
+                            @tm.Machine
+                        </td>
+                        <td class="centeredTD">
+                            @tm.Plantilla
+                        </td>
+
+                        @switch ((string)tm.ExpirationFlag)
+                        {
+                            case "0":
+                                <td class="centeredTD Danger">
+                                    Vencido
+                                </td>
+                                break;
+                            case "1":
+                                <td class="centeredTD Warning">
+                                    Próximo a vencer
+                                </td>
+                                break;
+                            case "2":
+                                <td class="centeredTD ">
+                                    En Tiempo
+                                </td>
+                                break;
+
+                        }
+
+
+                        <td style="padding:0 10px">
+                            @if (tm.Available == 1)
+                            {<a style="height:22px;width:22px" href="@Url.Action("DeleteTool", "Tool", new { code = tm.Code })">
+                                    <img style="height:22px;width:22px" alt="@MyResource.DeleteImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Button-Button-Close.48.png")" />
+                                </a>
+                            }
+                        </td>
+                        <td style="padding:0 10px">
+                            @if (tm.Available == 1)
+                            {<a style="height:22px;width:22px" href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                                    <img style="height:22px;width:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
+                                </a>
+                            }
+                        </td>
+                    </tr>
+
+
+
+
+
+                    odd = odd ? false : true;
+                    }
+                </tbody>
             }
         </table>
     </fieldset>
@@ -142,3 +153,21 @@ else
 {
     @Html.Partial("_LogInFormPartial")
 }
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.date').datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#ToolTable').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            language: {
+                "search":"Buscar: "
+            }
+
+    });
+</script>
