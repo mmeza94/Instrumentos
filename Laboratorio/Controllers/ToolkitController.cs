@@ -85,10 +85,14 @@ namespace Laboratorio.Controllers
             var cleanedToolkitCode = KitCode.Trim();
 
             //int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
-
-
-            bool IsInsertionSuccesful = DataAccess.InsToolKitCatalog(cleanedToolkitCode, MachineCode);
+            bool IsInsertionSuccesful = false;
             ToolKitModel model = new ToolKitModel();
+
+            if (!string.IsNullOrEmpty(cleanedToolkitCode))
+            {
+                IsInsertionSuccesful = DataAccess.InsToolKitCatalog(cleanedToolkitCode, MachineCode);               
+            }
+            
 
 
             if (IsInsertionSuccesful)
@@ -455,7 +459,7 @@ namespace Laboratorio.Controllers
 
         private void FillAvailableToolsSession()
         {
-            List<ToolModel> AvailableTools = DataAccess.GetAvailableTools();
+            List<ToolModel> AvailableTools = DataAccess.GetTools();
             FillFlag(AvailableTools);   
             this.Session["AvailableTools"] = AvailableTools;
 

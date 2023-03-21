@@ -9,7 +9,7 @@
 
     <fieldset >
         <legend>Instrumentos</legend>
-        <table class="center" id="ToolTable" style="width: 80vh; display: table; border-collapse: separate; box-sizing: border-box; text-indent: initial; border-spacing: 2px; border-color: gray;">
+        <table class="center" id="ToolTable" >
             <thead>
 
                 <tr class="TableHeader">
@@ -156,7 +156,7 @@ else
 
 
 
-<script type="text/javascript">
+@*<script type="text/javascript">
     $(document).ready(function () {
 
         $('.date').datepicker({ dateFormat: "dd/mm/yy" });
@@ -170,4 +170,23 @@ else
             }
 
     });
+</script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.date').datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#ToolTable').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            language: {
+                "search": "Buscar: "
+            }
+
+        });
+    });
+            
 </script>

@@ -7,6 +7,7 @@ namespace Laboratorio.Models
 {
     public class ToolModel
     {
+
         public string Code { get; set; }
         public string Type { get; set; }
         public DateTime CalibrationDate { get; set; }
@@ -18,7 +19,7 @@ namespace Laboratorio.Models
         public string Plantilla { get; set; } = "";
 
         public bool isChecked { get; set; }
-
+    
         public string ExpirationFlag { get; set; } //0 expirado, 1:proximo a expirar, 2: suficiente tiempo
 
 
