@@ -219,7 +219,7 @@ namespace Laboratorio.Controllers
 
         public ActionResult UpdateToolPage(string code, string validation)
         {
-            List<ToolModel> tm = DataAccess.GetTools();
+            List<ToolModel> tm = DataAccess.GetAvailableToolsForToolKit();
 
             ViewBag.ValidationMessage = validation;
 
