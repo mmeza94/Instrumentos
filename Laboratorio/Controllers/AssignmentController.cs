@@ -127,6 +127,33 @@ namespace Laboratorio.Controllers
 
 
 
+        public ActionResult UpdateTool(string code, DateTime calibrationDate, DateTime expirationDate, string previousCalibration, string previousExpiration)
+        {
+
+            if (DateTime.Compare(expirationDate, calibrationDate) < 0)
+            {
+                ResourceManager rs = new ResourceManager(typeof(Laboratorio.Messages));
+                string msg = rs.GetString("ValidationExpirationDate");
+                return RedirectToAction("UpdateToolPage", "Assignment", new { validation = msg, code = code });
+            }
+
+            int result = DataAccess.UpdateTool(code, calibrationDate, expirationDate);
+
+            if (result < 0)
+            {
+                return RedirectToAction("UpdateToolPage", "Assignment", new { code = code });
+            }
+            else
+            {
+                DataAccess.InsertLogEntry(User.Identity.Name,
+                    String.Format("Instrumento recalibrado: \"{0}\". Fecha previa de calibracion \"{1}\", fecha previa de expiración \"{2}\". Fecha de calibración nueva \"{3}\", fecha de expiración nueva \"{4}\"",
+                    code, previousCalibration, previousExpiration, calibrationDate.ToShortDateString(), expirationDate.ToShortDateString()));
+                return RedirectToAction("Index", "Assignment");
+            }
+        }
+
+
+
 
 
 

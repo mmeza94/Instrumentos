@@ -1,0 +1,77 @@
+@using MyResource = Laboratorio.Messages
+@{
+    ViewBag.Title = "Actualizar instrumento";
+}
+@if (Request.IsAuthenticated)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').datepicker({ dateFormat: "dd/mm/yy" });
+        });
+    </script>
+    <fieldset>
+        <legend>@MyResource.SelectedTool</legend>
+        <table class="center">
+            <tr class="TableHeader">
+                <th>
+                    C&oacute;digo
+                </th>
+                <th>
+                    Tipo
+                </th>
+                <th>
+                    Fecha de calibraci&oacute;n
+                </th>
+                <th>
+                    Fecha de expiraci&oacute;n
+                </th>
+            </tr>
+            <tr class="gridRowOdd">
+                <td class="centeredTD">
+                    @Model.Code
+                </td>
+                <td class="centeredTD">
+                    @Model.Type
+                </td>
+                <td class="centeredTD">
+                    @Model.CalibrationDate.ToString("dd/MM/yy")
+                </td>
+                <td class="centeredTD">
+                    @Model.ExpirationDate.ToString("dd/MM/yy")
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>@MyResource.NewData</legend>
+        <div>
+
+
+            @using (Html.BeginForm("UpdateTool", "Toolkit", FormMethod.Post))
+            {
+                @Html.Hidden("code", Model.Code as string)
+                @Html.Hidden("previousCalibration", Model.CalibrationDate.ToString("dd/MM/yy") as string)
+                @Html.Hidden("previousExpiration", Model.CalibrationDate.ToString("dd/MM/yy") as string)
+                <label for="CalibrationDate">@MyResource.CalibrationDate</label>
+                @Html.TextBox("CalibrationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
+                <label for="ExpirationDate">@MyResource.ExpirationDate</label>
+                @Html.TextBox("ExpirationDate", DateTime.Now.ToShortDateString(), new { @class = "date textBox textBoxEnable" })
+                if (ViewBag.ValidationMessage != null)
+                {
+                    <label class="validationError">@ViewBag.ValidationMessage</label>
+                }
+                <input type="submit" value="@MyResource.Update" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
+            }
+            @using (Html.BeginForm("Index", "Toolkit"))
+            {
+                <input type="submit" value="@MyResource.Cancel" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/cancel.png"))" />
+            }
+
+        </div>
+    </fieldset>
+
+}
+else
+{
+    @Html.Partial("_LogInFormPartial")
+}
