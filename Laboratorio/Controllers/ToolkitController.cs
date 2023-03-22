@@ -170,59 +170,83 @@ namespace Laboratorio.Controllers
 
 
 
+        //[HttpPost]
+        //public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse, string Action)
+        //{
+        //    ToolKitModel model = new ToolKitModel();
+
+        //    if (IsActionInsert(Action))
+        //    {
+        //        if (MeasureUse == "" || activos == "" || activosCodeToolkit == "")
+        //        {
+
+        //            FillToolkitsViewBag();
+        //            UpdateViewBags();
+        //            FillModel(model);
+
+        //            return View("Index", model);
+        //        }
+        //        else
+        //        {
+
+        //            MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+        //            FillToolkitsViewBag();
+        //            UpdateViewBags();
+        //            FillModel(model);
+
+        //            return View("Index", model);
+        //        }
+
+        //    }
+        //    else
+        //    {
+
+        //        if (activos == "" || activosCodeToolkit == "")
+        //        {
+
+        //            FillToolkitsViewBag();
+        //            UpdateViewBags();
+        //            FillModel(model);
+
+        //            return View("Index", model);
+        //        }
+
+        //        MassiveDeleteTools(activos, activosCodeToolkit);
+        //        FillToolkitsViewBag();
+        //        UpdateViewBags();
+        //        FillModel(model);
+
+        //        return View("Index", model);
+        //    }
+
+
+        //}
+
         [HttpPost]
-        public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse, string Action)
+        public ActionResult ToolMassiveAction(string activos, string activosCodeToolkit, string MeasureUse)
         {
             ToolKitModel model = new ToolKitModel();
 
-            if (IsActionInsert(Action))
-            {
-                if (MeasureUse == "" || activos == "" || activosCodeToolkit == "")
-                {
-
-                    FillToolkitsViewBag();
-                    UpdateViewBags();
-                    FillModel(model);
-
-                    return View("Index", model);
-                }
-                else
-                {
-
-                    MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
-                    FillToolkitsViewBag();
-                    UpdateViewBags();
-                    FillModel(model);
-
-                    return View("Index", model);
-                }
-
-            }
-            else
+            if (MeasureUse == "" || activos == "" || activosCodeToolkit == "")
             {
 
-                if (activos == "" || activosCodeToolkit == "")
-                {
-
-                    FillToolkitsViewBag();
-                    UpdateViewBags();
-                    FillModel(model);
-
-                    return View("Index", model);
-                }
-
-                MassiveDeleteTools(activos, activosCodeToolkit);
                 FillToolkitsViewBag();
                 UpdateViewBags();
                 FillModel(model);
 
                 return View("Index", model);
             }
+            else
+            {
 
+                MassiveInsertTools(activos, activosCodeToolkit, MeasureUse);
+                FillToolkitsViewBag();
+                UpdateViewBags();
+                FillModel(model);
 
+                return View("Index", model);
+            }
         }
-
-
 
 
 
