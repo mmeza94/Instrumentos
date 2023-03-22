@@ -41,6 +41,7 @@ namespace Laboratorio.Models.DataAccess
         //private static string storeProcedureDeleteDeactivatedTool = ConfigurationManager.AppSettings["SP_DeleteDeactivatedTool"].ToString();
         private static string storeProcedureDeleteToolInToolkit = ConfigurationManager.AppSettings["SP_DeleteToolInToolkit"].ToString();
         private static string storeProcedureqryToolsWithToolkitList = ConfigurationManager.AppSettings["SP_qryToolsWithToolkitList"].ToString();
+        private static string storeProcedureqryAvailableToolsForToolKit = ConfigurationManager.AppSettings["SP_qryAvailableToolsForToolKit"].ToString();
 
         static DataAccess()
         {
@@ -75,8 +76,35 @@ namespace Laboratorio.Models.DataAccess
            // dbClientGrana.AddCommand(storeProcedureDeleteDeactivatedTool);
             dbClientGrana.AddCommand(storeProcedureDeleteToolInToolkit);
             dbClientGrana.AddCommand(storeProcedureqryToolsWithToolkitList);
+            dbClientGrana.AddCommand(storeProcedureqryAvailableToolsForToolKit);
 
             dbClientGrana.Activate();
+        }
+
+
+
+
+        public static List<ToolModel> GetAvailableToolsForToolKit()
+        {
+            List<ToolModel> l = new List<ToolModel>();
+
+            using (var reader = dbClientGrana.GetCommand(storeProcedureqryAvailableToolsForToolKit).ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    ToolModel tm = new ToolModel();
+
+                    tm.Code = reader["Code"].ToString();
+                    tm.Type = reader["TypeName"].ToString();
+                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+
+                    l.Add(tm);
+                }
+
+            }
+
+            return l;
         }
 
 

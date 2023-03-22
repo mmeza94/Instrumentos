@@ -486,7 +486,7 @@ namespace Laboratorio.Controllers
 
         private void FillAvailableToolsSession()
         {
-            List<ToolModel> AvailableTools = DataAccess.GetTools();
+            List<ToolModel> AvailableTools = DataAccess.GetAvailableToolsForToolKit();
             FillFlag(AvailableTools);   
             this.Session["AvailableTools"] = AvailableTools;
 
