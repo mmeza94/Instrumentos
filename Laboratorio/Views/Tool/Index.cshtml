@@ -111,11 +111,10 @@
                             }
                         </td>
                         <td style="padding:0 10px">
-                            @if (tm.Available == 1)
-                            {<a style="height:22px;width:22px" href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
+                            <a style="height:22px;width:22px" href="@Url.Action("UpdateToolPage", "Tool", new { code = tm.Code })">
                                     <img style="height:22px;width:22px" alt="@MyResource.UpdateImageAlt" src="@Url.Content("~/Content/images/Hopstarter-Soft-Scraps-Button-Refresh.48.png")" />
                                 </a>
-                            }
+                            
                         </td>
                     </tr>
 
