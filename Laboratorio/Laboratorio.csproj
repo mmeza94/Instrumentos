@@ -200,10 +200,12 @@
     <Content Include="Content\images\webmessagebox_warning.png" />
     <Content Include="Content\Styles\customStyle.css" />
     <Content Include="Content\Styles\DataTable.css" />
+    <Content Include="Content\Styles\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\Styles\images\ui-icons_555555_256x240.png" />
     <Content Include="Content\Styles\jquery-ui.min.css" />
     <Content Include="Content\Styles\SweetAlertStyle.css" />
     <Content Include="Content\Styles\TenarisWebApplications.css" />
-    <Content Include="Content\themes\base\images\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />

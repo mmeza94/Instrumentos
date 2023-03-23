@@ -530,8 +530,8 @@ namespace Laboratorio.Controllers
             else
             {
 
-                toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
-                FillFlag(toolsFromToolKit);
+                //toolsFromToolKit = GetToolsFromSelectedToolKit(ToolKitCode);
+                //FillFlag(toolsFromToolKit);
 
                 this.Session["SelectedToolKitCode123"] = ToolKitCode;
                 this.Session["ToolsFromToolKit"] = toolsFromToolKit;
