@@ -660,8 +660,8 @@ namespace Laboratorio.Controllers
             sli.Add(mec3);
             sli.Add(mec4);
             sli.Add(Embalado2);
-            sli.Add(rosCop);
             sli.Add(fosCop);
+            sli.Add(rosCop);
 
             return sli;
         }

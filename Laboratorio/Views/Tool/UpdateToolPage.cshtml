@@ -6,6 +6,13 @@
 {  
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $.datepicker.regional['es'] = {
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+            }
+
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+
             $('.date').datepicker({ dateFormat: "dd/mm/yy" });
         });
     </script>
