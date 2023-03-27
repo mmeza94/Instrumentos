@@ -41,10 +41,12 @@ namespace Laboratorio.Controllers
 
 
 
+
+            //Primera tabla -- instrumetnso asignados a una maquina
             List<ToolModel> tm;
             tm = DataAccess.GetToolsByMachineCode(MachineCode);
 
-            
+            this.Session["AssignedToolsPerMachine"] = tm;
 
             this.Session["MachineCodeAssigned"] = MachineCode;
 
@@ -100,22 +102,23 @@ namespace Laboratorio.Controllers
             var tools = DataAccess.GetToolsFromToolKit(ToolKit);
             var MachineCode = this.Session["MachineCodeAssigned"].ToString();
 
+
+            //Desasignar lo que esta asignado en la maquina
+            List<ToolModel> assignedTools = (List<ToolModel>)this.Session["AssignedToolsPerMachine"];
+
+            foreach (var item in assignedTools)
+            {
+                RemoveTool(item.Code, MachineCode);
+            }
             
 
-
+            //Asignacion Masiva de instrumentos 
             foreach (var item in tools)
             {
                 int Use = (item.Measure == true) ? 1 : 0;
                 AddTool(item.Code, MachineCode, Use);
             }
 
-
-
-            //int idMachine = Convert.ToInt32(ConfigurationManager.AppSettings[MachineCode].ToString());
-            //List<SelectListItem> toolkits = GetToolkitCodes(idMachine);
-            //ViewBag.toolkits = toolkits;
-            //List<SelectListItem> sli = LoadMachines();
-            //ViewBag.Sli = sli;
 
             return RedirectToAction("Index", "Assignment", new { machineCode = MachineCode, });
 

@@ -274,6 +274,7 @@ namespace Laboratorio.Models.DataAccess
                     tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
                     tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
                     tm.Measure = Boolean.Parse(reader["Measure"].ToString());
+                    //tm.Measure = true;
                     tm.Shared = reader["Shared"].ToString();
                     ToolsFromToolKit.Add(tm);
                 }
@@ -305,6 +306,7 @@ namespace Laboratorio.Models.DataAccess
                     tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
                     tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
                     tm.Measure = Boolean.Parse(reader["Measure"].ToString());
+                   // tm.Measure = true;
                     tm.Shared = reader["Shared"].ToString();
                     ToolsFromToolKit.Add(tm);
                 }
