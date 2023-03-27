@@ -44,6 +44,8 @@ namespace Laboratorio.Controllers
             List<ToolModel> tm;
             tm = DataAccess.GetToolsByMachineCode(MachineCode);
 
+            
+
             this.Session["MachineCodeAssigned"] = MachineCode;
 
 
