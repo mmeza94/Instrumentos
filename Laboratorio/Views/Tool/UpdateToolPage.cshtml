@@ -11,7 +11,8 @@
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
                 dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
-                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                firstDay: 1,
             }
 
             $.datepicker.setDefaults($.datepicker.regional['es']);
@@ -66,11 +67,11 @@
                 {
                     <label class="validationError">@ViewBag.ValidationMessage</label>
                 }
-                <input type="submit" value="@MyResource.Update" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/insert.png"))" />
+                <input type="submit" value="@MyResource.Update" class="csbutton"  />
             }
             @using (Html.BeginForm("Index", "Tool"))
             {
-                <input type="submit" value="@MyResource.Cancel" class="csbutton" style="background-image: url(@Url.Content("~/Content/images/cancel.png"))" />
+                <input type="submit" value="@MyResource.Cancel" class="csbutton"  />
             }
 
         </div>
