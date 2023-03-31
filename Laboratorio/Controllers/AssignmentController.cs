@@ -329,8 +329,8 @@ namespace Laboratorio.Controllers
             sli.Add(mec4);
             sli.Add(Embalado2);
             sli.Add(Inyectora);
-            sli.Add(fosCop);
             sli.Add(rosCop);
+            sli.Add(fosCop);
             
 
 

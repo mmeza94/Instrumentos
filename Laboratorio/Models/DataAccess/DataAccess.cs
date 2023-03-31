@@ -96,8 +96,8 @@ namespace Laboratorio.Models.DataAccess
 
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["TypeName"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
 
                     l.Add(tm);
                 }
@@ -124,8 +124,8 @@ namespace Laboratorio.Models.DataAccess
 
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["TypeName"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
                     tm.Machine = reader["MachineName"].ToString();
                     tm.Plantilla = reader["Plantilla"].ToString();
                     bool active = Boolean.Parse(reader["Active"].ToString());
@@ -271,8 +271,8 @@ namespace Laboratorio.Models.DataAccess
                     //Aqui se cambio --tener cuidado en proudctivo DWF
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["Name"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
                     tm.Measure = Boolean.Parse(reader["Measure"].ToString());
                     //tm.Measure = true;
                     tm.Shared = reader["Shared"].ToString();
@@ -303,8 +303,8 @@ namespace Laboratorio.Models.DataAccess
                     //Aqui se cambio --tener cuidado en proudctivo DWF
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["Name"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
                     tm.Measure = Boolean.Parse(reader["Measure"].ToString());
                    // tm.Measure = true;
                     tm.Shared = reader["Shared"].ToString();
@@ -368,8 +368,8 @@ namespace Laboratorio.Models.DataAccess
 
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["TypeName"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
                     tm.Machine = reader["MachineName"].ToString();
 
                     bool active = Boolean.Parse(reader["Active"].ToString());
@@ -462,8 +462,8 @@ namespace Laboratorio.Models.DataAccess
 
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["TypeName"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
                     tm.Machine = reader["MachineName"].ToString();
                     tm.Plantilla = reader["Plantilla"].ToString();
                     bool active = Boolean.Parse(reader["Active"].ToString());
@@ -525,10 +525,11 @@ namespace Laboratorio.Models.DataAccess
 
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["Name"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
                     tm.Measure = Boolean.Parse(reader["Measure"].ToString());
                     tm.Shared = reader["Shared"].ToString();
+
                     l.Add(tm);
                 }
 
@@ -552,8 +553,8 @@ namespace Laboratorio.Models.DataAccess
 
                     tm.Code = reader["Code"].ToString();
                     tm.Type = reader["TypeName"].ToString();
-                    tm.CalibrationDate = DateTime.Parse(reader["CalibrationDate"].ToString());
-                    tm.ExpirationDate = DateTime.Parse(reader["ExpirationDate"].ToString());
+                    tm.CalibrationDate = DateTimeOffset.Parse(reader["CalibrationDate"].ToString());
+                    tm.ExpirationDate = DateTimeOffset.Parse(reader["ExpirationDate"].ToString());
 
                     l.Add(tm);
                 }

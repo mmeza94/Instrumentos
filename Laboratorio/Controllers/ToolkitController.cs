@@ -659,8 +659,8 @@ namespace Laboratorio.Controllers
             Embalado2.Value = ConfigurationManager.AppSettings["Embalado2Code"].ToString();
 
             SelectListItem Inyectora = new SelectListItem();
-            Embalado2.Text = "Inyectora";
-            Embalado2.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
+            Inyectora.Text = "Inyectora";
+            Inyectora.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
 
             sli.Add(gmp);
             sli.Add(end);
@@ -677,8 +677,8 @@ namespace Laboratorio.Controllers
             sli.Add(mec4);
             sli.Add(Embalado2);
             sli.Add(Inyectora);
-            sli.Add(fosCop);
             sli.Add(rosCop);
+            sli.Add(fosCop);
 
             return sli.Where(x => !string.IsNullOrEmpty(x.Text)).ToList(); ;
         }
@@ -753,8 +753,8 @@ namespace Laboratorio.Controllers
             Embalado2.Value = ConfigurationManager.AppSettings["Embalado2Code"].ToString();
 
             SelectListItem Inyectora = new SelectListItem();
-            Embalado2.Text = "Inyectora";
-            Embalado2.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
+            Inyectora.Text = "Inyectora";
+            Inyectora.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
 
             ToolkitCreation.Add(gmp);
             ToolkitCreation.Add(end);
@@ -771,8 +771,8 @@ namespace Laboratorio.Controllers
             ToolkitCreation.Add(mec4);
             ToolkitCreation.Add(Embalado2);
             ToolkitCreation.Add(Inyectora);
-            ToolkitCreation.Add(fosCop);
             ToolkitCreation.Add(rosCop);
+            ToolkitCreation.Add(fosCop);
 
             return ToolkitCreation.Where(x => !string.IsNullOrEmpty(x.Text)).ToList(); ;
         }

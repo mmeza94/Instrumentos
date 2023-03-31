@@ -10,8 +10,8 @@ namespace Laboratorio.Models
 
         public string Code { get; set; }
         public string Type { get; set; }
-        public DateTime CalibrationDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTimeOffset CalibrationDate { get; set; }
+        public DateTimeOffset ExpirationDate { get; set; }
         public string Machine { get; set; }
         public short Available { get; set; } //1 disponible, 2 no disponible, 3 dado de baja
         public bool Measure { get; set; }
