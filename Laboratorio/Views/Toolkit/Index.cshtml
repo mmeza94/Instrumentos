@@ -33,14 +33,14 @@
                 <div class="textBox textBoxEnable" style=" font-size:11pt">
                     @Html.TextBox("KitCode")
                 </div>
-                <label style="font-size:11pt; margin-bottom:5px" for="KitCode" class="editor-label">
+                <label style="font-size:11pt; margin-bottom:5px" for="MachineCode" class="editor-label">
                     Operación
                 </label>
                 @*<div class="editor-label" style=" font-size:11pt">
                     @Html.Label("Operación", " ", new { @class = "customFont" })
                 </div>*@
                 <div>
-                    @Html.DropDownList("MachineCode", ViewBag.Sli as List<SelectListItem>,new { @class = "customFont" })
+                    @Html.DropDownList("MachineCodeCreate", ViewBag.ToolkitCreationMachines as List<SelectListItem>,new { @class = "customFont" })
 
                 </div>
                 <p>

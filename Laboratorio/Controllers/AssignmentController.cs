@@ -291,12 +291,28 @@ namespace Laboratorio.Controllers
             fosCop.Text = "Fosfatizado Coples";
             fosCop.Value = ConfigurationManager.AppSettings["FosfatizadoCoplesCode"].ToString();
 
+
+
+
+
+
+
             SelectListItem Embalado1 = new SelectListItem();
             Embalado1.Text = "Pintado Tina A";
             Embalado1.Value = ConfigurationManager.AppSettings["Embalado1Code"].ToString();
+
+
+
             SelectListItem Embalado2 = new SelectListItem();
             Embalado2.Text = "Pintado Tina B";
             Embalado2.Value = ConfigurationManager.AppSettings["Embalado2Code"].ToString();
+
+
+            SelectListItem Inyectora = new SelectListItem();
+            Inyectora.Text = "Inyectora";
+            Inyectora.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
+            
+                      
 
             sli.Add(gmp);
             sli.Add(end);
@@ -312,10 +328,14 @@ namespace Laboratorio.Controllers
             sli.Add(mec3);
             sli.Add(mec4);
             sli.Add(Embalado2);
+            sli.Add(Inyectora);
             sli.Add(fosCop);
             sli.Add(rosCop);
+            
 
-            return sli;
+
+
+            return sli.Where(x => !string.IsNullOrEmpty(x.Text)).ToList();
         }
 
 

@@ -42,6 +42,7 @@ namespace Laboratorio.Controllers
 
             //Estas no dependen de nada
             FillMachineIdViewBag();
+            FillMachinesToolkitCreation();
             FillAvailableToolsSession();
             ViewBag.ValidationMessage = validation;
 
@@ -76,10 +77,18 @@ namespace Laboratorio.Controllers
         }
 
 
+        private void FillMachinesToolkitCreation()
+        {
+            List<SelectListItem> ToolkitCreationMachines = LoadMachinesForToolkitCreation();
+            ViewBag.ToolkitCreationMachines = ToolkitCreationMachines;
+            this.Session["ToolkitCreationMachines"] = ToolkitCreationMachines;
+        }
+
+
         
 
 
-        public ActionResult InsertNewToolKitCatalog(string KitCode, string MachineCode)
+        public ActionResult InsertNewToolKitCatalog(string KitCode, string MachineCodeCreate)
         {
 
             var cleanedToolkitCode = KitCode.Trim();
@@ -90,7 +99,7 @@ namespace Laboratorio.Controllers
 
             if (!string.IsNullOrEmpty(cleanedToolkitCode))
             {
-                IsInsertionSuccesful = DataAccess.InsToolKitCatalog(cleanedToolkitCode, MachineCode);               
+                IsInsertionSuccesful = DataAccess.InsToolKitCatalog(cleanedToolkitCode, MachineCodeCreate);               
             }
             
 
@@ -410,7 +419,9 @@ namespace Laboratorio.Controllers
         {
             //Se llena el primer comboBox
             List<SelectListItem> sli = LoadMachines();
+            //List<SelectListItem> ToolkitCreationMachines = LoadMachinesForToolkitCreation();
             this.Session["MachineIds"]= sli;
+            //ViewBag.ToolkitCreationMachines = ToolkitCreationMachines;
             ViewBag.Sli = sli;
         }
 
@@ -441,6 +452,7 @@ namespace Laboratorio.Controllers
             ViewBag.toolkitCodes = this.Session["ToolKitCatalog"];
             ViewBag.AvailableTools = this.Session["AvailableTools"];
             ViewBag.Sli = this.Session["MachineIds"];
+            ViewBag.ToolkitCreationMachines = this.Session["ToolkitCreationMachines"];
             NoRecordsViewBag();
             NoRecords2ViewBag();
         }
@@ -646,6 +658,10 @@ namespace Laboratorio.Controllers
             Embalado2.Text = "Pintado Tina B";
             Embalado2.Value = ConfigurationManager.AppSettings["Embalado2Code"].ToString();
 
+            SelectListItem Inyectora = new SelectListItem();
+            Embalado2.Text = "Inyectora";
+            Embalado2.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
+
             sli.Add(gmp);
             sli.Add(end);
             sli.Add(cnd);
@@ -660,11 +676,109 @@ namespace Laboratorio.Controllers
             sli.Add(mec3);
             sli.Add(mec4);
             sli.Add(Embalado2);
+            sli.Add(Inyectora);
             sli.Add(fosCop);
             sli.Add(rosCop);
 
-            return sli;
+            return sli.Where(x => !string.IsNullOrEmpty(x.Text)).ToList(); ;
         }
+
+
+
+        private List<SelectListItem> LoadMachinesForToolkitCreation()
+        {
+            List<SelectListItem> ToolkitCreation = new List<SelectListItem>();
+
+            SelectListItem gmp = new SelectListItem();
+            gmp.Text = "Granalladora MP";
+            gmp.Value = ConfigurationManager.AppSettings["GranalladoraCode"].ToString();
+
+            SelectListItem end = new SelectListItem();
+            end.Text = "Enderezadora";
+            end.Value = ConfigurationManager.AppSettings["EnderezadoraCode"].ToString();
+
+            SelectListItem cnd = new SelectListItem();
+            cnd.Text = "Control no destructivo";
+            cnd.Value = ConfigurationManager.AppSettings["CNDCode"].ToString();
+
+            SelectListItem forj0 = new SelectListItem();
+            forj0.Text = "Forjadora 0";
+            forj0.Value = ConfigurationManager.AppSettings["Forjadora0Code"].ToString();
+
+            SelectListItem forj = new SelectListItem();
+            forj.Text = "Forjadora 1";
+            forj.Value = ConfigurationManager.AppSettings["ForjadoraCode"].ToString();
+
+            SelectListItem nor = new SelectListItem();
+            nor.Text = "Horno de normalizado";
+            nor.Value = ConfigurationManager.AppSettings["NormalizadoCode"].ToString();
+
+            SelectListItem rev = new SelectListItem();
+            rev.Text = "Horno de revenido";
+            rev.Value = ConfigurationManager.AppSettings["RevenidoCode"].ToString();
+
+            SelectListItem gra2 = new SelectListItem();
+            gra2.Text = "Granalladora";
+            gra2.Value = ConfigurationManager.AppSettings["Granalladora2Code"].ToString();
+
+            SelectListItem mec1 = new SelectListItem();
+            mec1.Text = "Roscadora 1";
+            mec1.Value = ConfigurationManager.AppSettings["Roscadora1Code"].ToString();
+
+            SelectListItem mec2 = new SelectListItem();
+            mec2.Text = "Roscadora 2";
+            mec2.Value = ConfigurationManager.AppSettings["Roscadora2Code"].ToString();
+
+            SelectListItem mec3 = new SelectListItem();
+            mec3.Text = "Roscadora 3";
+            mec3.Value = ConfigurationManager.AppSettings["Roscadora3Code"].ToString();
+
+            SelectListItem mec4 = new SelectListItem();
+            mec4.Text = "Roscadora 4";
+            mec4.Value = ConfigurationManager.AppSettings["Roscadora4Code"].ToString();
+
+            SelectListItem rosCop = new SelectListItem();
+            rosCop.Text = "Roscadora Coples";
+            rosCop.Value = ConfigurationManager.AppSettings["RoscadoraCoplesCode"].ToString();
+
+            SelectListItem fosCop = new SelectListItem();
+            fosCop.Text = "Fosfatizado Coples";
+            fosCop.Value = ConfigurationManager.AppSettings["FosfatizadoCoplesCode"].ToString();
+
+            SelectListItem Embalado1 = new SelectListItem();
+            Embalado1.Text = "Pintado Tina A";
+            Embalado1.Value = ConfigurationManager.AppSettings["Embalado1Code"].ToString();
+            SelectListItem Embalado2 = new SelectListItem();
+            Embalado2.Text = "Pintado Tina B";
+            Embalado2.Value = ConfigurationManager.AppSettings["Embalado2Code"].ToString();
+
+            SelectListItem Inyectora = new SelectListItem();
+            Embalado2.Text = "Inyectora";
+            Embalado2.Value = ConfigurationManager.AppSettings["InyectoraCode"].ToString();
+
+            ToolkitCreation.Add(gmp);
+            ToolkitCreation.Add(end);
+            ToolkitCreation.Add(cnd);
+            ToolkitCreation.Add(forj0);
+            ToolkitCreation.Add(forj);
+            ToolkitCreation.Add(nor);
+            ToolkitCreation.Add(rev);
+            ToolkitCreation.Add(gra2);
+            ToolkitCreation.Add(mec1);
+            ToolkitCreation.Add(mec2);
+            ToolkitCreation.Add(Embalado1);
+            ToolkitCreation.Add(mec3);
+            ToolkitCreation.Add(mec4);
+            ToolkitCreation.Add(Embalado2);
+            ToolkitCreation.Add(Inyectora);
+            ToolkitCreation.Add(fosCop);
+            ToolkitCreation.Add(rosCop);
+
+            return ToolkitCreation.Where(x => !string.IsNullOrEmpty(x.Text)).ToList(); ;
+        }
+
+
+
 
         #endregion
 
