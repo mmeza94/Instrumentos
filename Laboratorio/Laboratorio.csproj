@@ -50,8 +50,8 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\SharedLib\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data.Entity" />
@@ -99,7 +99,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="Tenaris.Library.DbClient">
-      <HintPath>..\..\..\..\Desktop\Tenaris.Library.DbClient.dll</HintPath>
+      <HintPath>..\SharedLib\Tenaris.Library.DbClient.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
